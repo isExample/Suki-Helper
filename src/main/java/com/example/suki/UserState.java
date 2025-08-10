@@ -38,9 +38,9 @@ public class UserState {
         }
     }
 
-    public void updateStaminaToAllPlaces(int stamina){
+    public void applyDeltaToAllPlacesExceptSleep(int stamina){
         for (Place place : this.places.values()) {
-            place.updateAllStamina(stamina);
+            place.applyDeltaToActionsExceptSleep(stamina);
         }
     }
 }

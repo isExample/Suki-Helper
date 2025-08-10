@@ -23,8 +23,11 @@ public class Place {
         this.actions.remove(action);
     }
 
-    public void updateAllStamina(int stamina){
+    public void applyDeltaToActionsExceptSleep(int stamina){
         for(ActionCategory action : this.actions.keySet()){
+            if(action == ActionCategory.SLEEP){
+                continue;
+            }
             this.actions.put(action, this.actions.get(action) + stamina);
         }
     }

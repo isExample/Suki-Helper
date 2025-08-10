@@ -13,6 +13,6 @@ public class FitnessLevelModifier {
             userState.disableActionToAllPlaces(ActionCategory.EXERCISE);
         }
 
-        userState.updateStaminaToAllPlaces(level);
+        userState.applyDeltaToAllPlacesExceptSleep(level);
     }
 }
