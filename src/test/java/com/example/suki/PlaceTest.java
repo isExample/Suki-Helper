@@ -41,4 +41,12 @@ public class PlaceTest {
         assertTrue(place.getActions().containsKey(ActionCategory.SLEEP));
         assertEquals(5, place.getActions().size());
     }
+
+    @Test
+    void 집은_잠자기_체력지수가_3_증가한다(){
+        Place place = new Place(PlaceCategory.HOME);
+        int baseSleepStamina = 10;
+
+        assertEquals(baseSleepStamina + 3, place.getActions().get(ActionCategory.SLEEP));
+    }
 }
