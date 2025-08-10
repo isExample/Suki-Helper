@@ -23,12 +23,9 @@ public class Place {
         this.actions.remove(action);
     }
 
-    public void applyDeltaToActionsExceptSleep(int stamina){
-        for(ActionCategory action : this.actions.keySet()){
-            if(action == ActionCategory.SLEEP){
-                continue;
-            }
-            this.actions.put(action, this.actions.get(action) + stamina);
-        }
+    public void applyDeltaToActionsExceptSleep(int delta){
+        this.actions.replaceAll((action, value) ->
+                action == ActionCategory.SLEEP ? value : value + delta
+        );
     }
 }
