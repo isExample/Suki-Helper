@@ -1,28 +1,38 @@
 package com.example.suki;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserStateTest {
-    @Test
-    void 유저상태는_초기화시_기본장소_5곳을_포함한다(){
-        UserState userState = new UserState();
+    static Stream<PlaceCategory> 기본장소() {
+        return Arrays.stream(PlaceCategory.values())
+                .filter(PlaceCategory::isDefault);
+    }
 
-        assertTrue(userState.getPlaces().containsKey(PlaceCategory.SCHOOL));
-        assertTrue(userState.getPlaces().containsKey(PlaceCategory.HOME));
-        assertTrue(userState.getPlaces().containsKey(PlaceCategory.PARK));
-        assertTrue(userState.getPlaces().containsKey(PlaceCategory.CAFE));
-        assertTrue(userState.getPlaces().containsKey(PlaceCategory.LIBRARY));
-        assertEquals(5, userState.getPlaces().size());
+    static Stream<PlaceCategory> 조건부장소() {
+        return Arrays.stream(PlaceCategory.values())
+                .filter(pc -> !pc.isDefault());
     }
 
     @ParameterizedTest
-    @EnumSource(value = PlaceCategory.class, names = {
-            "GOLD_MINE","ART_GALLERY","GYM","PC_ROOM","FOOTBALL_PITCH","WORKSHOP","PRACTICE_ROOM"
-    })
+    @MethodSource("기본장소")
+    void 기본_유저상태는_각_기본장소를_포함한다(){
+        UserState userState = new UserState();
+        Set<PlaceCategory> expected = 기본장소().collect(Collectors.toSet());
+
+        assertEquals(expected, userState.getPlaces().keySet());
+        assertEquals(expected.size(), userState.getPlaces().size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("조건부장소")
     void 기본_유저상태는_조건부장소를_포함하지_않는다(PlaceCategory placeCategory){
         UserState us = new UserState();
 
