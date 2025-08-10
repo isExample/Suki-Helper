@@ -12,10 +12,10 @@ public class UserState {
     public UserState() {
         this.places = new EnumMap<>(PlaceCategory.class);
 
-        this.places.put(PlaceCategory.SCHOOL, new Place());
-        this.places.put(PlaceCategory.HOME, new Place());
-        this.places.put(PlaceCategory.PARK, new Place());
-        this.places.put(PlaceCategory.CAFE, new Place());
-        this.places.put(PlaceCategory.LIBRARY, new Place());
+        this.places.put(PlaceCategory.SCHOOL, new Place(PlaceCategory.SCHOOL));
+        this.places.put(PlaceCategory.HOME, new Place(PlaceCategory.HOME));
+        this.places.put(PlaceCategory.PARK, new Place(PlaceCategory.PARK));
+        this.places.put(PlaceCategory.CAFE, new Place(PlaceCategory.CAFE));
+        this.places.put(PlaceCategory.LIBRARY, new Place(PlaceCategory.LIBRARY));
     }
 }
