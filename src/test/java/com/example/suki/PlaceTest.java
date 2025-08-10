@@ -14,6 +14,7 @@ public class PlaceTest {
         assertTrue(place.getActions().containsKey(ActionCategory.PART_TIME));
         assertTrue(place.getActions().containsKey(ActionCategory.EXERCISE));
         assertTrue(place.getActions().containsKey(ActionCategory.SLEEP));
+        assertEquals(4, place.getActions().size());
     }
 
     @Test
