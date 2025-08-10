@@ -17,4 +17,8 @@ public class UserState {
                 .filter(PlaceCategory::isDefault)
                 .forEach(category -> this.places.put(category, new Place(category)));
     }
+
+    public void deactivatePlace(PlaceCategory place) {
+        this.places.remove(place);
+    }
 }
