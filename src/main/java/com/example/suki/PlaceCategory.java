@@ -17,7 +17,7 @@ public enum PlaceCategory {
             ActionCategory.STUDY, -16,
             ActionCategory.EXERCISE, -24,
             ActionCategory.PART_TIME, -29,
-            ActionCategory.SLEEP, 10
+            ActionCategory.SLEEP, 13    // 잠자기 특화 장소 보너스 + 3
     )),
     PARK("공원", Map.of(
             ActionCategory.STUDY, -16,
