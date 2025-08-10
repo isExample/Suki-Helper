@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PlaceTest {
     @Test
-    void 장소는_기본_행동_4가지를_포함한다(){
+    void 장소는_초기화시_기본행동_4가지를_포함한다(){
         Place place = new Place();
 
         assertTrue(place.getActions().containsKey(ActionCategory.STUDY));
