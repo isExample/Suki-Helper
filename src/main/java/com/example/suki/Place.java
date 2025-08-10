@@ -17,9 +17,9 @@ public class Place {
     }
 
     public void disableAction(ActionCategory action){
-        if(!this.actions.containsKey(action)) {
-            throw new IllegalArgumentException("이미 비활성화된 행동입니다.");
-        }
+        if(action == null) throw new IllegalArgumentException("행동은 null일 수 없습니다.");
+        if(!this.actions.containsKey(action)) throw new IllegalArgumentException("이미 비활성화된 행동입니다.");
+
         this.actions.remove(action);
     }
 
