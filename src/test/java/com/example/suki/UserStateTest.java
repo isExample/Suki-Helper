@@ -50,4 +50,10 @@ public class UserStateTest {
     void 비활성화장소를_비활성화_시도하면_예외가_발생한다(PlaceCategory placeCategory){
         assertThrows(IllegalArgumentException.class, () -> userState.deactivatePlace(placeCategory));
     }
+
+    @ParameterizedTest
+    @MethodSource("기본장소")
+    void 활성화장소를_활성화_시도하면_예외가_발생한다(PlaceCategory placeCategory){
+        assertThrows(IllegalArgumentException.class, () -> userState.activatePlace(placeCategory));
+    }
 }
