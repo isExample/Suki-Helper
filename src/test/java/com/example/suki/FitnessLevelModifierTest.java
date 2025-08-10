@@ -67,4 +67,17 @@ public class FitnessLevelModifierTest {
             }
         }
     }
+
+    @Test
+    void 운동레벨에_따른_행동체력_보정결과는_0을_초과하지_않는다(){
+        // 수업듣기, 게임하기, 아이돌연습 해당
+        userState.activatePlace(PlaceCategory.PC_ROOM);
+        userState.activatePlace(PlaceCategory.PRACTICE_ROOM);
+
+        modifier.modify(userState, 9);
+
+        assertEquals(0, userState.getPlaces().get(PlaceCategory.SCHOOL).getActions().get(ActionCategory.ATTEND_CLASS));
+        assertEquals(0, userState.getPlaces().get(PlaceCategory.PC_ROOM).getActions().get(ActionCategory.PLAY_GAME));
+        assertEquals(0, userState.getPlaces().get(PlaceCategory.PRACTICE_ROOM).getActions().get(ActionCategory.TRAINING));
+    }
 }
