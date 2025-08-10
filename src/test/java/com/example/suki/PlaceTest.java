@@ -53,7 +53,7 @@ public class PlaceTest {
     @Test
     void 집은_잠자기_체력지수가_3_증가한다(){
         Place place = new Place(PlaceCategory.HOME);
-        int baseSleepStamina = 10;
+        int baseSleepStamina = PlaceCategory.SCHOOL.getActions().get(ActionCategory.SLEEP); // 기본행동의 체력지수 참조
 
         assertEquals(baseSleepStamina + 3, place.getActions().get(ActionCategory.SLEEP));
     }
