@@ -37,4 +37,10 @@ public class UserState {
             place.disableAction(action);
         }
     }
+
+    public void updateStaminaToAllPlaces(int stamina){
+        for (Place place : this.places.values()) {
+            place.updateAllStamina(stamina);
+        }
+    }
 }

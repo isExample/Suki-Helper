@@ -22,4 +22,10 @@ public class Place {
         }
         this.actions.remove(action);
     }
+
+    public void updateAllStamina(int stamina){
+        for(ActionCategory action : this.actions.keySet()){
+            this.actions.put(action, this.actions.get(action) + stamina);
+        }
+    }
 }

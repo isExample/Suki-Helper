@@ -12,5 +12,7 @@ public class FitnessLevelModifier {
         if(level == MAX_LEVEL){
             userState.disableActionToAllPlaces(ActionCategory.EXERCISE);
         }
+
+        userState.updateStaminaToAllPlaces(level);
     }
 }
