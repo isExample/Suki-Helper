@@ -52,14 +52,19 @@ public class FitnessLevelModifierTest {
 
     @ParameterizedTest
     @MethodSource("기본장소와_운동레벨")
-    void 운동레벨_1당_행동_체력지수가_1_증가한다(PlaceCategory placeCategory, int level){
+    void 운동레벨_1당_잠자기를_제외한_행동의_체력지수가_1_증가한다(PlaceCategory placeCategory, int level){
         Place place = userState.getPlaces().get(placeCategory);
 
         modifier.modify(userState, level);
 
         for(ActionCategory action : place.getActions().keySet()) {
             int baseStamina = placeCategory.getActions().get(action);
-            assertEquals(baseStamina + level, place.getActions().get(action));
+
+            if (action == ActionCategory.SLEEP) {
+                assertEquals(baseStamina, place.getActions().get(action)); // 잠자기는 그대로
+            } else {
+                assertEquals(baseStamina + level, place.getActions().get(action));
+            }
         }
     }
 }
