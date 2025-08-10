@@ -9,9 +9,8 @@ public class FitnessLevelModifier {
             throw new IllegalArgumentException("운동 레벨은 0 이상 10 이하의 정수여야 합니다.");
         }
 
-        if(level == MAX_LEVEL){
-            userState.disableActionToAllPlaces(ActionCategory.EXERCISE);
-        }
+        if(level == MIN_LEVEL) return;
+        if(level == MAX_LEVEL) userState.disableActionToAllPlaces(ActionCategory.EXERCISE);
 
         userState.applyDeltaToAllPlacesExceptSleep(level);
     }
