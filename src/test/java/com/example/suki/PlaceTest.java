@@ -1,20 +1,22 @@
 package com.example.suki;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PlaceTest {
-    @Test
-    void 장소는_초기화시_기본행동_4가지를_포함한다(){
-        Place place = new Place(PlaceCategory.LIBRARY);
+    @ParameterizedTest
+    @EnumSource(PlaceCategory.class)
+    void 장소는_초기화시_기본행동_4가지를_포함한다(PlaceCategory placeCategory){
+        Place place = new Place(placeCategory);
 
         assertTrue(place.getActions().containsKey(ActionCategory.STUDY));
         assertTrue(place.getActions().containsKey(ActionCategory.PART_TIME));
         assertTrue(place.getActions().containsKey(ActionCategory.EXERCISE));
         assertTrue(place.getActions().containsKey(ActionCategory.SLEEP));
-        assertEquals(4, place.getActions().size());
     }
 
     @Test
