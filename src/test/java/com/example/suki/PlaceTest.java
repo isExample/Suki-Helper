@@ -92,4 +92,11 @@ public class PlaceTest {
         return SPECIAL_OWNER.entrySet().stream()
                 .map(e -> Arguments.of(e.getKey(), e.getValue()));
     }
+
+    @Test
+    void null_행동을_비활성화_시도하면_예외가_발생한다(){
+        Place place = new Place(PlaceCategory.SCHOOL);
+
+        assertThrows(IllegalArgumentException.class, () -> place.disableAction(null));
+    }
 }
