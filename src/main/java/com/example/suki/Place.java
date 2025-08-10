@@ -17,4 +17,11 @@ public class Place {
         this.actions.put(ActionCategory.EXERCISE, ActionCategory.EXERCISE.getStamina());
         this.actions.put(ActionCategory.SLEEP, ActionCategory.SLEEP.getStamina());
     }
+
+    public Place(PlaceCategory placeCategory){
+        this();
+        if(placeCategory == PlaceCategory.SCHOOL){
+            this.actions.put(ActionCategory.ATTEND_CLASS, ActionCategory.ATTEND_CLASS.getStamina());
+        }
+    }
 }
