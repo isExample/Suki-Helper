@@ -18,6 +18,10 @@ public class UserState {
                 .forEach(category -> this.places.put(category, new Place(category)));
     }
 
+    public void activatePlace(PlaceCategory category) {
+        this.places.put(category, new Place(category));
+    }
+
     public void deactivatePlace(PlaceCategory place) {
         if(!this.places.containsKey(place)){
             throw new IllegalArgumentException("비활성화할 수 없는 장소입니다.");
