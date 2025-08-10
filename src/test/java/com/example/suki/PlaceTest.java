@@ -19,13 +19,14 @@ public class PlaceTest {
         assertTrue(place.getActions().containsKey(ActionCategory.SLEEP));
     }
 
-    @Test
-    void 장소내_행동들은_기본체력지수로_초기화된다(){
-        Place place = new Place(PlaceCategory.LIBRARY);
+    @ParameterizedTest
+    @EnumSource(PlaceCategory.class)
+    void 장소내_행동들은_기본체력지수로_초기화된다(PlaceCategory placeCategory){
+        Place place = new Place(placeCategory);
 
         for(ActionCategory action : place.getActions().keySet()){
             System.out.println("행동: " + action + ", 체력: " + place.getActions().get(action));
-            assertEquals(PlaceCategory.LIBRARY.getActions(), place.getActions());
+            assertEquals(placeCategory.getActions(), place.getActions());
         }
     }
 
