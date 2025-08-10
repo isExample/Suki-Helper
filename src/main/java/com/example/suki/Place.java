@@ -25,7 +25,7 @@ public class Place {
 
     public void applyDeltaToActionsExceptSleep(int delta){
         this.actions.replaceAll((action, value) ->
-                action == ActionCategory.SLEEP ? value : value + delta
+                action == ActionCategory.SLEEP ? value : Math.min(0, value + delta)
         );
     }
 }
