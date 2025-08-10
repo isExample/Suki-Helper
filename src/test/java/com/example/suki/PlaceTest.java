@@ -42,6 +42,14 @@ public class PlaceTest {
         assertEquals(5, place.getActions().size());
     }
 
+    @ParameterizedTest
+    @EnumSource(value = PlaceCategory.class, names = "SCHOOL", mode = EnumSource.Mode.EXCLUDE)
+    void 특수행동_수업듣기는_학교에만_존재한다(PlaceCategory placeCategory){
+        Place place = new Place(placeCategory);
+
+        assertTrue(!place.getActions().containsKey(ActionCategory.ATTEND_CLASS));
+    }
+
     @Test
     void 집은_잠자기_체력지수가_3_증가한다(){
         Place place = new Place(PlaceCategory.HOME);
