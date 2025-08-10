@@ -2,19 +2,19 @@ package com.example.suki;
 
 import lombok.Getter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.EnumMap;
+import java.util.Map;
 
 @Getter
 public class Place {
-    private final Set<ActionCategory> actions;
+    private final Map<ActionCategory, Integer> actions;
 
     public Place() {
-        this.actions = new HashSet<>();
+        this.actions = new EnumMap<>(ActionCategory.class);
 
-        this.actions.add(ActionCategory.STUDY);
-        this.actions.add(ActionCategory.PART_TIME);
-        this.actions.add(ActionCategory.EXERCISE);
-        this.actions.add(ActionCategory.SLEEP);
+        this.actions.put(ActionCategory.STUDY, ActionCategory.STUDY.getStamina());
+        this.actions.put(ActionCategory.PART_TIME, ActionCategory.PART_TIME.getStamina());
+        this.actions.put(ActionCategory.EXERCISE, ActionCategory.EXERCISE.getStamina());
+        this.actions.put(ActionCategory.SLEEP, ActionCategory.SLEEP.getStamina());
     }
 }
