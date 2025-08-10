@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlaceTest {
     @ParameterizedTest
@@ -56,5 +55,10 @@ public class PlaceTest {
         int baseSleepStamina = PlaceCategory.SCHOOL.getActions().get(ActionCategory.SLEEP); // 기본행동의 체력지수 참조
 
         assertEquals(baseSleepStamina + 3, place.getActions().get(ActionCategory.SLEEP));
+    }
+
+    @Test
+    void 장소생성자에_null_전달시_예외가_발생한다(){
+        assertThrows(IllegalArgumentException.class, () -> new Place(null));
     }
 }
