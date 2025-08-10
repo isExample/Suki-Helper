@@ -9,5 +9,9 @@ public enum ActionCategory {
     SLEEP,          // 잠자기
 
     // 특수행동
-    ATTEND_CLASS;   // 수업듣기
+    ATTEND_CLASS,   // 수업듣기
+    PLAY_GAME,      // 게임연습
+    FOOTBALL,       // 축구연습
+    DRAWING,        // 그림연습
+    TRAINING        // 아이돌연습
 }
