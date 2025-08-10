@@ -58,6 +58,14 @@ public class PlaceTest {
     }
 
     @Test
+    void 미술관은_잠자기_체력지수가_2_증가한다(){
+        Place place = new Place(PlaceCategory.ART_GALLERY);
+        int baseSleepStamina = PlaceCategory.SCHOOL.getActions().get(ActionCategory.SLEEP); // 기본행동의 체력지수 참조
+
+        assertEquals(baseSleepStamina + 2, place.getActions().get(ActionCategory.SLEEP));
+    }
+
+    @Test
     void 장소생성자에_null_전달시_예외가_발생한다(){
         assertThrows(IllegalArgumentException.class, () -> new Place(null));
     }
