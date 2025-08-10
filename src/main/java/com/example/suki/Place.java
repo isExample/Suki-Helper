@@ -1,16 +1,20 @@
 package com.example.suki;
 
+import lombok.Getter;
+
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
 public class Place {
-    public Set<ActionCategory> actions;
+    private final Set<ActionCategory> actions;
 
     public Place() {
-        actions = Set.of(
-                ActionCategory.STUDY,
-                ActionCategory.PART_TIME,
-                ActionCategory.EXERCISE,
-                ActionCategory.SLEEP);
+        this.actions = new HashSet<>();
+
+        this.actions.add(ActionCategory.STUDY);
+        this.actions.add(ActionCategory.PART_TIME);
+        this.actions.add(ActionCategory.EXERCISE);
+        this.actions.add(ActionCategory.SLEEP);
     }
 }
