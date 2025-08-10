@@ -26,4 +26,16 @@ public class PlaceTest {
             assertEquals(action.getStamina(), place.getActions().get(action));
         }
     }
+
+    @Test
+    void 학교는_기본행동_4가지와_수업듣기를_포함한다(){
+        Place place = new Place(PlaceCategory.SCHOOL);
+
+        assertTrue(place.getActions().containsKey(ActionCategory.ATTEND_CLASS));
+        assertTrue(place.getActions().containsKey(ActionCategory.STUDY));
+        assertTrue(place.getActions().containsKey(ActionCategory.PART_TIME));
+        assertTrue(place.getActions().containsKey(ActionCategory.EXERCISE));
+        assertTrue(place.getActions().containsKey(ActionCategory.SLEEP));
+        assertEquals(5, place.getActions().size());
+    }
 }
