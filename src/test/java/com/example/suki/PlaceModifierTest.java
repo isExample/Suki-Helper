@@ -2,6 +2,8 @@ package com.example.suki;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,7 +13,7 @@ public class PlaceModifierTest {
         PlaceModifier modifier = new PlaceModifier();
         UserState userState = new UserState();
 
-        modifier.modify(userState, PlaceCategory.SCHOOL, PlaceCategory.GOLD_MINE);
+        modifier.modify(userState, List.of(PlaceCategory.SCHOOL), List.of());
 
         assertFalse(userState.getPlaces().containsKey(PlaceCategory.SCHOOL));
     }
@@ -21,7 +23,7 @@ public class PlaceModifierTest {
         PlaceModifier modifier = new PlaceModifier();
         UserState userState = new UserState();
 
-        modifier.modify(userState, PlaceCategory.SCHOOL, PlaceCategory.GOLD_MINE);
+        modifier.modify(userState, List.of(), List.of(PlaceCategory.GOLD_MINE));
 
         assertTrue(userState.getPlaces().containsKey(PlaceCategory.GOLD_MINE));
     }
