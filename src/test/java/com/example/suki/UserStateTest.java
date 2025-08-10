@@ -1,6 +1,7 @@
 package com.example.suki;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -42,5 +43,11 @@ public class UserStateTest {
     @MethodSource("조건부장소")
     void 기본_유저상태는_조건부장소를_포함하지_않는다(PlaceCategory placeCategory){
         assertFalse(userState.getPlaces().containsKey(placeCategory));
+    }
+
+    @ParameterizedTest
+    @MethodSource("조건부장소")
+    void 비활성화장소를_비활성화_시도하면_예외가_발생한다(PlaceCategory placeCategory){
+        assertThrows(IllegalArgumentException.class, () -> userState.deactivatePlace(placeCategory));
     }
 }
