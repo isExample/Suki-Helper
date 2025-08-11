@@ -1,5 +1,6 @@
 package com.example.suki;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -12,6 +13,14 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ItemModifierTest {
+    private ItemModifier modifier;
+    private UserState userState;
+
+    @BeforeEach
+    void setUp(){
+        modifier = new ItemModifier();
+        userState = new UserState();
+    }
 
     static Stream<PlaceCategory> 기본장소() {
         return Arrays.stream(PlaceCategory.values())
@@ -21,8 +30,6 @@ public class ItemModifierTest {
     @ParameterizedTest
     @MethodSource("기본장소")
     void 모든장소_모든행동의_체력소모량을_감소시키는_아이템이_존재한다(PlaceCategory place){
-        ItemModifier modifier = new ItemModifier();
-        UserState userState = new UserState();
         ItemCategory item = ItemCategory.CALMING_STONE;
 
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
@@ -39,8 +46,6 @@ public class ItemModifierTest {
 
     @Test
     void 특정장소_특정행동의_체력지수를_보정하는_아이템이_존재한다(){
-        ItemModifier modifier = new ItemModifier();
-        UserState userState = new UserState();
         ItemCategory item = ItemCategory.MEMORY_FORM_PILLOW;
         int baseStamina = userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP);
 
