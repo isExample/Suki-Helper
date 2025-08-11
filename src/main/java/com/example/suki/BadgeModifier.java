@@ -4,9 +4,12 @@ import java.util.List;
 
 public class BadgeModifier {
     public void modify(UserState userState, List<BadgeCategory> badgeList){
-        for(BadgeCategory badge : badgeList){
-            userState.applyDeltaToSpecializedPlace(badge.getValue(), badge.getActionCategory());
-        }
+        int totalBonus = badgeList.stream()
+                .mapToInt(BadgeCategory::getValue)
+                .sum();
 
+        if (totalBonus > 0) {
+            userState.applyDeltaToSpecializedPlace(totalBonus, ActionCategory.SLEEP);
+        }
     }
 }
