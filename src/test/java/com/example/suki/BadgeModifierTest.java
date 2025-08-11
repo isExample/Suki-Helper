@@ -1,5 +1,6 @@
 package com.example.suki;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -11,6 +12,17 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BadgeModifierTest {
+    private BadgeModifier modifier;
+    private UserState userState;
+
+    @BeforeEach
+    void setUp(){
+        modifier = new BadgeModifier();
+        userState = new UserState();
+        userState.activatePlace(PlaceCategory.ART_GALLERY);
+    }
+
+
     public static Stream<PlaceCategory> 잠자기특화장소() {
         return Arrays.stream(PlaceCategory.values())
                 .filter(p -> p.isSpecializedFor(ActionCategory.SLEEP));
@@ -30,10 +42,6 @@ public class BadgeModifierTest {
     @ParameterizedTest
     @MethodSource("잠자기특화장소x뱃지")
     void 잠자기특화장소의_잠자기_체력지수를_증가시키는_뱃지가_존재한다(BadgeCategory badge, PlaceCategory place){
-        BadgeModifier modifier = new BadgeModifier();
-        UserState userState = new UserState();
-        userState.activatePlace(PlaceCategory.ART_GALLERY);
-
         int baseStamina = userState.getPlaces().get(place).getActions().get(ActionCategory.SLEEP);
         int bonusStamina = badge.getValue();
 
@@ -45,11 +53,6 @@ public class BadgeModifierTest {
     @ParameterizedTest
     @MethodSource("잠자기특화장소")
     void 잠자기특화뱃지_효과는_중첩된다(PlaceCategory place){
-        BadgeModifier modifier = new BadgeModifier();
-        UserState userState = new UserState();
-        userState.activatePlace(PlaceCategory.ART_GALLERY);
-
-
         List<BadgeCategory> badgeList = 잠자기특화뱃지().toList();
         int baseStamina = userState.getPlaces().get(place).getActions().get(ActionCategory.SLEEP);
         int totalBonus = badgeList.stream()
