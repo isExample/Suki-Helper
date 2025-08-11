@@ -43,4 +43,12 @@ public class UserState {
             place.applyDeltaToActionsExceptSleep(delta);
         }
     }
+
+    public void applyDeltaToSpecializedPlace(int delta, ActionCategory action){
+        this.places.forEach((pc, p) -> {
+            if (pc.isSpecializedFor(action)) {
+                p.applyDeltaToAction(delta, action);
+            }
+        });
+    }
 }
