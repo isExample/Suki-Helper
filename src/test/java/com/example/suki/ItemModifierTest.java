@@ -36,4 +36,16 @@ public class ItemModifierTest {
             assertEquals(expected, after.get(action));
         });
     }
+
+    @Test
+    void 특정장소_특정행동의_체력지수를_보정하는_아이템이_존재한다(){
+        ItemModifier modifier = new ItemModifier();
+        UserState userState = new UserState();
+        ItemCategory item = ItemCategory.MEMORY_FORM_PILLOW;
+        int baseStamina = userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP);
+
+        modifier.modify(userState, item);
+
+        assertEquals(baseStamina + 2, userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP));
+    }
 }
