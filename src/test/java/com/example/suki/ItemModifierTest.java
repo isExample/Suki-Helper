@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -34,7 +35,7 @@ public class ItemModifierTest {
 
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
 
-        modifier.modify(userState, item);
+        modifier.modify(userState, List.of(item));
 
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
 
@@ -49,7 +50,7 @@ public class ItemModifierTest {
         ItemCategory item = ItemCategory.MEMORY_FORM_PILLOW;
         int baseStamina = userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP);
 
-        modifier.modify(userState, item);
+        modifier.modify(userState, List.of(item));
 
         assertEquals(baseStamina + 2, userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP));
     }
