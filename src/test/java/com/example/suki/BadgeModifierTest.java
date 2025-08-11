@@ -1,5 +1,6 @@
 package com.example.suki;
 
+import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,8 +34,23 @@ public class BadgeModifierTest {
         int baseStamina = userState.getPlaces().get(place).getActions().get(ActionCategory.SLEEP);
         int bonusStamina = badge.getValue();
 
-        modifier.modify(userState, badge);
+        modifier.modify(userState, List.of(badge));
 
         assertEquals(baseStamina + bonusStamina, userState.getPlaces().get(place).getActions().get(ActionCategory.SLEEP));
+    }
+
+    @Test
+    void 잠자기특화뱃지_효과는_중첩된다(){
+        BadgeModifier modifier = new BadgeModifier();
+        UserState userState = new UserState();
+
+        BadgeCategory badge1 = BadgeCategory.UNIV_1;
+        BadgeCategory badge2 = BadgeCategory.UNIV_2;
+        int baseStamina = userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP);
+        int totalBonus = badge1.getValue() + badge2.getValue();
+
+        modifier.modify(userState, List.of(badge1, badge2));
+
+        assertEquals(baseStamina + totalBonus, userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP));
     }
 }
