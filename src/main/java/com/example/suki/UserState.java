@@ -51,4 +51,8 @@ public class UserState {
             }
         });
     }
+
+    public void applyDeltaToPlaceAndAction(int delta, PlaceCategory place, ActionCategory action){
+        this.places.get(place).applyDeltaToAction(delta, action);
+    }
 }
