@@ -28,4 +28,8 @@ public class Place {
                 action == ActionCategory.SLEEP ? value : Math.min(0, value + delta)
         );
     }
+
+    public void applyDeltaToAction(int delta, ActionCategory action){
+        this.actions.replace(action, this.actions.get(action) + delta);
+    }
 }
