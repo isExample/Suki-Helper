@@ -13,12 +13,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.example.suki.TestSources.특성_스코프;
+import static com.example.suki.TestSources.특성x기본장소;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TraitModifierTest {
@@ -31,42 +32,16 @@ public class TraitModifierTest {
         userState = new UserState();
     }
 
-    static Stream<PlaceCategory> 기본장소(){
-        return Arrays.stream(PlaceCategory.values())
-                .filter(PlaceCategory::isDefault);
+    static Stream<Arguments> 모든장소_모든행동_특성x기본장소() {
+        return 특성x기본장소(특성_스코프(GlobalScope.class));
     }
 
-    static Stream<TraitCategory> 모든장소_모든행동_특성(){
-        return Arrays.stream(TraitCategory.values())
-                .filter(trait -> trait.getEffect() instanceof GlobalScope);
+    static Stream<Arguments> 특정행동_특성x기본장소() {
+        return 특성x기본장소(특성_스코프(ActionScope.class));
     }
 
-    static Stream<TraitCategory> 특정행동_특성(){
-        return Arrays.stream(TraitCategory.values())
-                .filter(trait -> trait.getEffect() instanceof ActionScope);
-    }
-
-    static Stream<TraitCategory> 특정장소_특성(){
-        return Arrays.stream(TraitCategory.values())
-                .filter(trait -> trait.getEffect() instanceof PlaceScope);
-    }
-
-    public static Stream<Arguments> 모든장소_모든행동_특성x기본장소() {
-        List<PlaceCategory> places = 기본장소().toList();
-        return 모든장소_모든행동_특성()
-                .flatMap(t -> places.stream().map(p -> Arguments.of(t, p)));
-    }
-
-    public static Stream<Arguments> 특정행동_특성x기본장소() {
-        List<PlaceCategory> places = 기본장소().toList();
-        return 특정행동_특성()
-                .flatMap(t -> places.stream().map(p -> Arguments.of(t, p)));
-    }
-
-    public static Stream<Arguments> 특정장소_특성x기본장소() {
-        List<PlaceCategory> places = 기본장소().toList();
-        return 특정장소_특성()
-                .flatMap(t -> places.stream().map(p -> Arguments.of(t, p)));
+    static Stream<Arguments> 특정장소_특성x기본장소() {
+        return 특성x기본장소(특성_스코프(PlaceScope.class));
     }
 
     @ParameterizedTest
