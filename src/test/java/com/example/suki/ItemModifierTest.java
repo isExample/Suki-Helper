@@ -2,9 +2,9 @@ package com.example.suki;
 
 import com.example.suki.domain.*;
 import com.example.suki.domain.action.ActionCategory;
-import com.example.suki.domain.effect.All;
+import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.item.ItemCategory;
-import com.example.suki.domain.effect.PlaceAndAction;
+import com.example.suki.domain.effect.PlaceActionScope;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.modifier.ItemModifier;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,12 +37,12 @@ public class ItemModifierTest {
 
     static Stream<ItemCategory> 모든장소_모든행동_아이템(){
         return Arrays.stream(ItemCategory.values())
-                .filter(item -> item.getEffect() instanceof All);
+                .filter(item -> item.getEffect() instanceof GlobalScope);
     }
 
     static Stream<ItemCategory> 특정장소_특정행동_아이템(){
         return Arrays.stream(ItemCategory.values())
-                .filter(item -> item.getEffect() instanceof PlaceAndAction);
+                .filter(item -> item.getEffect() instanceof PlaceActionScope);
     }
 
     public static Stream<Arguments> 모든장소_모든행동_아이템x기본장소() {

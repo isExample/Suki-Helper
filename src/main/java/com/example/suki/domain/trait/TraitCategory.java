@@ -3,7 +3,7 @@ package com.example.suki.domain.trait;
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.effect.ActionScope;
-import com.example.suki.domain.effect.All;
+import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.effect.StaminaEffect;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 public enum TraitCategory {
     // S급
     ADAMANTINE_BODY("금강불괴", "체력 소모량 -3",
-            new All(3)),
+            new GlobalScope(3)),
     ATHLETIC("운동체질", "운동 시 체력 소모량 -5",
             new ActionScope(5, ActionCategory.EXERCISE)),
     PART_TIME_MASTER("알바의 달인", "알바 시 체력 소모량 -5",

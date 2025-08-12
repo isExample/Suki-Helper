@@ -3,11 +3,10 @@ package com.example.suki;
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.effect.ActionScope;
-import com.example.suki.domain.effect.All;
+import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
 import com.example.suki.modifier.TraitModifier;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,7 +27,7 @@ public class TraitModifierTest {
 
     static Stream<TraitCategory> 모든장소_모든행동_특성(){
         return Arrays.stream(TraitCategory.values())
-                .filter(trait -> trait.getEffect() instanceof All);
+                .filter(trait -> trait.getEffect() instanceof GlobalScope);
     }
 
     static Stream<TraitCategory> 특정행동_특성(){

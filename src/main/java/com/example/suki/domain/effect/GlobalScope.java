@@ -4,12 +4,12 @@ import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
 
-public record PlaceAndAction(int delta, PlaceCategory place, ActionCategory action) implements StaminaEffect {
+public record GlobalScope(int delta) implements StaminaEffect {
     public void apply(UserState userState){
-        userState.applyDeltaToPlaceAndAction(delta, place, action);
+        userState.applyDeltaToAllPlacesExceptSleep(delta);
     }
 
     public int deltaFor(PlaceCategory p, ActionCategory a){
-        return (p == place && a == action) ? delta : 0;
+        return (a == ActionCategory.SLEEP) ? 0 : delta;
     }
 }
