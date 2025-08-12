@@ -1,5 +1,10 @@
 package com.example.suki;
 
+import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.badge.BadgeCategory;
+import com.example.suki.domain.place.PlaceCategory;
+import com.example.suki.domain.UserState;
+import com.example.suki.modifier.BadgeModifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

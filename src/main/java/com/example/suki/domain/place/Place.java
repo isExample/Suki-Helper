@@ -1,5 +1,6 @@
-package com.example.suki;
+package com.example.suki.domain.place;
 
+import com.example.suki.domain.action.ActionCategory;
 import lombok.Getter;
 
 import java.util.EnumMap;

@@ -1,4 +1,8 @@
-package com.example.suki;
+package com.example.suki.modifier;
+
+import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.badge.BadgeCategory;
+import com.example.suki.domain.UserState;
 
 import java.util.List;
 

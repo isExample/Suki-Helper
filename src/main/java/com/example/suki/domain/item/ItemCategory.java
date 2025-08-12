@@ -1,5 +1,8 @@
-package com.example.suki;
+package com.example.suki.domain.item;
 
+import com.example.suki.domain.UserState;
+import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.place.PlaceCategory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

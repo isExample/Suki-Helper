@@ -1,4 +1,7 @@
-package com.example.suki;
+package com.example.suki.modifier;
+
+import com.example.suki.domain.place.PlaceCategory;
+import com.example.suki.domain.UserState;
 
 import java.util.List;
 

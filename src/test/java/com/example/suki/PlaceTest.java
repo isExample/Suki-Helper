@@ -1,5 +1,8 @@
 package com.example.suki;
 
+import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.place.Place;
+import com.example.suki.domain.place.PlaceCategory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
