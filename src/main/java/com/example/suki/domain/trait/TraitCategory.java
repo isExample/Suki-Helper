@@ -4,7 +4,9 @@ import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.effect.ActionScope;
 import com.example.suki.domain.effect.GlobalScope;
+import com.example.suki.domain.effect.PlaceScope;
 import com.example.suki.domain.effect.StaminaEffect;
+import com.example.suki.domain.place.PlaceCategory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +25,9 @@ public enum TraitCategory {
     AVID_READER("다독가", "공부 시 체력 소모량 -1",
             new ActionScope(1, ActionCategory.STUDY)),
     JELLYFISH_SLEEP("해파리 수면법", "잠자기 시, 체력 회복량 1 증가",
-            new ActionScope(1, ActionCategory.SLEEP));
+            new ActionScope(1, ActionCategory.SLEEP)),
+    I_INTROVERTED("I.내향적", "집에서 체력 소모량 -3",
+            new PlaceScope(3, PlaceCategory.HOME));
 
 
     private final String name;
