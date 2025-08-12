@@ -1,10 +1,10 @@
-package com.example.suki.domain.item;
+package com.example.suki.domain.effect;
 
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
 
-public record PlaceAndAction(int delta, PlaceCategory place, ActionCategory action) implements ItemEffect {
+public record PlaceActionScope(int delta, PlaceCategory place, ActionCategory action) implements StaminaEffect {
     public void apply(UserState userState){
         userState.applyDeltaToPlaceAndAction(delta, place, action);
     }

@@ -60,4 +60,16 @@ public class UserState {
             this.places.get(place).applyDeltaToAction(delta, action);
         }
     }
+
+    public void applyDeltaToAction(int delta, ActionCategory action){
+        for (Place place : this.places.values()) {
+            place.applyDeltaToAction(delta, action);
+        }
+    }
+
+    public void applyDeltaToPlace(int delta, PlaceCategory place){
+        if(this.places.containsKey(place)) {
+            this.places.get(place).applyDeltaToActionsExceptSleep(delta);
+        }
+    }
 }

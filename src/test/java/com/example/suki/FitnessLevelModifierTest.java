@@ -12,10 +12,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.example.suki.TestSources.기본장소;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FitnessLevelModifierTest {
@@ -28,15 +28,10 @@ public class FitnessLevelModifierTest {
         userState = new UserState();
     }
 
-    static Stream<Arguments> 기본장소와_운동레벨() {
+    static Stream<Arguments> 기본장소x운동레벨() {
         return 기본장소().flatMap(pc ->
                 IntStream.rangeClosed(0, 9).boxed()
                         .map(level -> Arguments.of(pc, level)));
-    }
-
-    static Stream<PlaceCategory> 기본장소() {
-        return Arrays.stream(PlaceCategory.values())
-                .filter(PlaceCategory::isDefault);
     }
 
     @ParameterizedTest
@@ -56,7 +51,7 @@ public class FitnessLevelModifierTest {
     }
 
     @ParameterizedTest
-    @MethodSource("기본장소와_운동레벨")
+    @MethodSource("기본장소x운동레벨")
     void 운동레벨_1당_잠자기를_제외한_행동의_체력지수가_1_증가한다(PlaceCategory placeCategory, int level){
         Place place = userState.getPlaces().get(placeCategory);
 
