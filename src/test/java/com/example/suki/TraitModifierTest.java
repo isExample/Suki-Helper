@@ -7,6 +7,7 @@ import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
 import com.example.suki.modifier.TraitModifier;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,6 +21,15 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TraitModifierTest {
+    private TraitModifier modifier;
+    private UserState userState;
+
+    @BeforeEach
+    void setUp(){
+        modifier = new TraitModifier();
+        userState = new UserState();
+    }
+
     static Stream<PlaceCategory> 기본장소(){
         return Arrays.stream(PlaceCategory.values())
                 .filter(PlaceCategory::isDefault);
@@ -50,9 +60,6 @@ public class TraitModifierTest {
     @ParameterizedTest
     @MethodSource("모든장소_모든행동_특성x기본장소")
     void 모든장소_모든행동의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
-        TraitModifier modifier = new TraitModifier();
-        UserState userState = new UserState();
-
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
 
         modifier.modify(userState, List.of(trait));
@@ -66,9 +73,6 @@ public class TraitModifierTest {
     @ParameterizedTest
     @MethodSource("특정행동_특성x기본장소")
     void 특정행동의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
-        TraitModifier modifier = new TraitModifier();
-        UserState userState = new UserState();
-
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
 
         modifier.modify(userState, List.of(trait));
