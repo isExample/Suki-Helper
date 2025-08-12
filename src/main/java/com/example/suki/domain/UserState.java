@@ -56,6 +56,8 @@ public class UserState {
     }
 
     public void applyDeltaToPlaceAndAction(int delta, PlaceCategory place, ActionCategory action){
-        this.places.get(place).applyDeltaToAction(delta, action);
+        if(this.places.containsKey(place)) {
+            this.places.get(place).applyDeltaToAction(delta, action);
+        }
     }
 }
