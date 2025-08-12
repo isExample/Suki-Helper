@@ -40,7 +40,7 @@ public class ItemModifierTest {
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
 
         before.forEach((action, base) -> {
-            int expected = (base < 0) ? base + 1 : base; // 체력지수가 양수인 잠자기는 감소x
+            int expected = base + item.getEffect().deltaFor(place, action);
             assertEquals(expected, after.get(action));
         });
     }
@@ -52,6 +52,6 @@ public class ItemModifierTest {
 
         modifier.modify(userState, List.of(item));
 
-        assertEquals(baseStamina + 2, userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP));
+        assertEquals(baseStamina + item.getEffect().deltaFor(PlaceCategory.HOME, ActionCategory.SLEEP), userState.getPlaces().get(PlaceCategory.HOME).getActions().get(ActionCategory.SLEEP));
     }
 }
