@@ -75,7 +75,7 @@ public class BadgeModifierTest {
     @Test
     void 대학교뱃지는_최대_6개로_제한된다(){
         List<BadgeCategory> badge = new ArrayList<>();
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < 8; i++){
             badge.add(BadgeCategory.UNIV_1);
         }
 
