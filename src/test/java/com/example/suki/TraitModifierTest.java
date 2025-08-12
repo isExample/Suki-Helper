@@ -80,10 +80,9 @@ public class TraitModifierTest {
 
     private void assertTraitEffectApplied(TraitCategory trait, PlaceCategory place) {
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
         modifier.modify(userState, List.of(trait));
-
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
+
         before.forEach((action, base) -> {
             int expected = base + trait.getEffect().deltaFor(place, action, userState.getDay());
             assertEquals(expected, after.get(action));
