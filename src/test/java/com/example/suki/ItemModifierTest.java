@@ -47,7 +47,7 @@ public class ItemModifierTest {
 
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
         before.forEach((action, base) -> {
-            assertEquals(base + item.getEffect().deltaFor(place, action), after.get(action));
+            assertEquals(base + item.getEffect().deltaFor(place, action, userState.getDay()), after.get(action));
         });
     }
 
@@ -60,7 +60,7 @@ public class ItemModifierTest {
 
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
         before.forEach((action, base) -> {
-            assertEquals(base + item.getEffect().deltaFor(place, action), after.get(action));
+            assertEquals(base + item.getEffect().deltaFor(place, action, userState.getDay()), after.get(action));
         });
     }
 }
