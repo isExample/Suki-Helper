@@ -1,5 +1,6 @@
 package com.example.suki.domain.effect;
 
+import com.example.suki.domain.DayCategory;
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
@@ -9,7 +10,7 @@ public record PlaceScope(int delta, PlaceCategory place) implements StaminaEffec
         userState.applyDeltaToPlace(delta, place);
     }
 
-    public int deltaFor(PlaceCategory p, ActionCategory a){
+    public int deltaFor(PlaceCategory p, ActionCategory a, DayCategory d){
         return (p == place && a != ActionCategory.SLEEP) ? delta : 0;
     }
 }

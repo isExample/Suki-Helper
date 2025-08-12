@@ -78,4 +78,10 @@ public class UserState {
             this.places.get(place).applyDeltaToActionsExceptSleep(delta);
         }
     }
+
+    public void applyDeltaOnMatchingDay(int delta, DayCategory day){
+        if(this.day == day){
+            applyDeltaToAllPlacesExceptSleep(delta);
+        }
+    }
 }

@@ -1,11 +1,9 @@
 package com.example.suki.domain.trait;
 
+import com.example.suki.domain.DayCategory;
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
-import com.example.suki.domain.effect.ActionScope;
-import com.example.suki.domain.effect.GlobalScope;
-import com.example.suki.domain.effect.PlaceScope;
-import com.example.suki.domain.effect.StaminaEffect;
+import com.example.suki.domain.effect.*;
 import com.example.suki.domain.place.PlaceCategory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +25,11 @@ public enum TraitCategory {
     JELLYFISH_SLEEP("해파리 수면법", "잠자기 시, 체력 회복량 1 증가",
             new ActionScope(1, ActionCategory.SLEEP)),
     I_INTROVERTED("I.내향적", "집에서 체력 소모량 -3",
-            new PlaceScope(3, PlaceCategory.HOME));
+            new PlaceScope(3, PlaceCategory.HOME)),
 
+    // C급
+    MONDAY_LOVER("월요일 좋아", "월요일에 체력 소모량 -1",
+            new DayScope(1, DayCategory.WEEKDAY_MON));
 
     private final String name;
     private final String description;

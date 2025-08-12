@@ -1,5 +1,6 @@
 package com.example.suki.domain.effect;
 
+import com.example.suki.domain.DayCategory;
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
@@ -9,7 +10,7 @@ public record PlaceActionScope(int delta, PlaceCategory place, ActionCategory ac
         userState.applyDeltaToPlaceAndAction(delta, place, action);
     }
 
-    public int deltaFor(PlaceCategory p, ActionCategory a){
+    public int deltaFor(PlaceCategory p, ActionCategory a, DayCategory d){
         return (p == place && a == action) ? delta : 0;
     }
 }
