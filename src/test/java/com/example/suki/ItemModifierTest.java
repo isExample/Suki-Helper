@@ -12,12 +12,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.example.suki.TestSources.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ItemModifierTest {
@@ -30,31 +30,12 @@ public class ItemModifierTest {
         userState = new UserState();
     }
 
-    static Stream<PlaceCategory> 기본장소() {
-        return Arrays.stream(PlaceCategory.values())
-                .filter(PlaceCategory::isDefault);
+    static Stream<Arguments> 모든장소_모든행동_아이템x기본장소() {
+        return 아이템x기본장소(아이템_스코프(GlobalScope.class));
     }
 
-    static Stream<ItemCategory> 모든장소_모든행동_아이템(){
-        return Arrays.stream(ItemCategory.values())
-                .filter(item -> item.getEffect() instanceof GlobalScope);
-    }
-
-    static Stream<ItemCategory> 특정장소_특정행동_아이템(){
-        return Arrays.stream(ItemCategory.values())
-                .filter(item -> item.getEffect() instanceof PlaceActionScope);
-    }
-
-    public static Stream<Arguments> 모든장소_모든행동_아이템x기본장소() {
-        List<PlaceCategory> places = 기본장소().toList();
-        return 모든장소_모든행동_아이템()
-                .flatMap(i -> places.stream().map(p -> Arguments.of(i, p)));
-    }
-
-    public static Stream<Arguments> 특정장소_특정행동_아이템x기본장소() {
-        List<PlaceCategory> places = 기본장소().toList();
-        return 특정장소_특정행동_아이템()
-                .flatMap(i -> places.stream().map(p -> Arguments.of(i, p)));
+    static Stream<Arguments> 특정장소_특정행동_아이템x기본장소() {
+        return 아이템x기본장소(아이템_스코프(PlaceActionScope.class));
     }
 
     @ParameterizedTest
