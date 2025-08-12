@@ -1,9 +1,8 @@
 package com.example.suki.domain.trait;
 
 import com.example.suki.domain.UserState;
-import com.example.suki.domain.action.ActionCategory;
-import com.example.suki.domain.item.All;
-import com.example.suki.domain.item.ItemEffect;
+import com.example.suki.domain.effect.All;
+import com.example.suki.domain.effect.StaminaEffect;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +14,7 @@ public enum TraitCategory {
 
     private final String name;
     private final String description;
-    private final ItemEffect effect;
+    private final StaminaEffect effect;
 
     public void apply(UserState userState){
         effect.apply(userState);

@@ -2,9 +2,9 @@ package com.example.suki;
 
 import com.example.suki.domain.*;
 import com.example.suki.domain.action.ActionCategory;
-import com.example.suki.domain.item.All;
+import com.example.suki.domain.effect.All;
 import com.example.suki.domain.item.ItemCategory;
-import com.example.suki.domain.item.PlaceAndAction;
+import com.example.suki.domain.effect.PlaceAndAction;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.modifier.ItemModifier;
 import org.junit.jupiter.api.BeforeEach;

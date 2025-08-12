@@ -2,17 +2,14 @@ package com.example.suki;
 
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
-import com.example.suki.domain.item.All;
-import com.example.suki.domain.item.ItemCategory;
+import com.example.suki.domain.effect.All;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
 import com.example.suki.modifier.TraitModifier;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
