@@ -18,6 +18,19 @@ public class TestSources {
                     .filter(PlaceCategory::isDefault)
                     .toList();
 
+    private static final List<PlaceCategory> CONDITIONAL_PLACES =
+            Arrays.stream(PlaceCategory.values())
+                    .filter(p ->  !p.isDefault())
+                    .toList();
+
+    public static Stream<PlaceCategory> 기본장소() {
+        return DEFAULT_PLACES.stream();
+    }
+
+    public static Stream<PlaceCategory> 조건부장소() {
+        return CONDITIONAL_PLACES.stream();
+    }
+
     public static Stream<TraitCategory> 특성_스코프(Class<?> scopeType) {
         return Arrays.stream(TraitCategory.values())
                 .filter(t -> scopeType.isInstance(t.getEffect()));
