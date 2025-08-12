@@ -5,12 +5,12 @@ import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
 
-public record ActionScope(int delta, ActionCategory action) implements StaminaEffect {
+public record DayScope(int delta, DayCategory day) implements StaminaEffect {
     public void apply(UserState userState){
-        userState.applyDeltaToAction(delta, action);
+        userState.applyDeltaOnMatchingDay(delta, day);
     }
 
     public int deltaFor(PlaceCategory p, ActionCategory a, DayCategory d){
-        return (a == action) ? delta : 0;
+        return (d == day && a != ActionCategory.SLEEP) ? delta : 0;
     }
 }

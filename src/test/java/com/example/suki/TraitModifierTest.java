@@ -1,8 +1,10 @@
 package com.example.suki;
 
+import com.example.suki.domain.DayCategory;
 import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.effect.ActionScope;
+import com.example.suki.domain.effect.DayScope;
 import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.effect.PlaceScope;
 import com.example.suki.domain.place.PlaceCategory;
@@ -47,42 +49,43 @@ public class TraitModifierTest {
         return 특성x기본장소(특성_스코프(PlaceScope.class));
     }
 
+    static Stream<Arguments> 특정요일_특성x기본장소() {
+        return 특성x기본장소(특성_스코프(DayScope.class));
+    }
+
     @ParameterizedTest
     @MethodSource("모든장소_모든행동_특성x기본장소")
     void 모든장소_모든행동의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
-        Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
-        modifier.modify(userState, List.of(trait));
-
-        Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
-        before.forEach((action, base) -> {
-            assertEquals(base + trait.getEffect().deltaFor(place, action), after.get(action));
-        });
+        assertTraitEffectApplied(trait, place);
     }
 
     @ParameterizedTest
     @MethodSource("특정행동_특성x기본장소")
     void 특정행동의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
-        Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
-        modifier.modify(userState, List.of(trait));
-
-        Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
-        before.forEach((action, base) -> {
-            assertEquals(base + trait.getEffect().deltaFor(place, action), after.get(action));
-        });
+        assertTraitEffectApplied(trait, place);
     }
 
     @ParameterizedTest
     @MethodSource("특정장소_특성x기본장소")
     void 특정장소의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
+        assertTraitEffectApplied(trait, place);
+    }
+
+    @ParameterizedTest
+    @MethodSource("특정요일_특성x기본장소")
+    void 특정요일의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
+        userState = new UserState(DayCategory.WEEKDAY_MON);
+        assertTraitEffectApplied(trait, place);
+    }
+
+    private void assertTraitEffectApplied(TraitCategory trait, PlaceCategory place) {
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
         modifier.modify(userState, List.of(trait));
-
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
+
         before.forEach((action, base) -> {
-            assertEquals(base + trait.getEffect().deltaFor(place, action), after.get(action));
+            int expected = base + trait.getEffect().deltaFor(place, action, userState.getDay());
+            assertEquals(expected, after.get(action));
         });
     }
 

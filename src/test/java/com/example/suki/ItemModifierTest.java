@@ -41,26 +41,23 @@ public class ItemModifierTest {
     @ParameterizedTest
     @MethodSource("모든장소_모든행동_아이템x기본장소")
     void 모든장소_모든행동의_체력소모량을_감소시키는_아이템이_존재한다(ItemCategory item, PlaceCategory place){
-        Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
-        modifier.modify(userState, List.of(item));
-
-        Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
-        before.forEach((action, base) -> {
-            assertEquals(base + item.getEffect().deltaFor(place, action), after.get(action));
-        });
+        assertItemEffectApplied(item, place);
     }
 
     @ParameterizedTest
     @MethodSource("특정장소_특정행동_아이템x기본장소")
     void 특정장소_특정행동의_체력지수를_보정하는_아이템이_존재한다(ItemCategory item, PlaceCategory place){
+        assertItemEffectApplied(item, place);
+    }
+
+    private void assertItemEffectApplied(ItemCategory item, PlaceCategory place) {
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
         modifier.modify(userState, List.of(item));
-
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
+
         before.forEach((action, base) -> {
-            assertEquals(base + item.getEffect().deltaFor(place, action), after.get(action));
+            int expected = base + item.getEffect().deltaFor(place, action, userState.getDay());
+            assertEquals(expected, after.get(action));
         });
     }
 }
