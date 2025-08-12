@@ -56,55 +56,37 @@ public class TraitModifierTest {
     @ParameterizedTest
     @MethodSource("모든장소_모든행동_특성x기본장소")
     void 모든장소_모든행동의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
-        Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
-        modifier.modify(userState, List.of(trait));
-
-        Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
-        before.forEach((action, base) -> {
-            assertEquals(base + trait.getEffect().deltaFor(place, action, userState.getDay()), after.get(action));
-        });
+        assertTraitEffectApplied(trait, place);
     }
 
     @ParameterizedTest
     @MethodSource("특정행동_특성x기본장소")
     void 특정행동의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
-        Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
-        modifier.modify(userState, List.of(trait));
-
-        Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
-        before.forEach((action, base) -> {
-            assertEquals(base + trait.getEffect().deltaFor(place, action, userState.getDay()), after.get(action));
-        });
+        assertTraitEffectApplied(trait, place);
     }
 
     @ParameterizedTest
     @MethodSource("특정장소_특성x기본장소")
     void 특정장소의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
-        Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
-
-        modifier.modify(userState, List.of(trait));
-
-        Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
-        before.forEach((action, base) -> {
-            assertEquals(base + trait.getEffect().deltaFor(place, action, userState.getDay()), after.get(action));
-        });
+        assertTraitEffectApplied(trait, place);
     }
 
     @ParameterizedTest
     @MethodSource("특정요일_특성x기본장소")
     void 특정요일의_체력소모량을_감소시키는_특성이_존재한다(TraitCategory trait, PlaceCategory place){
         userState = new UserState(DayCategory.WEEKDAY_MON);
+        assertTraitEffectApplied(trait, place);
+    }
 
+    private void assertTraitEffectApplied(TraitCategory trait, PlaceCategory place) {
         Map<ActionCategory, Integer> before = new EnumMap<>(userState.getPlaces().get(place).getActions());
 
         modifier.modify(userState, List.of(trait));
 
         Map<ActionCategory, Integer> after = userState.getPlaces().get(place).getActions();
         before.forEach((action, base) -> {
-            System.out.println(base + trait.getEffect().deltaFor(place, action, userState.getDay()));
-            assertEquals(base + trait.getEffect().deltaFor(place, action, userState.getDay()), after.get(action));
+            int expected = base + trait.getEffect().deltaFor(place, action, userState.getDay());
+            assertEquals(expected, after.get(action));
         });
     }
 
