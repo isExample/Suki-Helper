@@ -12,9 +12,15 @@ import java.util.Map;
 @Getter
 public class UserState {
     private final Map<PlaceCategory, Place> places;
+    private final DayCategory day;
 
     public UserState() {
+        this(DayCategory.WEEKDAY_OTHER);
+    }
+
+    public UserState(DayCategory day) {
         this.places = new EnumMap<>(PlaceCategory.class);
+        this.day = day;
 
         Arrays.stream(PlaceCategory.values())
                 .filter(PlaceCategory::isDefault)
