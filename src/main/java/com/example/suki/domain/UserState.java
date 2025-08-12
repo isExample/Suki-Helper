@@ -1,5 +1,8 @@
-package com.example.suki;
+package com.example.suki.domain;
 
+import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.place.Place;
+import com.example.suki.domain.place.PlaceCategory;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -50,5 +53,11 @@ public class UserState {
                 p.applyDeltaToAction(delta, action);
             }
         });
+    }
+
+    public void applyDeltaToPlaceAndAction(int delta, PlaceCategory place, ActionCategory action){
+        if(this.places.containsKey(place)) {
+            this.places.get(place).applyDeltaToAction(delta, action);
+        }
     }
 }

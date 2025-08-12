@@ -1,4 +1,4 @@
-package com.example.suki;
+package com.example.suki.domain.action;
 
 
 public enum ActionCategory {

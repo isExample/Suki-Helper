@@ -1,5 +1,6 @@
-package com.example.suki;
+package com.example.suki.domain.badge;
 
+import com.example.suki.domain.action.ActionCategory;
 import lombok.Getter;
 
 @Getter

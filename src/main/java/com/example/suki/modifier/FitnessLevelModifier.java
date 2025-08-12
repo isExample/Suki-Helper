@@ -1,4 +1,7 @@
-package com.example.suki;
+package com.example.suki.modifier;
+
+import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.UserState;
 
 public class FitnessLevelModifier {
     private static final int MIN_LEVEL = 0;
