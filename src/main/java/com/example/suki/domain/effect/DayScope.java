@@ -11,6 +11,6 @@ public record DayScope(int delta, DayCategory day) implements StaminaEffect {
     }
 
     public int deltaFor(PlaceCategory p, ActionCategory a, DayCategory d){
-        return (d == DayCategory.WEEKDAY_MON && a != ActionCategory.SLEEP) ? delta : 0;
+        return (d == day && a != ActionCategory.SLEEP) ? delta : 0;
     }
 }
