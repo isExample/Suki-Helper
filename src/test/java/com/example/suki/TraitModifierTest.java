@@ -9,10 +9,12 @@ import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
 import com.example.suki.modifier.TraitModifier;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.stream.Stream;
 import static com.example.suki.TestSources.특성_스코프;
 import static com.example.suki.TestSources.특성x기본장소;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TraitModifierTest {
     private TraitModifier modifier;
@@ -81,5 +84,15 @@ public class TraitModifierTest {
         before.forEach((action, base) -> {
             assertEquals(base + trait.getEffect().deltaFor(place, action), after.get(action));
         });
+    }
+
+    @Test
+    void 특성은_최대_6개로_제한된다(){
+        List<TraitCategory> traitList = new ArrayList<>();
+        for(int i = 0; i < 7; i++){
+            traitList.add(TraitCategory.ATHLETIC);
+        }
+
+        assertThrows(IllegalArgumentException.class, () -> modifier.modify(userState, traitList));
     }
 }
