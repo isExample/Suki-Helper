@@ -8,6 +8,7 @@ import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,9 +42,15 @@ public class Simulator {
     }
 
     private SimulationResult simulateWeekday(UserState userState, int targetStamina) {
+        // 첫 장소 학교로 고정
+        Place school = userState.getPlaces().get(PlaceCategory.SCHOOL);
+        Map<ActionCategory, Integer> schoolActions = school.getActions();
+
+        // 두 번째 장소 결정
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
+            PlaceCategory secondPlace = entry.getKey();
             List<Tick> combination = new ArrayList<>();
-            if (findPath(0, MAX_STAMINA, targetStamina, entry.getKey(), entry.getValue().getActions(), combination)) {
+            if (findWeekdayPath(0, MAX_STAMINA, targetStamina, secondPlace, schoolActions, entry.getValue().getActions(), combination)) {
                 return SimulationResult.success(combination);
             }
         }
@@ -74,6 +81,35 @@ public class Simulator {
             combination.remove(combination.size() - 1);
         }
 
+        return false;
+    }
+
+    private boolean findWeekdayPath(int currentTick, int currentStamina, int targetStamina,
+                                    PlaceCategory secondPlace, Map<ActionCategory, Integer> schoolActions, Map<ActionCategory, Integer> secondActions,
+                                    List<Tick> combination) {
+        if (currentTick == MAX_TICKS || currentStamina == targetStamina) {
+            return currentStamina == targetStamina;
+        }
+
+        boolean schoolPhase = currentTick < 6; // 첫 6틱은 학교 고정
+        Map<ActionCategory, Integer> actions = schoolPhase ? schoolActions : secondActions;
+        PlaceCategory place = schoolPhase ? PlaceCategory.SCHOOL : secondPlace;
+
+        for (Map.Entry<ActionCategory, Integer> e : actions.entrySet()) {
+            ActionCategory action = e.getKey();
+            int delta = e.getValue();
+
+            int nextStamina = Math.min(MAX_STAMINA, currentStamina + delta);
+            if (nextStamina <= MIN_STAMINA) {
+                continue;
+            }
+
+            combination.add(new Tick(place, action));
+            if (findWeekdayPath(currentTick + 1, nextStamina, targetStamina, secondPlace, schoolActions, secondActions, combination)) {
+                return true;
+            }
+            combination.remove(combination.size() - 1);
+        }
         return false;
     }
 }
