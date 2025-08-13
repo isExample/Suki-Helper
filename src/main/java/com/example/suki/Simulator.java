@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Simulator {
+    private static final int MAX_TICKS = 14;
+
     public SimulationResult simulate(UserState userState, int targetStamina){
         if(targetStamina < 1 || targetStamina > 99) throw new IllegalArgumentException("목표 체력은 1 이상 99 이하여야 합니다.");
 
@@ -39,7 +41,7 @@ public class Simulator {
     private boolean findPath(int currentTick, int currentStamina, int targetStamina,
                              PlaceCategory place, Map<ActionCategory, Integer> availableActions, List<Tick> combination) {
         //System.out.println("진입: " + currentTick + ", " + currentStamina);
-        if(currentTick == 14 || currentStamina == targetStamina){
+        if(currentTick == MAX_TICKS || currentStamina == targetStamina){
             return currentStamina == targetStamina;
         }
 
