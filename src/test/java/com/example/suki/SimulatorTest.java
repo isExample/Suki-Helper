@@ -58,7 +58,7 @@ public class SimulatorTest {
         UserState userState = new UserState(DayCategory.WEEKDAY_OTHER);
 
         userState.deactivateAll();
-        userState.activatePlace(PlaceCategory.LIBRARY); // 단일 장소
+        userState.activatePlace(PlaceCategory.SCHOOL); // 평일 첫 장소는 항상 학교 -> 단일 장소는 학교만 가능
 
         assertTrue(simulator.simulate(userState, target).isPossible());
     }
