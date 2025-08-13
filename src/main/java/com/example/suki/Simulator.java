@@ -1,5 +1,6 @@
 package com.example.suki;
 
+import com.example.suki.domain.PlaceRule;
 import com.example.suki.domain.SimulationResult;
 import com.example.suki.domain.Tick;
 import com.example.suki.domain.UserState;
@@ -17,6 +18,8 @@ public class Simulator {
     private static final int MIN_STAMINA = 0;
     private static final int MAX_TICKS = 14;
     private static final int WEEKDAY_SCHOOL_TICKS = 6;
+    private static final PlaceRule WEEKEND_RULE = (tick, second) -> second;
+    private static final PlaceRule WEEKDAY_RULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
 
     public SimulationResult simulate(UserState userState, int targetStamina){
         if(targetStamina < 1 || targetStamina > 99) throw new IllegalArgumentException("목표 체력은 1 이상 99 이하여야 합니다.");
@@ -34,38 +37,37 @@ public class Simulator {
 
     private SimulationResult simulateWeekend(UserState userState, int targetStamina) {
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
-            List<Tick> combination = new ArrayList<>();
-            if (findPath(0, MAX_STAMINA, targetStamina, entry.getKey(), entry.getValue().getActions(), combination)) {
-                return SimulationResult.success(combination);
+            PlaceCategory single = entry.getKey(); // 단일 장소 고정
+            List<Tick> path = new ArrayList<>();
+            if (findPath(userState, 0, MAX_STAMINA, targetStamina, single, WEEKEND_RULE, path)) {
+                return SimulationResult.success(path);
             }
         }
         return SimulationResult.failure();
     }
 
     private SimulationResult simulateWeekday(UserState userState, int targetStamina) {
-        // 첫 장소 학교로 고정
-        Place school = userState.getPlaces().get(PlaceCategory.SCHOOL);
-        Map<ActionCategory, Integer> schoolActions = school.getActions();
-
-        // 두 번째 장소 결정
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
-            PlaceCategory secondPlace = entry.getKey();
-            List<Tick> combination = new ArrayList<>();
-            if (findWeekdayPath(0, MAX_STAMINA, targetStamina, secondPlace, schoolActions, entry.getValue().getActions(), combination)) {
-                return SimulationResult.success(combination);
+            PlaceCategory second = entry.getKey(); // 첫 장소 학교 고정, 두 번째 장소 탐색
+            List<Tick> path = new ArrayList<>();
+            if (findPath(userState, 0, MAX_STAMINA, targetStamina, second, WEEKDAY_RULE, path)) {
+                return SimulationResult.success(path);
             }
         }
         return SimulationResult.failure();
     }
 
-    private boolean findPath(int currentTick, int currentStamina, int targetStamina,
-                             PlaceCategory place, Map<ActionCategory, Integer> availableActions, List<Tick> combination) {
-//        System.out.println("진입: " + currentTick + ", " + currentStamina);
+    private boolean findPath(UserState userState, int currentTick, int currentStamina, int targetStamina,
+                             PlaceCategory secondPlace, PlaceRule rule, List<Tick> path) {
+
         if(currentTick == MAX_TICKS || currentStamina == targetStamina){
             return currentStamina == targetStamina;
         }
 
-        for (Map.Entry<ActionCategory, Integer> entry : availableActions.entrySet()) {
+        PlaceCategory place = rule.placeAt(currentTick, secondPlace);
+        Map<ActionCategory, Integer> actions = new EnumMap<>(userState.getPlaces().get(place).getActions());
+
+        for (Map.Entry<ActionCategory, Integer> entry : actions.entrySet()) {
             ActionCategory action = entry.getKey();
             int delta = entry.getValue();
 
@@ -73,44 +75,15 @@ public class Simulator {
             if (nextStamina <= MIN_STAMINA) {
                 continue;
             }
-//            System.out.println("반영: " + nextStamina + ", " + delta);
-            combination.add(new Tick(place, action));
-            if (findPath(currentTick + 1, nextStamina, targetStamina, place, availableActions, combination)) {
+
+            path.add(new Tick(place, action));
+            if (findPath(userState, currentTick + 1, nextStamina, targetStamina, place, rule, path)) {
                 return true;
             }
 
-            combination.remove(combination.size() - 1);
+            path.remove(path.size() - 1);
         }
 
-        return false;
-    }
-
-    private boolean findWeekdayPath(int currentTick, int currentStamina, int targetStamina,
-                                    PlaceCategory secondPlace, Map<ActionCategory, Integer> schoolActions, Map<ActionCategory, Integer> secondActions,
-                                    List<Tick> combination) {
-        if (currentTick == MAX_TICKS || currentStamina == targetStamina) {
-            return currentStamina == targetStamina;
-        }
-
-        boolean schoolPhase = currentTick < WEEKDAY_SCHOOL_TICKS; // 첫 6틱은 학교 고정
-        Map<ActionCategory, Integer> actions = schoolPhase ? schoolActions : secondActions;
-        PlaceCategory place = schoolPhase ? PlaceCategory.SCHOOL : secondPlace;
-
-        for (Map.Entry<ActionCategory, Integer> e : actions.entrySet()) {
-            ActionCategory action = e.getKey();
-            int delta = e.getValue();
-
-            int nextStamina = Math.min(MAX_STAMINA, currentStamina + delta);
-            if (nextStamina <= MIN_STAMINA) {
-                continue;
-            }
-
-            combination.add(new Tick(place, action));
-            if (findWeekdayPath(currentTick + 1, nextStamina, targetStamina, secondPlace, schoolActions, secondActions, combination)) {
-                return true;
-            }
-            combination.remove(combination.size() - 1);
-        }
         return false;
     }
 }
