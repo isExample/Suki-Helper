@@ -25,11 +25,8 @@ public class SimulatorTest {
         Simulator simulator = new Simulator();
         UserState userState = new UserState(DayCategory.WEEKEND);
 
-        // 기본장소 도서관만 남겨두기
-        userState.deactivatePlace(PlaceCategory.SCHOOL);
-        userState.deactivatePlace(PlaceCategory.HOME);
-        userState.deactivatePlace(PlaceCategory.CAFE);
-        userState.deactivatePlace(PlaceCategory.PARK);
+        userState.deactivateAll();
+        userState.activatePlace(PlaceCategory.LIBRARY); // 단일 장소
 
         assertTrue(simulator.simulate(userState, target).isPossible());
     }

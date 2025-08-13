@@ -41,6 +41,10 @@ public class UserState {
         this.places.remove(place);
     }
 
+    public void deactivateAll(){
+        this.places.clear();
+    }
+
     public void disableActionToAllPlaces(ActionCategory action){
         for (Place place : this.places.values()) {
             place.disableAction(action);
