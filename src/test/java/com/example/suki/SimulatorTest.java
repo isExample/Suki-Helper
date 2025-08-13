@@ -20,7 +20,7 @@ public class SimulatorTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"84"})
+    @CsvSource({"84", "68", "4"})
     void 주말에_단일장소에서_목표체력에_달성_가능하다(int target){
         Simulator simulator = new Simulator();
         UserState userState = new UserState(DayCategory.WEEKEND);
