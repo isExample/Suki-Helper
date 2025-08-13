@@ -40,7 +40,7 @@ public class Simulator {
 
     private boolean findPath(int currentTick, int currentStamina, int targetStamina,
                              PlaceCategory place, Map<ActionCategory, Integer> availableActions, List<Tick> combination) {
-        //System.out.println("진입: " + currentTick + ", " + currentStamina);
+//        System.out.println("진입: " + currentTick + ", " + currentStamina);
         if(currentTick == MAX_TICKS || currentStamina == targetStamina){
             return currentStamina == targetStamina;
         }
@@ -49,8 +49,11 @@ public class Simulator {
             ActionCategory action = entry.getKey();
             int delta = entry.getValue();
 
-            int nextStamina = currentStamina + delta;
-            //System.out.println("반영: " + nextStamina + ", " + delta);
+            int nextStamina = Math.min(100, currentStamina + delta);
+            if (nextStamina <= 0) {
+                continue;
+            }
+//            System.out.println("반영: " + nextStamina + ", " + delta);
             combination.add(new Tick(place, action));
             if (findPath(currentTick + 1, nextStamina, targetStamina, place, availableActions, combination)) {
                 return true;
