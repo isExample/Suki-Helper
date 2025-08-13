@@ -39,8 +39,8 @@ public class Simulator {
     private boolean findPath(int currentTick, int currentStamina, int targetStamina,
                              PlaceCategory place, Map<ActionCategory, Integer> availableActions, List<Tick> combination) {
         //System.out.println("진입: " + currentTick + ", " + currentStamina);
-        if(currentStamina == targetStamina){
-            return true;
+        if(currentTick == 14 || currentStamina == targetStamina){
+            return currentStamina == targetStamina;
         }
 
         for (Map.Entry<ActionCategory, Integer> entry : availableActions.entrySet()) {
