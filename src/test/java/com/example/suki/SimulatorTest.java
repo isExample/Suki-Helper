@@ -50,4 +50,16 @@ public class SimulatorTest {
 
         assertFalse(result.isPossible());
     }
+
+    @ParameterizedTest
+    @CsvSource({"84", "68", "4"})
+    void 평일에_단일장소에서_목표체력에_달성_가능하다(int target){
+        Simulator simulator = new Simulator();
+        UserState userState = new UserState(DayCategory.WEEKDAY_OTHER);
+
+        userState.deactivateAll();
+        userState.activatePlace(PlaceCategory.LIBRARY); // 단일 장소
+
+        assertTrue(simulator.simulate(userState, target).isPossible());
+    }
 }
