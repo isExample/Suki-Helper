@@ -24,13 +24,23 @@ public class Simulator {
                 return simulateWeekend(userState, targetStamina);
             case WEEKDAY_MON:
             case WEEKDAY_OTHER:
-                // todo: 평일 시뮬레이션
+                return simulateWeekday(userState, targetStamina);
         }
 
         return SimulationResult.failure();
     }
 
     private SimulationResult simulateWeekend(UserState userState, int targetStamina) {
+        for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
+            List<Tick> combination = new ArrayList<>();
+            if (findPath(0, MAX_STAMINA, targetStamina, entry.getKey(), entry.getValue().getActions(), combination)) {
+                return SimulationResult.success(combination);
+            }
+        }
+        return SimulationResult.failure();
+    }
+
+    private SimulationResult simulateWeekday(UserState userState, int targetStamina) {
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             List<Tick> combination = new ArrayList<>();
             if (findPath(0, MAX_STAMINA, targetStamina, entry.getKey(), entry.getValue().getActions(), combination)) {
