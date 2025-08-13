@@ -62,4 +62,16 @@ public class SimulatorTest {
 
         assertTrue(simulator.simulate(userState, target).isPossible());
     }
+
+    @Test
+    void 평일에_복합장소에서_목표체력에_달성_가능하다(){
+        Simulator simulator = new Simulator();
+        UserState userState = new UserState(DayCategory.WEEKDAY_MON);
+
+        userState.deactivateAll();
+        userState.activatePlace(PlaceCategory.SCHOOL);
+        userState.activatePlace(PlaceCategory.HOME);
+
+        assertTrue(simulator.simulate(userState, 59).isPossible());
+    }
 }
