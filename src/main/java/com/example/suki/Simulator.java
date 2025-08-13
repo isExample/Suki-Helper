@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class Simulator {
     private static final int MAX_TICKS = 14;
+    private static final int MAX_STAMINA = 100;
+    private static final int MIN_STAMINA = 0;
 
     public SimulationResult simulate(UserState userState, int targetStamina){
         if(targetStamina < 1 || targetStamina > 99) throw new IllegalArgumentException("목표 체력은 1 이상 99 이하여야 합니다.");
@@ -31,7 +33,7 @@ public class Simulator {
     private SimulationResult simulateWeekend(UserState userState, int targetStamina) {
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             List<Tick> combination = new ArrayList<>();
-            if (findPath(0, 100, targetStamina, entry.getKey(), entry.getValue().getActions(), combination)) {
+            if (findPath(0, MAX_STAMINA, targetStamina, entry.getKey(), entry.getValue().getActions(), combination)) {
                 return SimulationResult.success(combination);
             }
         }
@@ -49,8 +51,8 @@ public class Simulator {
             ActionCategory action = entry.getKey();
             int delta = entry.getValue();
 
-            int nextStamina = Math.min(100, currentStamina + delta);
-            if (nextStamina <= 0) {
+            int nextStamina = Math.min(MAX_STAMINA, currentStamina + delta);
+            if (nextStamina <= MIN_STAMINA) {
                 continue;
             }
 //            System.out.println("반영: " + nextStamina + ", " + delta);
