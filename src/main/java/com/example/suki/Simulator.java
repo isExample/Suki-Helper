@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Simulator {
-    private static final int MAX_TICKS = 14;
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;
+    private static final int MAX_TICKS = 14;
+    private static final int WEEKDAY_SCHOOL_TICKS = 6;
 
     public SimulationResult simulate(UserState userState, int targetStamina){
         if(targetStamina < 1 || targetStamina > 99) throw new IllegalArgumentException("목표 체력은 1 이상 99 이하여야 합니다.");
@@ -91,7 +92,7 @@ public class Simulator {
             return currentStamina == targetStamina;
         }
 
-        boolean schoolPhase = currentTick < 6; // 첫 6틱은 학교 고정
+        boolean schoolPhase = currentTick < WEEKDAY_SCHOOL_TICKS; // 첫 6틱은 학교 고정
         Map<ActionCategory, Integer> actions = schoolPhase ? schoolActions : secondActions;
         PlaceCategory place = schoolPhase ? PlaceCategory.SCHOOL : secondPlace;
 
