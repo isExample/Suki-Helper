@@ -1,8 +1,11 @@
 package com.example.suki;
 
 import com.example.suki.domain.DayCategory;
+import com.example.suki.domain.SimulationResult;
 import com.example.suki.domain.UserState;
+import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
+import com.example.suki.modifier.FitnessLevelModifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -29,5 +32,22 @@ public class SimulatorTest {
         userState.activatePlace(PlaceCategory.LIBRARY); // 단일 장소
 
         assertTrue(simulator.simulate(userState, target).isPossible());
+    }
+
+    @Test
+    void 행동은_하루_최대_14틱_수행할_수_있다(){
+        Simulator simulator = new Simulator();
+        UserState userState = new UserState(DayCategory.WEEKEND);
+        FitnessLevelModifier modifier = new FitnessLevelModifier();
+
+        userState.deactivateAll();
+        userState.activatePlace(PlaceCategory.LIBRARY);
+        userState.getPlaces().get(PlaceCategory.LIBRARY).disableAction(ActionCategory.SLEEP);
+        userState.getPlaces().get(PlaceCategory.LIBRARY).disableAction(ActionCategory.PART_TIME);
+
+        modifier.modify(userState, 10);
+        SimulationResult result = simulator.simulate(userState, 10);
+
+        assertFalse(result.isPossible());
     }
 }
