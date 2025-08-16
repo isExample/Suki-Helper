@@ -2,7 +2,7 @@ package com.example.suki;
 
 import com.example.suki.domain.DayCategory;
 import com.example.suki.domain.SimulationResult;
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.modifier.FitnessLevelModifier;

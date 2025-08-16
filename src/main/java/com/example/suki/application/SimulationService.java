@@ -4,7 +4,7 @@ import com.example.suki.Simulator;
 import com.example.suki.api.SimulationRequest;
 import com.example.suki.api.SimulationResponse;
 import com.example.suki.domain.User.UserContext;
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.User.UserStateFactory;
 import com.example.suki.modifier.*;
 import lombok.RequiredArgsConstructor;

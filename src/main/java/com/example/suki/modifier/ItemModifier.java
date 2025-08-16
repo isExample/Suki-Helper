@@ -1,7 +1,7 @@
 package com.example.suki.modifier;
 
 import com.example.suki.domain.item.ItemCategory;
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserState;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

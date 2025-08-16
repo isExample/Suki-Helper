@@ -1,6 +1,6 @@
 package com.example.suki.modifier;
 
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.trait.TraitCategory;
 import org.springframework.stereotype.Component;
 

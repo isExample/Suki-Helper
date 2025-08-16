@@ -3,7 +3,7 @@ package com.example.suki;
 import com.example.suki.domain.TickSchedule;
 import com.example.suki.domain.SimulationResult;
 import com.example.suki.domain.Tick;
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;

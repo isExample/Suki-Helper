@@ -1,6 +1,5 @@
 package com.example.suki.domain.User;
 
-import com.example.suki.domain.UserState;
 import org.springframework.stereotype.Component;
 
 @Component

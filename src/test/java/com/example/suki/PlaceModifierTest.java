@@ -1,7 +1,7 @@
 package com.example.suki;
 
 import com.example.suki.domain.place.PlaceCategory;
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.modifier.PlaceModifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

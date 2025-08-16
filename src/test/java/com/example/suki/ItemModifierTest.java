@@ -1,6 +1,6 @@
 package com.example.suki;
 
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.item.ItemCategory;
