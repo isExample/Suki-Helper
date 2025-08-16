@@ -28,7 +28,7 @@ public class SimulationService {
 
         applyModifiers(userState, request);
 
-        return SimulationResponse.from(request.targetStamina(), simulator.simulate(userState, request.targetStamina()));
+        return SimulationResponse.from(request.targetStamina(), simulator.simulateReach(userState, request.targetStamina()));
     }
 
     public SimulationResponse simulateFinishAt(SimulationRequest request) {
