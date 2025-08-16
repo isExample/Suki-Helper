@@ -17,6 +17,7 @@ public class Simulator {
     private static final int MIN_STAMINA = 0;
     private static final int MAX_TICKS = 14;
     private static final int WEEKDAY_SCHOOL_TICKS = 6;
+
     private static final TickSchedule WEEKEND_SCHEDULE = (tick, second) -> second;
     private static final TickSchedule WEEKDAY_SCHEDULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
 
@@ -28,7 +29,7 @@ public class Simulator {
         return simulate(userState, new FinishAtGoal(targetStamina));
     }
 
-    public SimulationResult simulate(UserState userState, Goal goal){
+    private SimulationResult simulate(UserState userState, Goal goal){
         switch (userState.getDay()) {
             case WEEKEND:
                 return simulateBySchedule(userState, goal, WEEKEND_SCHEDULE);
