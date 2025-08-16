@@ -29,8 +29,14 @@ public class SimulationController {
     }
 
     @Operation(summary = "체력 n 달성 조합 반환")
-    @PostMapping
-    public ApiResponse<SimulationResponse> simulate(@RequestBody SimulationRequest request) {
-        return ApiResponse.ok(simulationService.getCombination(request));
+    @PostMapping("/reach")
+    public ApiResponse<SimulationResponse> simulateReach(@RequestBody SimulationRequest request) {
+        return ApiResponse.ok(simulationService.simulateReach(request));
+    }
+
+    @Operation(summary = "체력 n으로 마무리 조합 반환")
+    @PostMapping("/finish-at")
+    public ApiResponse<SimulationResponse> simulateFinishAt(@RequestBody SimulationRequest request) {
+        return ApiResponse.ok(simulationService.simulateFinishAt(request));
     }
 }
