@@ -25,31 +25,20 @@ public class Simulator {
 
         switch (userState.getDay()) {
             case WEEKEND:
-                return simulateWeekend(userState, targetStamina);
+                return simulateBySchedule(userState, targetStamina, WEEKEND_SCHEDULE);
             case WEEKDAY_MON:
             case WEEKDAY_OTHER:
-                return simulateWeekday(userState, targetStamina);
+                return simulateBySchedule(userState, targetStamina, WEEKDAY_SCHEDULE);
         }
 
         return SimulationResult.failure();
     }
 
-    private SimulationResult simulateWeekend(UserState userState, int targetStamina) {
+    private SimulationResult simulateBySchedule(UserState userState, int targetStamina, TickSchedule schedule) {
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
-            PlaceCategory single = entry.getKey(); // 단일 장소 고정
+            PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
             List<Tick> path = new ArrayList<>();
-            if (findPath(userState, 0, MAX_STAMINA, targetStamina, single, WEEKEND_SCHEDULE, path)) {
-                return SimulationResult.success(path);
-            }
-        }
-        return SimulationResult.failure();
-    }
-
-    private SimulationResult simulateWeekday(UserState userState, int targetStamina) {
-        for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
-            PlaceCategory second = entry.getKey(); // 첫 장소 학교 고정, 두 번째 장소 탐색
-            List<Tick> path = new ArrayList<>();
-            if (findPath(userState, 0, MAX_STAMINA, targetStamina, second, WEEKDAY_SCHEDULE, path)) {
+            if (findPath(userState, 0, MAX_STAMINA, targetStamina, second, schedule, path)) {
                 return SimulationResult.success(path);
             }
         }
