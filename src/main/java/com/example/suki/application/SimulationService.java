@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class SimulationService {
     private final UserStateFactory userStateFactory;
     private final FitnessLevelModifier fitnessLevelModifier;
-    private final PlaceModifier placeModifier;
     private final BadgeModifier badgeModifier;
     private final TraitModifier traitModifier;
     private final ItemModifier itemModifier;
@@ -25,7 +24,6 @@ public class SimulationService {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
         fitnessLevelModifier.modify(userState, request.fitnessLevel());
-        placeModifier.modify(userState, request.inactiveList(), request.activeList());
         badgeModifier.modify(userState, request.badgeList());
         traitModifier.modify(userState, request.traitList());
         itemModifier.modify(userState, request.itemList());
