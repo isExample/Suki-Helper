@@ -7,12 +7,14 @@ import com.example.suki.domain.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class Simulator {
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;
