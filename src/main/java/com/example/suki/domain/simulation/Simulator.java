@@ -24,6 +24,10 @@ public class Simulator {
         return simulate(userState, new ReachGoal(targetStamina));
     }
 
+    public SimulationResult simulateFinishAt(UserState userState, int targetStamina){
+        return simulate(userState, new FinishAtGoal(targetStamina));
+    }
+
     public SimulationResult simulate(UserState userState, Goal goal){
         switch (userState.getDay()) {
             case WEEKEND:

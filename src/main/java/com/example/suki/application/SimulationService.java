@@ -36,7 +36,7 @@ public class SimulationService {
 
         applyModifiers(userState, request);
 
-        return SimulationResponse.from(request.targetStamina(), null);
+        return SimulationResponse.from(request.targetStamina(), simulator.simulateFinishAt(userState, request.targetStamina()));
     }
 
     private void applyModifiers(UserState userState, SimulationRequest request) {
