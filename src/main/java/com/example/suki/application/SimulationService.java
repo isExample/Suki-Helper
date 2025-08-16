@@ -3,7 +3,9 @@ package com.example.suki.application;
 import com.example.suki.Simulator;
 import com.example.suki.api.SimulationRequest;
 import com.example.suki.api.SimulationResponse;
+import com.example.suki.domain.User.UserContext;
 import com.example.suki.domain.UserState;
+import com.example.suki.domain.User.UserStateFactory;
 import com.example.suki.modifier.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SimulationService {
+    private final UserStateFactory userStateFactory;
     private final FitnessLevelModifier fitnessLevelModifier;
     private final PlaceModifier placeModifier;
     private final BadgeModifier badgeModifier;
@@ -19,7 +22,7 @@ public class SimulationService {
     private final Simulator simulator;
 
     public SimulationResponse applyModifiers(SimulationRequest request) {
-        UserState userState = new UserState(request.day());
+        UserState userState = userStateFactory.create(UserContext.from(request));
 
         fitnessLevelModifier.modify(userState, request.fitnessLevel());
         placeModifier.modify(userState, request.inactiveList(), request.activeList());
