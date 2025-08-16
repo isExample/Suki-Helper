@@ -28,6 +28,6 @@ public class SimulationController {
     @Operation(summary = "체력 n 달성 조합 반환")
     @PostMapping
     public ApiResponse<SimulationResponse> simulate(@RequestBody SimulationRequest request) {
-        return ApiResponse.ok(simulationService.applyModifiers(request));
+        return ApiResponse.ok(simulationService.getCombination(request));
     }
 }

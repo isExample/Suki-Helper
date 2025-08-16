@@ -20,14 +20,18 @@ public class SimulationService {
     private final ItemModifier itemModifier;
     private final Simulator simulator;
 
-    public SimulationResponse applyModifiers(SimulationRequest request) {
+    public SimulationResponse getCombination(SimulationRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
+        applyModifiers(userState, request);
+
+        return SimulationResponse.from(request.targetStamina(), simulator.simulate(userState, request.targetStamina()));
+    }
+
+    private void applyModifiers(UserState userState, SimulationRequest request) {
         fitnessLevelModifier.modify(userState, request.fitnessLevel());
         badgeModifier.modify(userState, request.badgeList());
         traitModifier.modify(userState, request.traitList());
         itemModifier.modify(userState, request.itemList());
-
-        return SimulationResponse.from(request.targetStamina(), simulator.simulate(userState, request.targetStamina()));
     }
 }
