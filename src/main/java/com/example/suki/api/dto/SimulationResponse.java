@@ -1,7 +1,7 @@
 package com.example.suki.api.dto;
 
-import com.example.suki.domain.simulation.SimulationResult;
-import com.example.suki.domain.simulation.Tick;
+import com.example.suki.domain.simulation.model.SimulationResult;
+import com.example.suki.domain.simulation.model.Tick;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;

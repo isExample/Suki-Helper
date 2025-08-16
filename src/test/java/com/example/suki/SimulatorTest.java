@@ -1,7 +1,7 @@
 package com.example.suki;
 
 import com.example.suki.domain.day.DayCategory;
-import com.example.suki.domain.simulation.SimulationResult;
+import com.example.suki.domain.simulation.model.SimulationResult;
 import com.example.suki.domain.simulation.Simulator;
 import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;

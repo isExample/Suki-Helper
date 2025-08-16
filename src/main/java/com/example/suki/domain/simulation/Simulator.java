@@ -4,6 +4,11 @@ import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
+import com.example.suki.domain.simulation.goal.FinishAtGoal;
+import com.example.suki.domain.simulation.goal.Goal;
+import com.example.suki.domain.simulation.goal.ReachGoal;
+import com.example.suki.domain.simulation.model.SimulationResult;
+import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,8 +23,8 @@ public class Simulator {
     private static final int MAX_TICKS = 14;
     private static final int WEEKDAY_SCHOOL_TICKS = 6;
 
-    private static final TickSchedule WEEKEND_SCHEDULE = (tick, second) -> second;
-    private static final TickSchedule WEEKDAY_SCHEDULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
+    private static final DaySchedule WEEKEND_SCHEDULE = (tick, second) -> second;
+    private static final DaySchedule WEEKDAY_SCHEDULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
 
     public SimulationResult simulateReach(UserState userState, int targetStamina){
         return simulate(userState, new ReachGoal(targetStamina));
@@ -41,7 +46,7 @@ public class Simulator {
         }
     }
 
-    private SimulationResult simulateBySchedule(UserState userState, Goal goal, TickSchedule schedule) {
+    private SimulationResult simulateBySchedule(UserState userState, Goal goal, DaySchedule schedule) {
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
             List<Tick> path = new ArrayList<>();
@@ -53,7 +58,7 @@ public class Simulator {
     }
 
     private boolean findPath(UserState userState, int currentTick, int currentStamina, Goal goal,
-                             PlaceCategory secondPlace, TickSchedule schedule, List<Tick> path) {
+                             PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path) {
         if(goal.isTerminal(currentTick, currentStamina, MAX_TICKS)){
             return goal.isSuccess(currentTick, currentStamina);
         }

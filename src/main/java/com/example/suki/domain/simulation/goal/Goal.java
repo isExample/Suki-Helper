@@ -1,4 +1,4 @@
-package com.example.suki.domain.simulation;
+package com.example.suki.domain.simulation.goal;
 
 public interface Goal {
     boolean isSuccess(int tick, int stamina);
