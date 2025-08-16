@@ -23,12 +23,20 @@ public class SimulationService {
     private final ItemModifier itemModifier;
     private final Simulator simulator;
 
-    public SimulationResponse getCombination(SimulationRequest request) {
+    public SimulationResponse simulateReach(SimulationRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
         applyModifiers(userState, request);
 
-        return SimulationResponse.from(request.targetStamina(), simulator.simulate(userState, request.targetStamina()));
+        return SimulationResponse.from(request.targetStamina(), simulator.simulateReach(userState, request.targetStamina()));
+    }
+
+    public SimulationResponse simulateFinishAt(SimulationRequest request) {
+        UserState userState = userStateFactory.create(UserContext.from(request));
+
+        applyModifiers(userState, request);
+
+        return SimulationResponse.from(request.targetStamina(), simulator.simulateFinishAt(userState, request.targetStamina()));
     }
 
     private void applyModifiers(UserState userState, SimulationRequest request) {

@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
-@Schema(description = "체력 n 달성 조합 반환 API 요청")
+@Schema(description = "체력 달성 조합 요청")
 public record SimulationRequest(
         @Schema(description="목표 체력")
         int targetStamina,
