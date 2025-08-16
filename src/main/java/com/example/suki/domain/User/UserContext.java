@@ -1,7 +1,7 @@
 package com.example.suki.domain.User;
 
-import com.example.suki.api.SimulationRequest;
-import com.example.suki.domain.DayCategory;
+import com.example.suki.api.dto.SimulationRequest;
+import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.place.PlaceCategory;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.suki.modifier;
+package com.example.suki.domain.modifier;
 
 import com.example.suki.domain.item.ItemCategory;
 import com.example.suki.domain.User.UserState;

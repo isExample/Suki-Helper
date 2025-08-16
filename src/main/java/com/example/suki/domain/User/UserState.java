@@ -1,6 +1,6 @@
 package com.example.suki.domain.User;
 
-import com.example.suki.domain.DayCategory;
+import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;

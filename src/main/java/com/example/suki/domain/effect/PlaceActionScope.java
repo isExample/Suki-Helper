@@ -1,6 +1,6 @@
 package com.example.suki.domain.effect;
 
-import com.example.suki.domain.DayCategory;
+import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;

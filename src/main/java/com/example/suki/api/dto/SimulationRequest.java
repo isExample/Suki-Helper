@@ -1,6 +1,6 @@
-package com.example.suki.api;
+package com.example.suki.api.dto;
 
-import com.example.suki.domain.DayCategory;
+import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.badge.BadgeCategory;
 import com.example.suki.domain.item.ItemCategory;
 import com.example.suki.domain.place.PlaceCategory;

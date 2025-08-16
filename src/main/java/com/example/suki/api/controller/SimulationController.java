@@ -1,5 +1,8 @@
-package com.example.suki.api;
+package com.example.suki.api.controller;
 
+import com.example.suki.api.dto.ApiResponse;
+import com.example.suki.api.dto.SimulationRequest;
+import com.example.suki.api.dto.SimulationResponse;
 import com.example.suki.application.SimulationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

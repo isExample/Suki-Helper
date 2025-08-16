@@ -1,4 +1,4 @@
-package com.example.suki.api;
+package com.example.suki.api.dto;
 
 import org.springframework.http.HttpStatus;
 
