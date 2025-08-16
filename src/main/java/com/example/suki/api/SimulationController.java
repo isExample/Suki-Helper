@@ -2,9 +2,7 @@ package com.example.suki.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Simulations")
 @RestController
@@ -21,5 +19,11 @@ public class SimulationController {
     @GetMapping("/test/error")
     public ApiResponse<String> testError() {
         throw new IllegalArgumentException("error");
+    }
+
+    @Operation(summary = "체력 n 달성 조합 반환")
+    @PostMapping
+    public ApiResponse<SimulationResponse> simulate(@RequestBody SimulationRequest request) {
+        return ApiResponse.ok(new SimulationResponse(0, true, null));
     }
 }
