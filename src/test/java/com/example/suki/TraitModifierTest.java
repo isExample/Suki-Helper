@@ -1,7 +1,7 @@
 package com.example.suki;
 
-import com.example.suki.domain.DayCategory;
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.day.DayCategory;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.effect.ActionScope;
 import com.example.suki.domain.effect.DayScope;
@@ -9,7 +9,7 @@ import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.effect.PlaceScope;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
-import com.example.suki.modifier.TraitModifier;
+import com.example.suki.domain.modifier.TraitModifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

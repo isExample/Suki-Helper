@@ -1,12 +1,12 @@
 package com.example.suki;
 
-import com.example.suki.domain.*;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.effect.GlobalScope;
 import com.example.suki.domain.item.ItemCategory;
 import com.example.suki.domain.effect.PlaceActionScope;
 import com.example.suki.domain.place.PlaceCategory;
-import com.example.suki.modifier.ItemModifier;
+import com.example.suki.domain.modifier.ItemModifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

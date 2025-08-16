@@ -1,4 +1,4 @@
-package com.example.suki.domain;
+package com.example.suki.domain.simulation;
 
 import lombok.Getter;
 

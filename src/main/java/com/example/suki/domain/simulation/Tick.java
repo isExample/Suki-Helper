@@ -1,4 +1,4 @@
-package com.example.suki.domain;
+package com.example.suki.domain.simulation;
 
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;

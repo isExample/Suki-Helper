@@ -1,4 +1,4 @@
-package com.example.suki.domain;
+package com.example.suki.domain.day;
 
 public enum DayCategory {
     WEEKDAY_MON,        // 월요일

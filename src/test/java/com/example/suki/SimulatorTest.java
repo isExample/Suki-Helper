@@ -1,11 +1,12 @@
 package com.example.suki;
 
-import com.example.suki.domain.DayCategory;
-import com.example.suki.domain.SimulationResult;
-import com.example.suki.domain.UserState;
+import com.example.suki.domain.day.DayCategory;
+import com.example.suki.domain.simulation.SimulationResult;
+import com.example.suki.domain.simulation.Simulator;
+import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.PlaceCategory;
-import com.example.suki.modifier.FitnessLevelModifier;
+import com.example.suki.domain.modifier.FitnessLevelModifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
