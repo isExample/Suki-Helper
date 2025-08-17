@@ -46,7 +46,7 @@ public class SimulationService {
 
         applyModifiers(userState, request);
 
-        return null;
+        return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax()));
     }
 
     private void applyModifiers(UserState userState, SimulationRequest request) {
