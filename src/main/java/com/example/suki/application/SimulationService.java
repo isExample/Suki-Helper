@@ -1,5 +1,7 @@
 package com.example.suki.application;
 
+import com.example.suki.api.dto.SimulationRangeRequest;
+import com.example.suki.api.dto.SimulationRangeResponse;
 import com.example.suki.domain.simulation.Simulator;
 import com.example.suki.api.dto.SimulationRequest;
 import com.example.suki.api.dto.SimulationResponse;
@@ -39,7 +41,22 @@ public class SimulationService {
         return SimulationResponse.from(request.targetStamina(), simulator.simulateFinishAt(userState, request.targetStamina()));
     }
 
+    public SimulationRangeResponse simulateFinishWithin(SimulationRangeRequest request) {
+        UserState userState = userStateFactory.create(UserContext.from(request));
+
+        applyModifiers(userState, request);
+
+        return null;
+    }
+
     private void applyModifiers(UserState userState, SimulationRequest request) {
+        fitnessLevelModifier.modify(userState, request.fitnessLevel());
+        badgeModifier.modify(userState, request.badgeList());
+        traitModifier.modify(userState, request.traitList());
+        itemModifier.modify(userState, request.itemList());
+    }
+
+    private void applyModifiers(UserState userState, SimulationRangeRequest request) {
         fitnessLevelModifier.modify(userState, request.fitnessLevel());
         badgeModifier.modify(userState, request.badgeList());
         traitModifier.modify(userState, request.traitList());
