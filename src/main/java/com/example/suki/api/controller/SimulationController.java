@@ -39,4 +39,10 @@ public class SimulationController {
     public ApiResponse<SimulationResponse> simulateFinishAt(@RequestBody SimulationRequest request) {
         return ApiResponse.ok(simulationService.simulateFinishAt(request));
     }
+
+    @Operation(summary = "체력 n1 ~ n2로 마무리 조합 반환")
+    @PostMapping("/finish-within")
+    public ApiResponse<SimulationResponse> simulateFinishWithin(@RequestBody SimulationRequest request) {
+        return ApiResponse.ok(null);
+    }
 }
