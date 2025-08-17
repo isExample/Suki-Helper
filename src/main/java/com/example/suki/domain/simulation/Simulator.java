@@ -5,6 +5,7 @@ import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.goal.FinishAtGoal;
+import com.example.suki.domain.simulation.goal.FinishWithinGoal;
 import com.example.suki.domain.simulation.goal.Goal;
 import com.example.suki.domain.simulation.goal.ReachGoal;
 import com.example.suki.domain.simulation.model.SimulationResult;
@@ -32,6 +33,10 @@ public class Simulator {
 
     public SimulationResult simulateFinishAt(UserState userState, int targetStamina){
         return simulate(userState, new FinishAtGoal(targetStamina));
+    }
+
+    public SimulationResult simulateFinishWithin(UserState userState, int min, int max){
+        return simulate(userState, new FinishWithinGoal(min, max));
     }
 
     private SimulationResult simulate(UserState userState, Goal goal){

@@ -1,5 +1,6 @@
 package com.example.suki.domain.User;
 
+import com.example.suki.api.dto.SimulationRangeRequest;
 import com.example.suki.api.dto.SimulationRequest;
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.place.PlaceCategory;
@@ -12,6 +13,10 @@ public record UserContext(
         List<PlaceCategory> activeList
 ) {
     public static UserContext from(SimulationRequest request) {
+        return new UserContext(request.day(), request.inactiveList(), request.activeList());
+    }
+
+    public static UserContext from(SimulationRangeRequest request) {
         return new UserContext(request.day(), request.inactiveList(), request.activeList());
     }
 }
