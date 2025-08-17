@@ -12,6 +12,7 @@ import com.example.suki.domain.modifier.BadgeModifier;
 import com.example.suki.domain.modifier.FitnessLevelModifier;
 import com.example.suki.domain.modifier.ItemModifier;
 import com.example.suki.domain.modifier.TraitModifier;
+import com.example.suki.domain.simulation.model.SimulationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,38 +29,34 @@ public class SimulationService {
     public SimulationResponse simulateReach(SimulationRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
-        applyModifiers(userState, request);
+        applyModifiers(userState, SimulationContext.from(request));
 
-        return SimulationResponse.from(request.targetStamina(), simulator.simulateReach(userState, request.targetStamina()));
+        SimulationResult result = simulator.simulateReach(userState, request.targetStamina());
+        return SimulationResponse.from(request.targetStamina(), result);
     }
 
     public SimulationResponse simulateFinishAt(SimulationRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
-        applyModifiers(userState, request);
+        applyModifiers(userState, SimulationContext.from(request));
 
-        return SimulationResponse.from(request.targetStamina(), simulator.simulateFinishAt(userState, request.targetStamina()));
+        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina());
+        return SimulationResponse.from(request.targetStamina(), result);
     }
 
     public SimulationRangeResponse simulateFinishWithin(SimulationRangeRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
-        applyModifiers(userState, request);
+        applyModifiers(userState, SimulationContext.from(request));
 
-        return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax()));
+        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax());
+        return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), result);
     }
 
-    private void applyModifiers(UserState userState, SimulationRequest request) {
-        fitnessLevelModifier.modify(userState, request.fitnessLevel());
-        badgeModifier.modify(userState, request.badgeList());
-        traitModifier.modify(userState, request.traitList());
-        itemModifier.modify(userState, request.itemList());
-    }
-
-    private void applyModifiers(UserState userState, SimulationRangeRequest request) {
-        fitnessLevelModifier.modify(userState, request.fitnessLevel());
-        badgeModifier.modify(userState, request.badgeList());
-        traitModifier.modify(userState, request.traitList());
-        itemModifier.modify(userState, request.itemList());
+    private void applyModifiers(UserState userState, SimulationContext context) {
+        fitnessLevelModifier.modify(userState, context.fitnessLevel());
+        badgeModifier.modify(userState, context.badgeList());
+        traitModifier.modify(userState, context.traitList());
+        itemModifier.modify(userState, context.itemList());
     }
 }
