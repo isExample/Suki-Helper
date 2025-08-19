@@ -1,4 +1,4 @@
-package com.example.suki.api;
+package com.example.suki.api.exception;
 
 import lombok.Getter;
 

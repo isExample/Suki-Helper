@@ -1,10 +1,8 @@
 package com.example.suki.api.advice;
 
-import com.example.suki.api.BusinessException;
-import com.example.suki.api.ErrorCode;
+import com.example.suki.api.exception.BusinessException;
+import com.example.suki.api.exception.ErrorCode;
 import com.example.suki.api.dto.ErrorResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

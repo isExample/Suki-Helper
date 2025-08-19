@@ -1,7 +1,7 @@
 package com.example.suki.domain.place;
 
-import com.example.suki.api.BusinessException;
-import com.example.suki.api.ErrorCode;
+import com.example.suki.api.exception.BusinessException;
+import com.example.suki.api.exception.ErrorCode;
 import com.example.suki.domain.action.ActionCategory;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.example.suki.api;
+package com.example.suki.api.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,8 @@ public enum ErrorCode {
     VALIDATION_FAILED("C001", HttpStatus.BAD_REQUEST, "요청 값이 올바르지 않습니다."),
 
     // User
-    PLACE_ALREADY_ACTIVATED("U001", HttpStatus.INTERNAL_SERVER_ERROR, "이미 활성화된 장소입니다."),
-    PLACE_ALREADY_DISABLED("U002", HttpStatus.INTERNAL_SERVER_ERROR, "이미 비활성화된 장소입니다."),
+    PLACE_ALREADY_ACTIVATED("U001", HttpStatus.CONFLICT, "이미 활성화된 장소입니다."),
+    PLACE_ALREADY_DISABLED("U002", HttpStatus.CONFLICT, "이미 비활성화된 장소입니다."),
 
     // Place
     PLACE_REQUIRED("P001", HttpStatus.INTERNAL_SERVER_ERROR, "장소는 null일 수 없습니다."),

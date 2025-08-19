@@ -1,7 +1,7 @@
 package com.example.suki.domain.User;
 
-import com.example.suki.api.BusinessException;
-import com.example.suki.api.ErrorCode;
+import com.example.suki.api.exception.BusinessException;
+import com.example.suki.api.exception.ErrorCode;
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
