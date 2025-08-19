@@ -1,5 +1,7 @@
 package com.example.suki.domain.User;
 
+import com.example.suki.api.BusinessException;
+import com.example.suki.api.ErrorCode;
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
@@ -30,7 +32,7 @@ public class UserState {
 
     public void activatePlace(PlaceCategory place) {
         if(this.places.containsKey(place)){
-            throw new IllegalArgumentException("이미 활성화된 장소입니다.");
+            throw new BusinessException(ErrorCode.PLACE_ALREADY_ACTIVATED);
         }
         this.places.put(place, new Place(place));
     }
