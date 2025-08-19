@@ -1,5 +1,6 @@
 package com.example.suki;
 
+import com.example.suki.api.exception.BusinessException;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.User.UserState;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,12 +45,12 @@ public class UserStateTest {
     @ParameterizedTest
     @MethodSource("com.example.suki.TestSources#조건부장소")
     void 비활성화장소를_비활성화_시도하면_예외가_발생한다(PlaceCategory placeCategory){
-        assertThrows(IllegalArgumentException.class, () -> userState.deactivatePlace(placeCategory));
+        assertThrows(BusinessException.class, () -> userState.deactivatePlace(placeCategory));
     }
 
     @ParameterizedTest
     @MethodSource("com.example.suki.TestSources#기본장소")
     void 활성화장소를_활성화_시도하면_예외가_발생한다(PlaceCategory placeCategory){
-        assertThrows(IllegalArgumentException.class, () -> userState.activatePlace(placeCategory));
+        assertThrows(BusinessException.class, () -> userState.activatePlace(placeCategory));
     }
 }

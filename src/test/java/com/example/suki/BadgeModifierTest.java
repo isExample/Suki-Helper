@@ -71,14 +71,4 @@ public class BadgeModifierTest {
 
         assertEquals(baseStamina + totalBonus, userState.getPlaces().get(place).getActions().get(ActionCategory.SLEEP));
     }
-
-    @Test
-    void 대학교뱃지는_최대_6개로_제한된다(){
-        List<BadgeCategory> badge = new ArrayList<>();
-        for(int i = 0; i < 8; i++){
-            badge.add(BadgeCategory.UNIV_1);
-        }
-
-        assertThrows(IllegalArgumentException.class, () -> modifier.modify(userState, badge));
-    }
 }

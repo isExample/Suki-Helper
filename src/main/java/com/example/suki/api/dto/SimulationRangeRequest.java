@@ -6,28 +6,52 @@ import com.example.suki.domain.item.ItemCategory;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
 @Schema(description = "체력 범위 달성 조합 요청")
 public record SimulationRangeRequest(
         @Schema(description="목표 체력 최소값")
+        @Min(1)
         int targetMin,
+
         @Schema(description="목표 체력 최대값")
+        @Max(99)
         int targetMax,
+
         @Schema(description="운동 레벨", defaultValue = "0")
+        @Min(0) @Max(10)
         int fitnessLevel,
+
         @Schema(description="요일 정보", defaultValue = "WEEKDAY_OTHER")
+        @NotNull
         DayCategory day,
+
         @Schema(description="비활성화된 기본 장소 목록")
+        @NotNull
         List<PlaceCategory> inactiveList,
+
         @Schema(description="활성화된 조건부 장소 목록")
+        @NotNull
         List<PlaceCategory> activeList,
+
         @Schema(description="대학교 뱃지 목록")
+        @NotNull
+        @Size(max = 7)
         List<BadgeCategory> badgeList,
+
         @Schema(description="특성 목록")
+        @NotNull
+        @Size(max = 6)
         List<TraitCategory> traitList,
+
         @Schema(description="아이템 목록")
+        @NotNull
         List<ItemCategory> itemList
 ) {
+        @AssertTrue(message = "targetMin은 targetMax보다 작아야 합니다.")
+        public boolean isRangeValid() {
+                return targetMin < targetMax;
+        }
 }

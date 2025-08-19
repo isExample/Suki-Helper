@@ -34,12 +34,6 @@ public class FitnessLevelModifierTest {
                         .map(level -> Arguments.of(pc, level)));
     }
 
-    @ParameterizedTest
-    @CsvSource({"-1", "11", "100"})
-    void 범위밖_운동레벨은_예외를_발생시킨다(int level){
-        assertThrows(IllegalArgumentException.class, () -> modifier.modify(userState, level));
-    }
-
     @Test
     void 운동레벨이_최대치면_운동하기_행동은_비활성화된다(){
         modifier.modify(userState, 10);

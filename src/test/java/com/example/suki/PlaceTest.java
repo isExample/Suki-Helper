@@ -1,5 +1,6 @@
 package com.example.suki;
 
+import com.example.suki.api.exception.BusinessException;
 import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
@@ -67,7 +68,7 @@ public class PlaceTest {
 
     @Test
     void 장소생성자에_null_전달시_예외가_발생한다(){
-        assertThrows(IllegalArgumentException.class, () -> new Place(null));
+        assertThrows(BusinessException.class, () -> new Place(null));
     }
 
     @ParameterizedTest
@@ -100,6 +101,6 @@ public class PlaceTest {
     void null_행동을_비활성화_시도하면_예외가_발생한다(){
         Place place = new Place(PlaceCategory.SCHOOL);
 
-        assertThrows(IllegalArgumentException.class, () -> place.disableAction(null));
+        assertThrows(BusinessException.class, () -> place.disableAction(null));
     }
 }

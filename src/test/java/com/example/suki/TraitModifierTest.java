@@ -1,5 +1,6 @@
 package com.example.suki;
 
+import com.example.suki.api.exception.BusinessException;
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
@@ -87,15 +88,5 @@ public class TraitModifierTest {
             int expected = base + trait.getEffect().deltaFor(place, action, userState.getDay());
             assertEquals(expected, after.get(action));
         });
-    }
-
-    @Test
-    void 특성은_최대_6개로_제한된다(){
-        List<TraitCategory> traitList = new ArrayList<>();
-        for(int i = 0; i < 7; i++){
-            traitList.add(TraitCategory.ATHLETIC);
-        }
-
-        assertThrows(IllegalArgumentException.class, () -> modifier.modify(userState, traitList));
     }
 }
