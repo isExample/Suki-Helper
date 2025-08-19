@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    // 커스텀 예외
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex) {
         ErrorCode errorCode = ex.getErrorCode();
@@ -24,6 +24,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(body);
     }
 
+    // @Valid 검증 예외
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgNotValid(MethodArgumentNotValidException ex) {
         ErrorCode errorCode = ErrorCode.VALIDATION_FAILED;
