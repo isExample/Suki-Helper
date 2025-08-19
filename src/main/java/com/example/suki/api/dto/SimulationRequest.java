@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -36,10 +37,12 @@ public record SimulationRequest(
 
         @Schema(description="대학교 뱃지 목록")
         @NotNull
+        @Size(max = 7)
         List<BadgeCategory> badgeList,
 
         @Schema(description="특성 목록")
         @NotNull
+        @Size(max = 6)
         List<TraitCategory> traitList,
 
         @Schema(description="아이템 목록")
