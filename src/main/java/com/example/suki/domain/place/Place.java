@@ -1,5 +1,7 @@
 package com.example.suki.domain.place;
 
+import com.example.suki.api.BusinessException;
+import com.example.suki.api.ErrorCode;
 import com.example.suki.domain.action.ActionCategory;
 import lombok.Getter;
 
@@ -12,16 +14,18 @@ public class Place {
 
     public Place(PlaceCategory placeCategory) {
         if(placeCategory == null) {
-            throw new IllegalArgumentException("장소는 null일 수 없습니다.");
+            throw new BusinessException(ErrorCode.PLACE_REQUIRED);
         }
         this.actions = new EnumMap<>(placeCategory.getActions());
     }
 
     public void disableAction(ActionCategory action){
-        if(action == null) throw new IllegalArgumentException("행동은 null일 수 없습니다.");
-        if(!this.actions.containsKey(action)) throw new IllegalArgumentException("이미 비활성화된 행동입니다.");
-
-        this.actions.remove(action);
+        if(action == null) {
+            throw new BusinessException(ErrorCode.ACTION_REQUIRED);
+        }
+        if (this.actions.remove(action) == null) {
+            throw new BusinessException(ErrorCode.ACTION_ALREADY_DISABLED);
+        }
     }
 
     public void applyDeltaToActionsExceptSleep(int delta){

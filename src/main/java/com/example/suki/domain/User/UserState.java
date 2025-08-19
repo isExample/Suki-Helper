@@ -39,7 +39,7 @@ public class UserState {
 
     public void deactivatePlace(PlaceCategory place) {
         if(!this.places.containsKey(place)){
-            throw new IllegalArgumentException("비활성화할 수 없는 장소입니다.");
+            throw new BusinessException(ErrorCode.PLACE_ALREADY_DISABLED);
         }
         this.places.remove(place);
     }
