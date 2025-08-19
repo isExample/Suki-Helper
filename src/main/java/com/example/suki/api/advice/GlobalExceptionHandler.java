@@ -6,6 +6,7 @@ import com.example.suki.api.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex, HttpServletRequest req) {
+    public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex) {
         ErrorCode errorCode = ex.getErrorCode();
 
         ErrorResponse body = ErrorResponse.of(
@@ -24,4 +25,23 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(errorCode.getStatus()).body(body);
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgNotValid(MethodArgumentNotValidException ex) {
+        ErrorCode errorCode = ErrorCode.VALIDATION_FAILED;
+        String detail = ex.getBindingResult().getFieldErrors().stream()
+                .findFirst()
+                .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
+                .orElse(errorCode.getDetail());
+
+        ErrorResponse body = ErrorResponse.of(
+                errorCode.getStatus(),
+                errorCode.name(),
+                errorCode.getCode(),
+                detail
+        );
+        return ResponseEntity.status(errorCode.getStatus()).body(body);
+    }
+
+
 }
