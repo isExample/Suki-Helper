@@ -2,7 +2,7 @@ package com.example.suki.api.dto;
 
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.badge.BadgeCategory;
-import com.example.suki.domain.item.ItemCategory;
+import com.example.suki.domain.item.PermanentItemCategory;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,6 +47,6 @@ public record SimulationRequest(
 
         @Schema(description="아이템 목록")
         @NotNull
-        List<ItemCategory> itemList
+        List<PermanentItemCategory> itemList
 ) {
 }
