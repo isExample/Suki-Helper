@@ -13,22 +13,22 @@ public class ConsumableBag {
         this.remains.putAll(initial);
     }
 
-    boolean canUse(ConsumableItemCategory item) {
+    public boolean canUse(ConsumableItemCategory item) {
         return this.remains.getOrDefault(item, 0) > 0;
     }
 
-    void use(ConsumableItemCategory item)  {
+    public void use(ConsumableItemCategory item)  {
         this.remains.merge(item, -1, Integer::sum);
         if (this.remains.getOrDefault(item,0) <= 0) {
             this.remains.remove(item);
         }
     }
 
-    void undo(ConsumableItemCategory item) {
+    public void undo(ConsumableItemCategory item) {
         this.remains.merge(item,  1, Integer::sum);
     }
 
-    Iterable<ConsumableItemCategory> usableItems() {
+    public Iterable<ConsumableItemCategory> usableItems() {
         return this.remains.keySet();
     }
 }

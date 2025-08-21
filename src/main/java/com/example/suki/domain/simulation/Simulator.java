@@ -82,11 +82,28 @@ public class Simulator {
                 continue;
             }
 
-            path.add(new Tick(place, action));
+            // 소비성 아이템 미사용
+            path.add(new Tick(place, action, Map.of()));
             if (findPath(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag)) {
                 return true;
             }
             path.remove(path.size() - 1);
+
+            // 소비성 아이템 사용
+            for(ConsumableItemCategory item : consumableBag.usableItems()){
+                if(!consumableBag.canUse(item) || nextStamina == MAX_STAMINA) {
+                    continue;
+                }
+
+                int itemNextStamina = item.apply(nextStamina);
+                consumableBag.use(item);
+                path.add(new Tick(place, action, Map.of(item, 1)));
+                if (findPath(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag)) {
+                    return true;
+                }
+                path.remove(path.size() - 1);
+                consumableBag.undo(item);
+            }
         }
         return false;
     }

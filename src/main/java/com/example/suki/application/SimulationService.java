@@ -16,6 +16,8 @@ import com.example.suki.domain.simulation.model.SimulationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class SimulationService {
@@ -31,7 +33,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateReach(userState, request.targetStamina());
+        SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), Map.of());
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -40,7 +42,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina());
+        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), Map.of());
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -49,7 +51,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax());
+        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), Map.of());
         return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), result);
     }
 

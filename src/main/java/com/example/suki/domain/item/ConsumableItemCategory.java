@@ -17,4 +17,9 @@ public enum ConsumableItemCategory {
 
     private final String name;
     private final IntUnaryOperator effect;
+
+    public int apply(int stamina){
+        int next = effect.applyAsInt(stamina);
+        return Math.min(100, next);
+    }
 }
