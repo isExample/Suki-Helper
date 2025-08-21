@@ -2,12 +2,14 @@ package com.example.suki.domain.simulation;
 
 import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.goal.FinishAtGoal;
 import com.example.suki.domain.simulation.goal.FinishWithinGoal;
 import com.example.suki.domain.simulation.goal.Goal;
 import com.example.suki.domain.simulation.goal.ReachGoal;
+import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationResult;
 import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
@@ -27,35 +29,35 @@ public class Simulator {
     private static final DaySchedule WEEKEND_SCHEDULE = (tick, second) -> second;
     private static final DaySchedule WEEKDAY_SCHEDULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
 
-    public SimulationResult simulateReach(UserState userState, int targetStamina){
-        return simulate(userState, new ReachGoal(targetStamina));
+    public SimulationResult simulateReach(UserState userState, int targetStamina, Map<ConsumableItemCategory, Integer> consumableItemMap){
+        return simulate(userState, new ReachGoal(targetStamina), new ConsumableBag(consumableItemMap));
     }
 
-    public SimulationResult simulateFinishAt(UserState userState, int targetStamina){
-        return simulate(userState, new FinishAtGoal(targetStamina));
+    public SimulationResult simulateFinishAt(UserState userState, int targetStamina, Map<ConsumableItemCategory, Integer> consumableItemMap){
+        return simulate(userState, new FinishAtGoal(targetStamina), new ConsumableBag(consumableItemMap));
     }
 
-    public SimulationResult simulateFinishWithin(UserState userState, int min, int max){
-        return simulate(userState, new FinishWithinGoal(min, max));
+    public SimulationResult simulateFinishWithin(UserState userState, int min, int max, Map<ConsumableItemCategory, Integer> consumableItemMap){
+        return simulate(userState, new FinishWithinGoal(min, max), new ConsumableBag(consumableItemMap));
     }
 
-    private SimulationResult simulate(UserState userState, Goal goal){
+    private SimulationResult simulate(UserState userState, Goal goal, ConsumableBag consumableBag){
         switch (userState.getDay()) {
             case WEEKEND:
-                return simulateBySchedule(userState, goal, WEEKEND_SCHEDULE);
+                return simulateBySchedule(userState, goal, WEEKEND_SCHEDULE, consumableBag);
             case WEEKDAY_MON:
             case WEEKDAY_OTHER:
-                return simulateBySchedule(userState, goal, WEEKDAY_SCHEDULE);
+                return simulateBySchedule(userState, goal, WEEKDAY_SCHEDULE, consumableBag);
             default:
                 return SimulationResult.failure();
         }
     }
 
-    private SimulationResult simulateBySchedule(UserState userState, Goal goal, DaySchedule schedule) {
+    private SimulationResult simulateBySchedule(UserState userState, Goal goal, DaySchedule schedule, ConsumableBag consumableBag) {
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
             List<Tick> path = new ArrayList<>();
-            if (findPath(userState, 0, MAX_STAMINA, goal, second, schedule, path)) {
+            if (findPath(userState, 0, MAX_STAMINA, goal, second, schedule, path, consumableBag)) {
                 return SimulationResult.success(path);
             }
         }
@@ -63,7 +65,7 @@ public class Simulator {
     }
 
     private boolean findPath(UserState userState, int currentTick, int currentStamina, Goal goal,
-                             PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path) {
+                             PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag) {
         if(goal.isTerminal(currentTick, currentStamina, MAX_TICKS)){
             return goal.isSuccess(currentTick, currentStamina);
         }
@@ -81,7 +83,7 @@ public class Simulator {
             }
 
             path.add(new Tick(place, action));
-            if (findPath(userState, currentTick + 1, nextStamina, goal, place, schedule, path)) {
+            if (findPath(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag)) {
                 return true;
             }
             path.remove(path.size() - 1);
