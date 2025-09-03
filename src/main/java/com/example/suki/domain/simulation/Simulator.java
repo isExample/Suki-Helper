@@ -83,7 +83,7 @@ public class Simulator {
             }
 
             // 소비성 아이템 미사용
-            path.add(new Tick(place, action, Map.of()));
+            path.add(new Tick(place, action, null));
             if (findPath(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag)) {
                 return true;
             }
@@ -97,7 +97,7 @@ public class Simulator {
 
                 int itemNextStamina = item.apply(nextStamina);
                 consumableBag.use(item);
-                path.add(new Tick(place, action, Map.of(item, 1)));
+                path.add(new Tick(place, action, item));
                 if (findPath(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag)) {
                     return true;
                 }
