@@ -2,6 +2,7 @@ package com.example.suki.api.dto;
 
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.badge.BadgeCategory;
+import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.item.PermanentItemCategory;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
@@ -12,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+import java.util.Map;
 
 @Schema(description = "체력 달성 조합 요청")
 public record SimulationRequest(
@@ -45,8 +47,12 @@ public record SimulationRequest(
         @Size(max = 6)
         List<TraitCategory> traitList,
 
-        @Schema(description="아이템 목록")
+        @Schema(description="영구성 아이템 목록")
         @NotNull
-        List<PermanentItemCategory> itemList
+        List<PermanentItemCategory> permanentItemList,
+
+        @Schema(description="소비성 아이템 목록")
+        @NotNull
+        Map<ConsumableItemCategory, @Min(1) Integer> consumableItemMap
 ) {
 }
