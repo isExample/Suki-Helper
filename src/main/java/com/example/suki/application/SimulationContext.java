@@ -14,16 +14,14 @@ public record SimulationContext(
         int fitnessLevel,
         List<BadgeCategory> badgeList,
         List<TraitCategory> traitList,
-        List<PermanentItemCategory> permanentItemList,
-        Map<ConsumableItemCategory, Integer> consumableItemMap
+        List<PermanentItemCategory> permanentItemList
 ) {
     public static SimulationContext from(SimulationRequest request) {
         return new SimulationContext(
                 request.fitnessLevel(),
                 request.badgeList(),
                 request.traitList(),
-                request.permanentItemList(),
-                request.consumableItemMap()
+                request.permanentItemList()
         );
     }
 
@@ -32,8 +30,7 @@ public record SimulationContext(
                 request.fitnessLevel(),
                 request.badgeList(),
                 request.traitList(),
-                request.permanentItemList(),
-                request.consumableItemMap()
+                request.permanentItemList()
         );
     }
 }

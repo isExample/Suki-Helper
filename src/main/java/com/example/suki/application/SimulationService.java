@@ -33,7 +33,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), Map.of());
+        SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.consumableItemMap());
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -42,7 +42,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), Map.of());
+        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), request.consumableItemMap());
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -51,7 +51,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), Map.of());
+        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), request.consumableItemMap());
         return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), result);
     }
 
@@ -59,6 +59,6 @@ public class SimulationService {
         fitnessLevelModifier.modify(userState, context.fitnessLevel());
         badgeModifier.modify(userState, context.badgeList());
         traitModifier.modify(userState, context.traitList());
-        itemModifier.modify(userState, context.itemList());
+        itemModifier.modify(userState, context.permanentItemList());
     }
 }
