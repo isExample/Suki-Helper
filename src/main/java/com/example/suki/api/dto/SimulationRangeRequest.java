@@ -1,5 +1,7 @@
 package com.example.suki.api.dto;
 
+import com.example.suki.api.validation.CoffeeMaxOne;
+import com.example.suki.api.validation.CoffeeMutuallyExclusive;
 import com.example.suki.domain.badge.BadgeCategory;
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.item.ConsumableItemCategory;
@@ -54,6 +56,8 @@ public record SimulationRangeRequest(
 
         @Schema(description="소비성 아이템 목록")
         @NotNull
+        @CoffeeMaxOne
+        @CoffeeMutuallyExclusive
         Map<ConsumableItemCategory, @Min(1) Integer> consumableItemMap
 ) {
         @AssertTrue(message = "targetMin은 targetMax보다 작아야 합니다.")
