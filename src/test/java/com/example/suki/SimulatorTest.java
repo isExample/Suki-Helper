@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SimulatorTest {
@@ -23,7 +25,7 @@ public class SimulatorTest {
         userState.deactivateAll();
         userState.activatePlace(PlaceCategory.LIBRARY); // 단일 장소
 
-        assertTrue(simulator.simulateReach(userState, target).isPossible());
+        assertTrue(simulator.simulateReach(userState, target, Map.of()).isPossible());
     }
 
     @Test
@@ -38,7 +40,7 @@ public class SimulatorTest {
         userState.getPlaces().get(PlaceCategory.LIBRARY).disableAction(ActionCategory.PART_TIME);
 
         modifier.modify(userState, 10);
-        SimulationResult result = simulator.simulateReach(userState, 10);
+        SimulationResult result = simulator.simulateReach(userState, 10, Map.of());
 
         assertFalse(result.isPossible());
     }
@@ -52,7 +54,7 @@ public class SimulatorTest {
         userState.deactivateAll();
         userState.activatePlace(PlaceCategory.SCHOOL); // 평일 첫 장소는 항상 학교 -> 단일 장소는 학교만 가능
 
-        assertTrue(simulator.simulateReach(userState, target).isPossible());
+        assertTrue(simulator.simulateReach(userState, target, Map.of()).isPossible());
     }
 
     @Test
@@ -64,6 +66,6 @@ public class SimulatorTest {
         userState.activatePlace(PlaceCategory.SCHOOL);
         userState.activatePlace(PlaceCategory.HOME);
 
-        assertTrue(simulator.simulateReach(userState, 59).isPossible());
+        assertTrue(simulator.simulateReach(userState, 59, Map.of()).isPossible());
     }
 }

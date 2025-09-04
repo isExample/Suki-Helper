@@ -1,6 +1,6 @@
 package com.example.suki;
 
-import com.example.suki.domain.item.ItemCategory;
+import com.example.suki.domain.item.PermanentItemCategory;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,8 +36,8 @@ public class TestSources {
                 .filter(t -> scopeType.isInstance(t.getEffect()));
     }
 
-    public static Stream<ItemCategory> 아이템_스코프(Class<?> scopeType) {
-        return Arrays.stream(ItemCategory.values())
+    public static Stream<PermanentItemCategory> 아이템_스코프(Class<?> scopeType) {
+        return Arrays.stream(PermanentItemCategory.values())
                 .filter(i -> scopeType.isInstance(i.getEffect()));
     }
 
@@ -45,7 +45,7 @@ public class TestSources {
         return traits.flatMap(t -> DEFAULT_PLACES.stream().map(p -> Arguments.of(t, p)));
     }
 
-    public static Stream<Arguments> 아이템x기본장소(Stream<ItemCategory> items) {
+    public static Stream<Arguments> 아이템x기본장소(Stream<PermanentItemCategory> items) {
         return items.flatMap(i -> DEFAULT_PLACES.stream().map(p -> Arguments.of(i, p)));
     }
 }
