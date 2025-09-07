@@ -25,6 +25,7 @@ public class Simulator {
     private static final int MIN_STAMINA = 0;
     private static final int MAX_TICKS = 14;
     private static final int WEEKDAY_SCHOOL_TICKS = 6;
+    private static final int MAX_SOLUTIONS = 10;
 
     private static final DaySchedule WEEKEND_SCHEDULE = (tick, second) -> second;
     private static final DaySchedule WEEKDAY_SCHEDULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
@@ -54,20 +55,31 @@ public class Simulator {
     }
 
     private SimulationResult simulateBySchedule(UserState userState, Goal goal, DaySchedule schedule, ConsumableBag consumableBag) {
+        List<List<Tick>> solutions = new ArrayList<>();
+
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
             List<Tick> path = new ArrayList<>();
-            if (findPath(userState, 0, MAX_STAMINA, goal, second, schedule, path, consumableBag)) {
-                return SimulationResult.success(path);
+            findPath(userState, 0, MAX_STAMINA, goal, second, schedule, path, consumableBag, solutions);
+
+            if(solutions.size() >= MAX_SOLUTIONS) {
+                break;
             }
         }
-        return SimulationResult.failure();
+        return solutions.isEmpty() ? SimulationResult.failure() : SimulationResult.success(solutions);
     }
 
-    private boolean findPath(UserState userState, int currentTick, int currentStamina, Goal goal,
-                             PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag) {
+    private void findPath(UserState userState, int currentTick, int currentStamina, Goal goal,
+                             PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions) {
+        if(solutions.size() >= MAX_SOLUTIONS) {
+            return;
+        }
+
         if(goal.isTerminal(currentTick, currentStamina, MAX_TICKS)){
-            return goal.isSuccess(currentTick, currentStamina);
+            if(goal.isSuccess(currentTick, currentStamina)){
+                solutions.add(List.copyOf(path));
+            }
+            return;
         }
 
         PlaceCategory place = schedule.placeAt(currentTick, secondPlace);
@@ -84,9 +96,7 @@ public class Simulator {
 
             // 소비성 아이템 미사용
             path.add(new Tick(place, action, null));
-            if (findPath(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag)) {
-                return true;
-            }
+            findPath(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag, solutions);
             path.remove(path.size() - 1);
 
             // 소비성 아이템 사용
@@ -98,13 +108,10 @@ public class Simulator {
                 int itemNextStamina = item.apply(nextStamina);
                 consumableBag.use(item);
                 path.add(new Tick(place, action, item));
-                if (findPath(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag)) {
-                    return true;
-                }
+                findPath(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag, solutions);
                 path.remove(path.size() - 1);
                 consumableBag.undo(item);
             }
         }
-        return false;
     }
 }

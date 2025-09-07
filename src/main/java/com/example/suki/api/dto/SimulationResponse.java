@@ -11,14 +11,17 @@ public record SimulationResponse(
         int targetStamina,
         @Schema(description = "목표 체력 달성 가능 여부")
         boolean isPossible,
+        @Schema(description = "조합 수(최대 10)")
+        int count,
         @Schema(description = "목표 체력 달성 조합")
-        List<Tick> tickList
+        List<List<Tick>> combinations
 ) {
     public static SimulationResponse from(int targetStamina, SimulationResult result) {
         return new SimulationResponse(
                 targetStamina,
                 result.isPossible(),
-                result.getTickList()
+                result.getCombinations().size(),
+                result.getCombinations()
         );
     }
 }
