@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer(appName)">
+    <small>
+        &copy; <span th:text="${#calendars.format(#dates.createNow(), 'yyyy')}">2025</span>
+        <span th:text="${appName}">Suki Helper</span>
+    </small>
+</footer>
+</body>
+</html>
