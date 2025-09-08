@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Suki Helper')"></head>
+<body>
+<header th:replace="fragments/header :: header('Suki Helper')"></header>
+
+<main class="container" aria-labelledby="home-title">
+    <h1 id="home-title" style="position:absolute; left:-9999px;">기능 선택</h1>
+    <p class="hero">원하는 조합 기능을 선택하세요.</p>
+
+    <section class="grid" aria-label="기능 카드">
+        <!-- 1) 체력 N 달성 조합 -->
+        <article class="card">
+            <h2>체력 N 달성 조합</h2>
+            <p>목표 체력(<code>N</code>)을 달성하는 조합을 조회합니다.</p>
+            <div class="actions">
+                <a class="btn" href="/reach">바로가기</a>
+            </div>
+        </article>
+
+        <!-- 2) 체력 N 마무리 조합 -->
+        <article class="card">
+            <h2>체력 N 마무리 조합</h2>
+            <p>최종 체력이 정확히 <code>N</code>이 되도록 하는 조합을 조회합니다.</p>
+            <div class="actions">
+                <a class="btn" href="/finish-at">바로가기</a>
+            </div>
+        </article>
+
+        <!-- 3) 체력 N1 ~ N2 마무리 조합 -->
+        <article class="card">
+            <h2>체력 N1 ~ N2 마무리 조합</h2>
+            <p>최종 체력이 구간(<code>N1~N2</code>)에 들도록 하는 조합을 조회합니다.</p>
+            <div class="actions">
+                <a class="btn" href="/finish-within">바로가기</a>
+            </div>
+        </article>
+    </section>
+</main>
+
+<footer th:replace="fragments/footer :: footer('Suki Helper')"></footer>
+</body>
+</html>
