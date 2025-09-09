@@ -1,18 +1,17 @@
-/* reach.html 전용 스타일 */
-/* 폼 카드: hover/포커스 효과 제거 */
-#reachForm.card { box-shadow: none; transition: none; }
-#reachForm.card:hover,
-#reachForm.card:focus,
-#reachForm.card:focus-within {
-    box-shadow: none;
-    transform: none;
+/* 입력 폼 */
+.sim-form.card {
+    box-shadow:none; transition:none;
+}
+.sim-form.card:hover,
+.sim-form.card:focus,
+.sim-form.card:focus-within {
+    box-shadow:none; transform:none;
 }
 
-/* 입력 공통 */
-#reachForm input[type="number"],
-#reachForm input[type="text"],
-#reachForm select,
-#reachForm textarea {
+.sim-form input[type="number"],
+.sim-form input[type="text"],
+.sim-form select,
+.sim-form textarea {
     padding: 10px 12px;
     font-size: 16px;
     border: 1px solid #ddd;
@@ -99,25 +98,27 @@
     border-radius: 10px;
 }
 
-/* '조합 조회' 버튼 호버/포커스 */
-#buildRequestBtn{
+/* '조합 조회' 버튼 */
+.sim-submit{
     transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .12s ease;
 }
-#buildRequestBtn:hover{
+.sim-submit:hover{
     background:#0b5ed7;
     border-color:#0a58ca;
     box-shadow:0 6px 16px rgba(13,110,253,.20);
     transform:translateY(-1px);
 }
-#buildRequestBtn:active{
+.sim-submit:active{
     transform:translateY(0);
     box-shadow:0 3px 10px rgba(13,110,253,.18);
 }
-#buildRequestBtn:focus-visible{
+.sim-submit:focus-visible{
     outline:0;
     box-shadow:0 0 0 3px rgba(13,110,253,.25);
 }
-#buildRequestBtn[disabled]{ opacity:.6; cursor:not-allowed; box-shadow:none; transform:none; }
+.sim-submit[disabled]{
+    opacity:.6; cursor:not-allowed; box-shadow:none; transform:none;
+}
 
 /* 결과 UI */
 .result-card { padding:16px; margin-top:20px; }

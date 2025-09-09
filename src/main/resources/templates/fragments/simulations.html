@@ -1,0 +1,127 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="formAndResult(pageTitle, endpoint, formId, buttonId)">
+    <h1 th:text="${pageTitle}">시뮬레이터</h1>
+    <p class="hero">조건을 입력하고 조합을 조회하세요.</p>
+
+    <form class="card sim-form" style="padding:20px"
+          th:attr="id=${formId}, data-endpoint=${endpoint}">
+        <!-- 기본 -->
+        <fieldset class="section">
+            <div class="field-row">
+                <label class="field-label" for="targetStamina">목표 체력 N (1~99)</label>
+                <input type="number" id="targetStamina" name="targetStamina" min="1" max="99" required class="field-input">
+            </div>
+            <div class="field-row">
+                <label class="field-label" for="fitnessLevel">운동 레벨 (0~10)</label>
+                <input type="number" id="fitnessLevel" name="fitnessLevel" min="0" max="10" value="0" class="field-input">
+            </div>
+        </fieldset>
+
+        <!-- 요일 -->
+        <fieldset class="section">
+            <legend class="section-title">요일</legend>
+            <label style="display:block;margin:6px 0"><input type="radio" name="day" value="WEEKDAY_MONDAY"> 평일(월)</label>
+            <label style="display:block;margin:6px 0"><input type="radio" name="day" value="WEEKDAY_OTHER" checked> 평일(나머지)</label>
+            <label style="display:block;margin:6px 0"><input type="radio" name="day" value="WEEKEND"> 주말</label>
+        </fieldset>
+
+        <!-- 비활성/활성 장소 -->
+        <fieldset class="section">
+            <legend class="section-title">비활성화된 기본 장소</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="inactiveList" value="HOME"> 집</label>
+                <label><input type="checkbox" name="inactiveList" value="PARK"> 공원</label>
+                <label><input type="checkbox" name="inactiveList" value="CAFE"> 카페</label>
+                <label><input type="checkbox" name="inactiveList" value="LIBRARY"> 도서관</label>
+            </div>
+        </fieldset>
+
+        <fieldset class="section">
+            <legend class="section-title">활성화된 조건부 장소</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="activeList" value="GOLD_MINE"> 금광</label>
+                <label><input type="checkbox" name="activeList" value="ART_GALLERY"> 미술관</label>
+                <label><input type="checkbox" name="activeList" value="GYM"> 헬스장</label>
+                <label><input type="checkbox" name="activeList" value="PC_ROOM"> 피시방</label>
+                <label><input type="checkbox" name="activeList" value="FOOTBALL_PITCH"> 축구연습장</label>
+                <label><input type="checkbox" name="activeList" value="WORKSHOP"> 작업실</label>
+                <label><input type="checkbox" name="activeList" value="PRACTICE_ROOM"> 연습실</label>
+            </div>
+        </fieldset>
+
+        <!-- 뱃지 -->
+        <fieldset class="section">
+            <legend class="section-title">대학교 뱃지 (최대 7개)</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="badgeList" value="SANGMYEON"> 상면대학교</label>
+                <label><input type="checkbox" name="badgeList" value="DIGISTAR"> 디지스타</label>
+            </div>
+        </fieldset>
+
+        <!-- 특성 -->
+        <fieldset class="section">
+            <legend class="section-title">특성 (최대 6개)</legend>
+
+            <div class="trait-group">
+                <div class="subhead">S급</div>
+                <div class="choices">
+                    <label><input type="checkbox" name="traitList" value="ADAMANTINE_BODY"> 금강불괴</label>
+                    <label><input type="checkbox" name="traitList" value="ATHLETIC"> 운동체질</label>
+                    <label><input type="checkbox" name="traitList" value="PART_TIME_MASTER"> 알바의 달인</label>
+                </div>
+            </div>
+
+            <div class="trait-group">
+                <div class="subhead">A급</div>
+                <div class="choices">
+                    <label><input type="checkbox" name="traitList" value="AVID_READER"> 다독가</label>
+                    <label><input type="checkbox" name="traitList" value="JELLYFISH_SLEEP"> 해파리 수면법</label>
+                    <label><input type="checkbox" name="traitList" value="I_INTROVERTED"> I.내향적</label>
+                </div>
+            </div>
+
+            <div class="trait-group">
+                <div class="subhead">C급</div>
+                <div class="choices">
+                    <label><input type="checkbox" name="traitList" value="MONDAY_LOVER"> 월요일 좋아</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 영구성 아이템 -->
+        <fieldset class="section">
+            <legend class="section-title">영구성 아이템</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="permanentItemList" value="CALMING_STONE"> 만지면 마음이 편안해지는 돌</label>
+                <label><input type="checkbox" name="permanentItemList" value="MEMORY_FORM_PILLOW"> 메모리폼 베개</label>
+            </div>
+        </fieldset>
+
+        <!-- 소비성 아이템 (수량) -->
+        <fieldset class="section">
+            <legend class="section-title">소비성 아이템 (수량)</legend>
+            <div class="qty-grid">
+                <div class="qty"><span>디카페인 커피</span><div class="spin"><input type="number" id="qty-DECAF_COFFEE" name="consumableItemMap.DECAF_COFFEE" min="0" value="0"></div></div>
+                <div class="qty"><span>뻥튀기</span><div class="spin"><input type="number" id="qty-PUFFED_RICE" name="consumableItemMap.PUFFED_RICE" min="0" value="0"></div></div>
+                <div class="qty"><span>수라상</span><div class="spin"><input type="number" id="qty-ROYAL_FEAST" name="consumableItemMap.ROYAL_FEAST" min="0" value="0"></div></div>
+                <div class="qty"><span>초코우유</span><div class="spin"><input type="number" id="qty-CHOCOLATE_MILK" name="consumableItemMap.CHOCOLATE_MILK" min="0" value="0"></div></div>
+                <div class="qty"><span>흰 우유</span><div class="spin"><input type="number" id="qty-WHITE_MILK" name="consumableItemMap.WHITE_MILK" min="0" value="0"></div></div>
+                <div class="qty"><span>커피</span><div class="spin"><input type="number" id="qty-COFFEE" name="consumableItemMap.COFFEE" min="0" value="0"></div></div>
+                <div class="qty"><span>커피x2</span><div class="spin"><input type="number" id="qty-COFFEE_X2" name="consumableItemMap.COFFEE_X2" min="0" value="0"></div></div>
+            </div>
+        </fieldset>
+
+        <div class="actions-row" style="margin-top:12px; text-align:right">
+            <button class="btn sim-submit" type="button" th:attr="id=${buttonId}" data-role="submit">조합 조회</button>
+        </div>
+    </form>
+
+    <!-- 결과 UI -->
+    <section id="result" class="card result-card" hidden aria-live="polite">
+        <h2 style="margin:0 0 12px">결과</h2>
+        <p id="result-empty" class="muted" hidden>조건에 맞는 조합이 없습니다.</p>
+        <div id="result-wrap" hidden>
+            <p class="result-count"><strong>조합 수:</strong> <span id="r-count">0</span></p>
+            <ol id="combo-list" class="combo-list"></ol>
+        </div>
+    </section>
+</th:block>
