@@ -27,6 +27,10 @@
 .field-label { width: 180px; font-weight: 600; }
 .field-input { width: 120px; max-width: 200px; }
 
+.field-input-pair { display:flex; align-items:center; gap:8px; }
+.field-input-pair .sep { color:#666; }
+.field-input-pair .field-input { width:140px; max-width:160px; } /* 필요시 조절 */
+
 /* 특성 하위 그룹 표시 */
 .trait-group {
     padding-left: 14px;

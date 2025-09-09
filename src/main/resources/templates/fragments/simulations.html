@@ -1,4 +1,4 @@
-<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="formAndResult(pageTitle, endpoint, formId, buttonId)">
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="formAndResult(pageTitle, endpoint, formId, buttonId, targetMode)">
     <h1 th:text="${pageTitle}">시뮬레이터</h1>
     <p class="hero">조건을 입력하고 조합을 조회하세요.</p>
 
@@ -6,9 +6,24 @@
           th:attr="id=${formId}, data-endpoint=${endpoint}">
         <!-- 기본 -->
         <fieldset class="section">
-            <div class="field-row">
-                <label class="field-label" for="targetStamina">목표 체력 N (1~99)</label>
-                <input type="number" id="targetStamina" name="targetStamina" min="1" max="99" required class="field-input">
+            <!-- range 모드 -->
+            <div th:if="${targetMode} == 'range'">
+                <div class="field-row">
+                    <label class="field-label" for="targetMin">목표 체력 N1 ~ N2 (1~99)</label>
+                    <div class="field-input-pair">
+                        <input type="number" id="targetMin" name="targetMin" min="1" max="99" step="1" inputmode="numeric" class="field-input" required>
+                        <span class="sep">~</span>
+                        <input type="number" id="targetMax" name="targetMax" min="1" max="99" step="1" inputmode="numeric" class="field-input" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- single 모드 -->
+            <div th:unless="${targetMode} == 'range'">
+                <div class="field-row">
+                    <label class="field-label" for="targetStamina">목표 체력 N (1~99)</label>
+                    <input type="number" id="targetStamina" name="targetStamina" min="1" max="99" step="1" inputmode="numeric" required class="field-input">
+                </div>
             </div>
             <div class="field-row">
                 <label class="field-label" for="fitnessLevel">운동 레벨 (0~10)</label>

@@ -50,8 +50,10 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
     }
 
     function buildRequest(root=document){
-        return {
-            targetStamina: Number($('#targetStamina', root)?.value || 0),
+        const min = root.querySelector('#targetMin');
+        const max = root.querySelector('#targetMax');
+
+        const base = {
             fitnessLevel:  Number($('#fitnessLevel', root)?.value || 0),
             day: $('input[name="day"]:checked', root)?.value || 'WEEKDAY_OTHER',
             inactiveList: pickList('inactiveList', root),
@@ -61,7 +63,23 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
             permanentItemList: pickList('permanentItemList', root),
             consumableItemMap: buildConsumables(root)
         };
+
+        if(min && max){
+            // range 모드
+            return {
+                ...base,
+                targetMin: Number(min.value || 0),
+                targetMax: Number(max.value || 0)
+            };
+        } else {
+            // single 모드
+            return {
+                ...base,
+                targetStamina: Number($('#targetStamina', root)?.value || 0)
+            };
+        }
     }
+
     function validateClient(payload){
         const c1 = payload.consumableItemMap['COFFEE'] || 0;
         const c2 = payload.consumableItemMap['COFFEE_X2'] || 0;

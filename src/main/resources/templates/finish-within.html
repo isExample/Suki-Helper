@@ -10,7 +10,7 @@
 <header th:replace="~{fragments/header :: header('Suki Helper')}"></header>
 
 <main class="container"
-      th:insert="~{fragments/simulations :: formAndResult('체력 N 마무리', '/api/v1/simulations/finish-within', 'finishWithinForm', 'finishWithinBtn')}">
+      th:insert="~{fragments/simulations :: formAndResult('체력 N1 ~ N2 마무리', '/api/v1/simulations/finish-within', 'finishWithinForm', 'finishWithinBtn', 'range')}">
 </main>
 
 <footer th:replace="~{fragments/footer :: footer('Suki Helper')}"></footer>
