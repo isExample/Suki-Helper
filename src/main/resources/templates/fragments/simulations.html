@@ -9,7 +9,7 @@
             <!-- range 모드 -->
             <div th:if="${targetMode} == 'range'">
                 <div class="field-row">
-                    <label class="field-label" for="targetMin">목표 체력 N1 ~ N2 (1~99)</label>
+                    <label class="field-label" for="targetMin">목표 체력 N1 ~ N2 <span class="label-hint">(1~99)</span></label>
                     <div class="field-input-pair">
                         <input type="number" id="targetMin" name="targetMin" min="1" max="99" step="1" inputmode="numeric" class="field-input" required>
                         <span class="sep">~</span>
@@ -21,12 +21,12 @@
             <!-- single 모드 -->
             <div th:unless="${targetMode} == 'range'">
                 <div class="field-row">
-                    <label class="field-label" for="targetStamina">목표 체력 N (1~99)</label>
+                    <label class="field-label" for="targetStamina">목표 체력 N <span class="label-hint">(1~99)</span></label>
                     <input type="number" id="targetStamina" name="targetStamina" min="1" max="99" step="1" inputmode="numeric" required class="field-input">
                 </div>
             </div>
             <div class="field-row">
-                <label class="field-label" for="fitnessLevel">운동 레벨 (0~10)</label>
+                <label class="field-label" for="fitnessLevel">운동 레벨 <span class="label-hint">(0~10)</span></label>
                 <input type="number" id="fitnessLevel" name="fitnessLevel" min="0" max="10" value="0" class="field-input">
             </div>
         </fieldset>
@@ -65,7 +65,7 @@
 
         <!-- 뱃지 -->
         <fieldset class="section">
-            <legend class="section-title">대학교 뱃지 (최대 7개)</legend>
+            <legend class="section-title">대학교 뱃지 <span class="label-hint">(최대 7개, 체력 관련 뱃지만 존재)</span></legend>
             <div class="choices">
                 <label><input type="checkbox" name="badgeList" value="SANGMYEON"> 상면대학교</label>
                 <label><input type="checkbox" name="badgeList" value="DIGISTAR"> 디지스타</label>
@@ -74,7 +74,7 @@
 
         <!-- 특성 -->
         <fieldset class="section">
-            <legend class="section-title">특성 (최대 6개)</legend>
+            <legend class="section-title">특성 <span class="label-hint">(최대 6개, 체력 관련 특성만 존재)</span></legend>
 
             <div class="trait-group">
                 <div class="subhead">S급</div>
@@ -104,7 +104,7 @@
 
         <!-- 영구성 아이템 -->
         <fieldset class="section">
-            <legend class="section-title">영구성 아이템</legend>
+            <legend class="section-title">영구성 아이템 <span class="label-hint">(체력 관련 아이템만 존재)</span></legend>
             <div class="choices">
                 <label><input type="checkbox" name="permanentItemList" value="CALMING_STONE"> 만지면 마음이 편안해지는 돌</label>
                 <label><input type="checkbox" name="permanentItemList" value="MEMORY_FORM_PILLOW"> 메모리폼 베개</label>
@@ -113,7 +113,7 @@
 
         <!-- 소비성 아이템 (수량) -->
         <fieldset class="section">
-            <legend class="section-title">소비성 아이템 (수량)</legend>
+            <legend class="section-title">소비성 아이템 <span class="label-hint">(커피는 최대 1개)</span></legend>
             <div class="qty-grid">
                 <div class="qty"><span>디카페인 커피</span><div class="spin"><input type="number" id="qty-DECAF_COFFEE" name="consumableItemMap.DECAF_COFFEE" min="0" value="0"></div></div>
                 <div class="qty"><span>뻥튀기</span><div class="spin"><input type="number" id="qty-PUFFED_RICE" name="consumableItemMap.PUFFED_RICE" min="0" value="0"></div></div>
@@ -121,7 +121,7 @@
                 <div class="qty"><span>초코우유</span><div class="spin"><input type="number" id="qty-CHOCOLATE_MILK" name="consumableItemMap.CHOCOLATE_MILK" min="0" value="0"></div></div>
                 <div class="qty"><span>흰 우유</span><div class="spin"><input type="number" id="qty-WHITE_MILK" name="consumableItemMap.WHITE_MILK" min="0" value="0"></div></div>
                 <div class="qty"><span>커피</span><div class="spin"><input type="number" id="qty-COFFEE" name="consumableItemMap.COFFEE" min="0" value="0"></div></div>
-                <div class="qty"><span>커피x2</span><div class="spin"><input type="number" id="qty-COFFEE_X2" name="consumableItemMap.COFFEE_X2" min="0" value="0"></div></div>
+                <div class="qty"><span>커피x2<span class="label-hint">(개발자)</span></span><div class="spin"><input type="number" id="qty-COFFEE_X2" name="consumableItemMap.COFFEE_X2" min="0" value="0"></div></div>
             </div>
         </fieldset>
 

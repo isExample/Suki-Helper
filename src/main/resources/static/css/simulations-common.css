@@ -31,6 +31,13 @@
 .field-input-pair .sep { color:#666; }
 .field-input-pair .field-input { width:140px; max-width:160px; } /* 필요시 조절 */
 
+.label-hint{
+    font-size: 0.9em;
+    color: #768193;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
 /* 특성 하위 그룹 표시 */
 .trait-group {
     padding-left: 14px;
