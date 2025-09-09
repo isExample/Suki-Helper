@@ -81,10 +81,21 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
     }
 
     function validateClient(payload){
+        // 커피 제약 검증
         const c1 = payload.consumableItemMap['COFFEE'] || 0;
         const c2 = payload.consumableItemMap['COFFEE_X2'] || 0;
         if (c1 > 1) throw new Error('커피는 1개를 초과할 수 없습니다.');
         if (c1 > 0 && c2 > 0) throw new Error('커피와 커피x2는 동시에 사용할 수 없습니다.');
+
+        // 범위형 target 검증
+        if (typeof payload.targetMin === 'number' && typeof payload.targetMax === 'number') {
+            const n1 = payload.targetMin, n2 = payload.targetMax;
+            if (n1 < 1 || n1 > 99 || n2 < 1 || n2 > 99) throw new Error('목표 체력 범위는 1~99입니다.');
+            if (n1 >= n2) throw new Error('N1은 N2보다 작아야 합니다.');
+        } else if (typeof payload.targetStamina === 'number') {
+            const n = payload.targetStamina;
+            if (n < 1 || n > 99) throw new Error('목표 체력은 1~99입니다.');
+        }
     }
 
     // ===== 결과 렌더링 =====
