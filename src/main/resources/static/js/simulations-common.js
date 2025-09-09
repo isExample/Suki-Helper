@@ -1,0 +1,176 @@
+const PLACE_LABELS = {
+    SCHOOL: '학교',
+    HOME: '집',
+    PARK: '공원',
+    CAFE: '카페',
+    LIBRARY: '도서관',
+    GOLD_MINE: '금광',
+    ART_GALLERY: '미술관',
+    GYM: '헬스장',
+    PC_ROOM: '피시방',
+    FOOTBALL_PITCH: '축구연습장',
+    WORKSHOP: '작업실',
+    PRACTICE_ROOM: '연습실'
+};
+
+const ACTION_LABELS = {
+    STUDY: '공부',
+    PART_TIME: '알바',
+    EXERCISE: '운동',
+    SLEEP: '잠자기',
+    ATTEND_CLASS: '수업듣기',
+    PLAY_GAME: '게임연습',
+    FOOTBALL: '축구연습',
+    DRAWING: '그림연습',
+    TRAINING: '아이돌연습'
+};
+
+const placeLabel  = v => PLACE_LABELS[v]  ?? v;
+const actionLabel = v => ACTION_LABELS[v] ?? v;
+
+(() => {
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    const ctx = $('meta[name="ctx"]')?.content || '';
+
+    function pickList(name) {
+        return $$(`input[name="${name}"]:checked`).map(el => el.value);
+    }
+
+    function buildConsumables() {
+        const ids = ['DECAF_COFFEE', 'PUFFED_RICE', 'ROYAL_FEAST', 'CHOCOLATE_MILK', 'WHITE_MILK', 'COFFEE', 'COFFEE_X2'];
+        const map = {};
+        ids.forEach(k => {
+            const el = $(`#qty-${k}`);
+            const n = Number(el?.value || 0);
+            if (n >= 1) map[k] = n;
+        });
+        return map;
+    }
+
+    function buildRequest(root=document){
+        return {
+            targetStamina: Number($('#targetStamina', root)?.value || 0),
+            fitnessLevel:  Number($('#fitnessLevel', root)?.value || 0),
+            day: $('input[name="day"]:checked', root)?.value || 'WEEKDAY_OTHER',
+            inactiveList: pickList('inactiveList', root),
+            activeList: pickList('activeList', root),
+            badgeList: pickList('badgeList', root),
+            traitList: pickList('traitList', root),
+            permanentItemList: pickList('permanentItemList', root),
+            consumableItemMap: buildConsumables(root)
+        };
+    }
+    function validateClient(payload){
+        const c1 = payload.consumableItemMap['COFFEE'] || 0;
+        const c2 = payload.consumableItemMap['COFFEE_X2'] || 0;
+        if (c1 > 1) throw new Error('커피는 1개를 초과할 수 없습니다.');
+        if (c1 > 0 && c2 > 0) throw new Error('커피와 커피x2는 동시에 사용할 수 없습니다.');
+    }
+
+    // ===== 결과 렌더링 =====
+    function renderTicks(ticks){
+        return ticks.map(t => {
+            const cls = t.action === 'SLEEP' ? 'tick tick--sleep' : 'tick tick--other';
+            return `
+        <div class="${cls}">
+          <span class="action">${actionLabel(t.action)}</span>
+          <span class="stamina">${t.stamina}</span>
+        </div>
+      `;
+        }).join('');
+    }
+
+    function renderCombo(combo, idx){
+        const p1 = combo.slice(0, 6);
+        const p2 = combo.slice(6, 14);
+        const p1Name = p1[0]?.place ? placeLabel(p1[0].place) : '장소1';
+        const p2Name = p2[0]?.place ? placeLabel(p2[0].place) : '장소2';
+        const place2Html = p2.length ? `
+      <div class="place">
+        <div class="place-title">${p2Name} (8틱)</div>
+        <div class="ticks">${renderTicks(p2)}</div>
+      </div>` : '';
+        return `
+      <li>
+        <div class="combo">
+          <div class="combo-head">
+            <span class="title">조합 #${idx+1}</span>
+            <span class="info">총 ${combo.length}틱</span>
+          </div>
+          <div class="place-grid">
+            <div class="place">
+              <div class="place-title">${p1Name} (6틱)</div>
+              <div class="ticks">${renderTicks(p1)}</div>
+            </div>
+            ${place2Html}
+          </div>
+        </div>
+      </li>`;
+    }
+
+    function renderResult(resp, root=document){
+        const resultSec   = $('#result', root);
+        const emptyP      = $('#result-empty', root);
+        const resultWrap  = $('#result-wrap', root);
+        const countSpan   = $('#r-count', root);
+        const comboListEl = $('#combo-list', root);
+
+        resultSec.hidden = false;
+        const combos = Array.isArray(resp?.combinations) ? resp.combinations : [];
+        const count  = Number.isInteger(resp?.count) ? resp.count : combos.length;
+
+        if (combos.length === 0) {
+            emptyP.hidden = false;
+            resultWrap.hidden = true;
+            return;
+        }
+        emptyP.hidden = true;
+        resultWrap.hidden = false;
+        countSpan.textContent = String(count);
+        comboListEl.innerHTML = combos.map(renderCombo).join('');
+    }
+
+    // ===== 초기화 엔트리 =====
+    function init({ endpoint, formId, buttonId }){
+        const form = document.getElementById(formId);
+        const btn  = document.getElementById(buttonId);
+        if (!form || !btn) return;
+
+        btn.addEventListener('click', async () => {
+            try{
+                const payload = buildRequest(form);
+                validateClient(payload);
+
+                const headers = { 'Content-Type': 'application/json' };
+
+                btn.disabled = true;
+                const oldText = btn.textContent;
+                btn.textContent = '요청 중...';
+
+                const res = await fetch(`${ctx}${endpoint}`, {
+                    method:'POST', headers, body: JSON.stringify(payload)
+                });
+
+                const text = await res.text();
+                const parsed = (() => { try { return JSON.parse(text); } catch { return null; } })();
+                const data = parsed && typeof parsed === 'object' ? (parsed.data ?? parsed) : parsed ?? text;
+
+                document.dispatchEvent(new CustomEvent('sim:response', { detail: { ok: res.ok, data, endpoint } }));
+                if (!res.ok || typeof data !== 'object') throw new Error(typeof data === 'string' ? data : '요청 실패');
+
+                renderResult(data, document);
+            } catch(err){
+                console.error('[Simulation ERROR]', err);
+                alert(err?.message || '요청 중 오류가 발생했습니다.');
+                document.dispatchEvent(new CustomEvent('sim:error', { detail: err }));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '조합 조회';
+            }
+        });
+    }
+
+    window.SimulationUI = { init };
+})();
