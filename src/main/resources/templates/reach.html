@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('체력 N 달성 · Suki Helper')"></head>
+<body>
+<header th:replace="fragments/header :: header('Suki Helper')"></header>
+
+<main class="container" style="max-width:1000px">
+    <h1>체력 N 달성</h1>
+    <p class="hero">요청에 필요한 값들을 입력하세요.</p>
+
+    <form id="reachForm" class="card" style="padding:20px">
+        <!-- 기본 -->
+        <fieldset style="border:0;padding:0;margin:0 16px 16px 0">
+            <div class="field-row">
+                <label class="field-label" for="targetStamina">목표 체력 N (1~99)</label>
+                <input type="number" id="targetStamina" name="targetStamina" min="1" max="99" required class="field-input">
+            </div>
+
+            <div class="field-row">
+                <label class="field-label" for="fitnessLevel">운동 레벨 (0~10)</label>
+                <input type="number" id="fitnessLevel" name="fitnessLevel" min="0" max="10" value="0" class="field-input">
+            </div>
+        </fieldset>
+
+        <!-- 요일 -->
+        <fieldset style="border:0;padding:0;margin:0 0 16px">
+            <legend style="font-weight:700;margin-bottom:10px">요일</legend>
+            <label style="display:block;margin:6px 0">
+                <input type="radio" name="day" value="WEEKDAY_MONDAY"> 평일(월)
+            </label>
+            <label style="display:block;margin:6px 0">
+                <input type="radio" name="day" value="WEEKDAY_OTHER" checked> 평일(나머지)
+            </label>
+            <label style="display:block;margin:6px 0">
+                <input type="radio" name="day" value="WEEKEND"> 주말
+            </label>
+        </fieldset>
+
+        <!-- 비활성/활성 장소 -->
+        <fieldset style="border:0;padding:0;margin:0 0 16px">
+            <legend style="font-weight:700;margin-bottom:10px">비활성화된 기본 장소</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="inactiveList" value="HOME"> 집</label>
+                <label><input type="checkbox" name="inactiveList" value="PARK"> 공원</label>
+                <label><input type="checkbox" name="inactiveList" value="CAFE"> 카페</label>
+                <label><input type="checkbox" name="inactiveList" value="LIBRARY"> 도서관</label>
+            </div>
+        </fieldset>
+
+        <fieldset style="border:0;padding:0;margin:0 0 16px">
+            <legend style="font-weight:700;margin-bottom:10px">활성화된 조건부 장소</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="activeList" value="GOLD_MINE"> 금광</label>
+                <label><input type="checkbox" name="activeList" value="ART_GALLERY"> 미술관</label>
+                <label><input type="checkbox" name="activeList" value="GYM"> 헬스장</label>
+                <label><input type="checkbox" name="activeList" value="PC_ROOM"> 피시방</label>
+                <label><input type="checkbox" name="activeList" value="FOOTBALL_PITCH"> 축구연습장</label>
+                <label><input type="checkbox" name="activeList" value="WORKSHOP"> 작업실</label>
+                <label><input type="checkbox" name="activeList" value="PRACTICE_ROOM"> 연습실</label>
+            </div>
+        </fieldset>
+
+        <!-- 뱃지 -->
+        <fieldset style="border:0;padding:0;margin:0 0 16px">
+            <legend style="font-weight:700;margin-bottom:10px">대학교 뱃지 (최대 7개)</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="badgeList" value="SANGMYEON"> 상면대학교</label>
+                <label><input type="checkbox" name="badgeList" value="DIGISTAR"> 디지스타</label>
+            </div>
+        </fieldset>
+
+        <!-- 특성 -->
+        <fieldset style="border:0;padding:0;margin:0 0 16px">
+            <legend style="font-weight:700;margin-bottom:10px">특성 (최대 6개)</legend>
+
+            <div class="trait-group">
+                <div class="subhead">S급</div>
+                <div class="choices">
+                    <label><input type="checkbox" name="traitList" value="ADAMANTINE_BODY"> 금강불괴</label>
+                    <label><input type="checkbox" name="traitList" value="ATHLETIC"> 운동체질</label>
+                    <label><input type="checkbox" name="traitList" value="PART_TIME_MASTER"> 알바의 달인</label>
+                </div>
+            </div>
+
+            <div class="trait-group">
+                <div class="subhead">A급</div>
+                <div class="choices">
+                    <label><input type="checkbox" name="traitList" value="AVID_READER"> 다독가</label>
+                    <label><input type="checkbox" name="traitList" value="JELLYFISH_SLEEP"> 해파리 수면법</label>
+                    <label><input type="checkbox" name="traitList" value="I_INTROVERTED"> I.내향적</label>
+                </div>
+            </div>
+
+            <div class="trait-group">
+                <div class="subhead">C급</div>
+                <div class="choices">
+                    <label><input type="checkbox" name="traitList" value="MONDAY_LOVER"> 월요일 좋아</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 영구성 아이템 -->
+        <fieldset style="border:0;padding:0;margin:0 0 16px">
+            <legend style="font-weight:700;margin-bottom:10px">영구성 아이템</legend>
+            <div class="choices">
+                <label><input type="checkbox" name="permanentItemList" value="CALMING_STONE"> 만지면 마음이 편안해지는 돌</label>
+                <label><input type="checkbox" name="permanentItemList" value="MEMORY_FORM_PILLOW"> 메모리폼 베개</label>
+            </div>
+        </fieldset>
+
+        <!-- 소비성 아이템 (수량) -->
+        <fieldset style="border:0;padding:0;margin:0 0 8px">
+            <legend style="font-weight:700;margin-bottom:10px">소비성 아이템 (수량)</legend>
+
+            <div class="qty-grid">
+                <div class="qty">
+                    <span>디카페인 커피</span>
+                    <div class="spin">
+                        <input type="number" id="qty-DECAF_COFFEE" name="consumableItemMap.DECAF_COFFEE" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="qty">
+                    <span>뻥튀기</span>
+                    <div class="spin">
+                        <input type="number" id="qty-PUFFED_RICE" name="consumableItemMap.PUFFED_RICE" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="qty">
+                    <span>수라상</span>
+                    <div class="spin">
+                        <input type="number" id="qty-ROYAL_FEAST" name="consumableItemMap.ROYAL_FEAST" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="qty">
+                    <span>초코우유</span>
+                    <div class="spin">
+                        <input type="number" id="qty-CHOCOLATE_MILK" name="consumableItemMap.CHOCOLATE_MILK" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="qty">
+                    <span>흰 우유</span>
+                    <div class="spin">
+                        <input type="number" id="qty-WHITE_MILK" name="consumableItemMap.WHITE_MILK" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="qty">
+                    <span>커피</span>
+                    <div class="spin">
+                        <input type="number" id="qty-COFFEE" name="consumableItemMap.COFFEE" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="qty">
+                    <span>커피x2</span>
+                    <div class="spin">
+                        <input type="number" id="qty-COFFEE_X2" name="consumableItemMap.COFFEE_X2" min="0" value="0">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</main>
+
+<footer th:replace="fragments/footer :: footer('Suki Helper')"></footer>
+
+<!-- 페이지 전용 스타일 -->
+<style>
+    #reachForm input[type="number"],
+    #reachForm input[type="text"],
+    #reachForm select,
+    #reachForm textarea {
+        padding: 10px 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+    .field-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+    .field-label { width: 180px; font-weight: 600; }
+    .field-input { width: 120px; max-width: 200px; }
+
+    .trait-group {
+        padding-left: 14px;
+        border-left: 3px solid #e6e9ef;
+        margin-top: 12px;
+    }
+
+    .subhead {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #555;
+        margin: 6px 0 6px;
+    }
+
+    .choices {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 8px;
+        justify-items: start;
+    }
+
+    .choices label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 10px 12px;
+        max-width: 280px;
+        width: 100%; /* 셀 내에서 폭 채우되 max-width로 상한 */
+        white-space: normal;
+        word-break: keep-all;
+        line-height: 1.4;
+    }
+
+    .qty-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .qty {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 8px 0;
+        width: 100%;
+    }
+
+    .qty span {
+        min-width: 110px;
+    }
+
+    .qty .spin {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .qty input {
+        width: 90px;
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+
+    .choices label:has(> input[type="checkbox"]:checked),
+    .choices-inline label:has(> input[type="checkbox"]:checked) {
+        background: #eaf3ff;
+        border-color: #9ec5fe;
+        box-shadow: inset 0 0 0 2px #d6e4ff;
+    }
+
+</style>
+
+</body>
+</html>
