@@ -23,8 +23,8 @@
         </fieldset>
 
         <!-- 요일 -->
-        <fieldset style="border:0;padding:0;margin:0 0 16px">
-            <legend style="font-weight:700;margin-bottom:10px">요일</legend>
+        <fieldset class="section">
+            <legend class="section-title">요일</legend>
             <label style="display:block;margin:6px 0">
                 <input type="radio" name="day" value="WEEKDAY_MONDAY"> 평일(월)
             </label>
@@ -37,8 +37,8 @@
         </fieldset>
 
         <!-- 비활성/활성 장소 -->
-        <fieldset style="border:0;padding:0;margin:0 0 16px">
-            <legend style="font-weight:700;margin-bottom:10px">비활성화된 기본 장소</legend>
+        <fieldset class="section">
+            <legend class="section-title">비활성화된 기본 장소</legend>
             <div class="choices">
                 <label><input type="checkbox" name="inactiveList" value="HOME"> 집</label>
                 <label><input type="checkbox" name="inactiveList" value="PARK"> 공원</label>
@@ -47,8 +47,8 @@
             </div>
         </fieldset>
 
-        <fieldset style="border:0;padding:0;margin:0 0 16px">
-            <legend style="font-weight:700;margin-bottom:10px">활성화된 조건부 장소</legend>
+        <fieldset class="section">
+            <legend class="section-title">활성화된 조건부 장소</legend>
             <div class="choices">
                 <label><input type="checkbox" name="activeList" value="GOLD_MINE"> 금광</label>
                 <label><input type="checkbox" name="activeList" value="ART_GALLERY"> 미술관</label>
@@ -61,8 +61,8 @@
         </fieldset>
 
         <!-- 뱃지 -->
-        <fieldset style="border:0;padding:0;margin:0 0 16px">
-            <legend style="font-weight:700;margin-bottom:10px">대학교 뱃지 (최대 7개)</legend>
+        <fieldset class="section">
+            <legend class="section-title">대학교 뱃지 (최대 7개)</legend>
             <div class="choices">
                 <label><input type="checkbox" name="badgeList" value="SANGMYEON"> 상면대학교</label>
                 <label><input type="checkbox" name="badgeList" value="DIGISTAR"> 디지스타</label>
@@ -70,8 +70,8 @@
         </fieldset>
 
         <!-- 특성 -->
-        <fieldset style="border:0;padding:0;margin:0 0 16px">
-            <legend style="font-weight:700;margin-bottom:10px">특성 (최대 6개)</legend>
+        <fieldset class="section">
+            <legend class="section-title">특성 (최대 6개)</legend>
 
             <div class="trait-group">
                 <div class="subhead">S급</div>
@@ -100,8 +100,8 @@
         </fieldset>
 
         <!-- 영구성 아이템 -->
-        <fieldset style="border:0;padding:0;margin:0 0 16px">
-            <legend style="font-weight:700;margin-bottom:10px">영구성 아이템</legend>
+        <fieldset class="section">
+            <legend class="section-title">영구성 아이템</legend>
             <div class="choices">
                 <label><input type="checkbox" name="permanentItemList" value="CALMING_STONE"> 만지면 마음이 편안해지는 돌</label>
                 <label><input type="checkbox" name="permanentItemList" value="MEMORY_FORM_PILLOW"> 메모리폼 베개</label>
@@ -109,8 +109,8 @@
         </fieldset>
 
         <!-- 소비성 아이템 (수량) -->
-        <fieldset style="border:0;padding:0;margin:0 0 8px">
-            <legend style="font-weight:700;margin-bottom:10px">소비성 아이템 (수량)</legend>
+        <fieldset class="section">
+            <legend class="section-title">소비성 아이템 (수량)</legend>
 
             <div class="qty-grid">
                 <div class="qty">
@@ -192,6 +192,9 @@
         border: 1px solid #ddd;
         border-radius: 10px;
     }
+
+    .section { border:0; padding:0; margin:0 0 16px; }
+    .section-title { font-weight:700; margin-bottom:10px; }
 
     .field-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
     .field-label { width: 180px; font-weight: 600; }
