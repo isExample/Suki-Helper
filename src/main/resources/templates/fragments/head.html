@@ -21,7 +21,12 @@
         .btn.secondary { background: #fff; color:#0d6efd; border-color:#cfe2ff; }
         footer { padding: 20px; text-align: center; color:#888; }
     </style>
-    <th:block th:if="${links}"   th:replace="${links}"></th:block>
-    <th:block th:if="${scripts}" th:replace="${scripts}"></th:block>
+    <th:block th:if="${links}">
+        <th:block th:replace="${links}"></th:block>
+    </th:block>
+
+    <th:block th:if="${scripts}">
+        <th:block th:replace="${scripts}"></th:block>
+    </th:block>
 </head>
 </html>
