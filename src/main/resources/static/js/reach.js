@@ -38,7 +38,68 @@
         if (c1 > 0 && c2 > 0) throw new Error('커피와 커피x2는 동시에 사용할 수 없습니다.');
     }
 
-    // ===== Submit =====
+    // ===== 결과 렌더링 =====
+    const resultSec   = $('#result');
+    const emptyP      = $('#result-empty');
+    const resultWrap  = $('#result-wrap');
+    const countSpan   = $('#r-count');
+    const comboListEl = $('#combo-list');
+
+    function renderTicks(ticks, startIndex=1){
+        return ticks.map((t, i) => {
+            const item = t.item ? ` · <span class="tick-item">${t.item}</span>` : '';
+            return `<li>#${startIndex + i} <span class="tick-meta"><code>${t.action}</code> · 체력 <strong>${t.stamina}</strong>${item}</span></li>`;
+        }).join('');
+    }
+
+    function renderCombo(combo, idx){
+        // 조합은 장소1(6틱) + 장소2(8틱) 고정
+        const p1 = combo.slice(0, 6);
+        const p2 = combo.slice(6, 14);
+
+        const p1Name = p1[0]?.place ?? '장소1';
+        const p2Name = p2[0]?.place ?? '장소2';
+
+        return `
+      <li>
+        <div class="combo">
+          <div class="combo-head">
+            <span class="title">조합 #${idx+1}</span>
+            <span class="info">총 ${combo.length}틱</span>
+          </div>
+          <div class="place-grid">
+            <div class="place">
+              <div class="place-title">${p1Name} (6틱)</div>
+              <ol class="ticks">${renderTicks(p1, 1)}</ol>
+            </div>
+            <div class="place">
+              <div class="place-title">${p2Name} (8틱)</div>
+              <ol class="ticks">${renderTicks(p2, 7)}</ol>
+            </div>
+          </div>
+        </div>
+      </li>
+    `;
+    }
+
+    function renderResult(resp){
+        // SimulationResponse
+        resultSec.hidden = false;
+
+        if (!resp || !Array.isArray(resp.combinations) || resp.count === 0) {
+            emptyP.hidden = false;
+            resultWrap.hidden = true;
+            return;
+        }
+
+        emptyP.hidden = true;
+        resultWrap.hidden = false;
+
+        countSpan.textContent = String(resp.count);
+        comboListEl.innerHTML = resp.combinations.map(renderCombo).join('');
+    }
+
+    // ===== 버튼 클릭 -> API 호출 =====
     const btn = $('#buildRequestBtn');
     if (!btn) return;
 
@@ -59,16 +120,15 @@
             });
 
             const text = await res.text();
-            const data = (() => { try { return JSON.parse(text); } catch { return text; } })();
+            const parsed = (() => { try { return JSON.parse(text); } catch { return null; } })();
+            const data = parsed && typeof parsed === 'object' ? (parsed.data ?? parsed) : parsed ?? text;
 
             // 다른 스크립트/결과 UI에서 사용할 수 있도록 이벤트 발행
             document.dispatchEvent(new CustomEvent('reach:response', { detail: { ok: res.ok, data } }));
 
             if (!res.ok) throw new Error(typeof data === 'string' ? data : '요청 실패');
 
-            // 임시: 콘솔 확인 (결과 UI 연동 전)
-            console.log('[Reach OK]', data);
-            alert('요청이 성공적으로 전송되었습니다.');
+            renderResult(data);
 
         } catch (err) {
             console.error('[Reach ERROR]', err);

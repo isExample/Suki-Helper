@@ -172,6 +172,19 @@
         </div>
 
     </form>
+
+    <section id="result" class="card result-card" hidden aria-live="polite">
+        <h2 style="margin:0 0 12px">탐색 결과</h2>
+
+        <!-- 조합 없음 메시지 -->
+        <p id="result-empty" class="muted" hidden>조건에 맞는 조합이 없습니다.</p>
+
+        <!-- 요약 + 조합 목록 -->
+        <div id="result-wrap" hidden>
+            <p class="result-count"><strong>조합 수:</strong> <span id="r-count">0</span></p>
+            <ol id="combo-list" class="combo-list"></ol>
+        </div>
+    </section>
 </main>
 
 <footer th:replace="fragments/footer :: footer('Suki Helper')"></footer>
