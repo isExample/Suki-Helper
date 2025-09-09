@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(title)">
+<head th:fragment="head(title, links, scripts)">
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title th:text="${title}">Suki Helper</title>
@@ -21,5 +21,12 @@
         .btn.secondary { background: #fff; color:#0d6efd; border-color:#cfe2ff; }
         footer { padding: 20px; text-align: center; color:#888; }
     </style>
+    <th:block th:if="${links}">
+        <th:block th:replace="${links}"></th:block>
+    </th:block>
+
+    <th:block th:if="${scripts}">
+        <th:block th:replace="${scripts}"></th:block>
+    </th:block>
 </head>
 </html>

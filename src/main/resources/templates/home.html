@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('Suki Helper')"></head>
+<head th:replace="~{fragments/head :: head('Suki Helper', null, null)}"></head>
 <body>
-<header th:replace="fragments/header :: header('Suki Helper')"></header>
+<header th:replace="~{fragments/header :: header('Suki Helper')}"></header>
 
 <main class="container" aria-labelledby="home-title">
     <h1 id="home-title" style="position:absolute; left:-9999px;">기능 선택</h1>
@@ -38,6 +38,6 @@
     </section>
 </main>
 
-<footer th:replace="fragments/footer :: footer('Suki Helper')"></footer>
+<footer th:replace="~{fragments/footer :: footer('Suki Helper')}"></footer>
 </body>
 </html>

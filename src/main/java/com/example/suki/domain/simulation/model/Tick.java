@@ -5,5 +5,5 @@ import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.place.PlaceCategory;
 
 
-public record Tick(PlaceCategory place, ActionCategory action, ConsumableItemCategory item) {
+public record Tick(PlaceCategory place, ActionCategory action, int stamina, ConsumableItemCategory item) {
 }

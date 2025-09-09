@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public enum BadgeCategory {
-    UNIV_1("상면대학교", ActionCategory.SLEEP, 2),
-    UNIV_2("디지스타", ActionCategory.SLEEP, 3);
+    SANGMYEON("상면대학교", ActionCategory.SLEEP, 2),
+    DIGISTAR("디지스타", ActionCategory.SLEEP, 3);
 
     private final String description;
     private final ActionCategory actionCategory;

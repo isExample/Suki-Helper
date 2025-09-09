@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('체력 N 마무리 · Suki Helper', ~{::link}, ~{::script})}">
+    <link rel="stylesheet" th:href="@{/css/simulations-common.css}">
+    <script defer th:src="@{/js/simulations-common.js}"></script>
+    <script defer th:src="@{/js/finish-at.js}"></script>
+</head>
+
+<body>
+<header th:replace="~{fragments/header :: header('Suki Helper')}"></header>
+
+<main class="container"
+      th:insert="~{fragments/simulations :: formAndResult('체력 N 마무리', '/api/v1/simulations/finish-at', 'finishAtForm', 'finishAtBtn', 'single')}">
+</main>
+
+<footer th:replace="~{fragments/footer :: footer('Suki Helper')}"></footer>
+</body>
+</html>
