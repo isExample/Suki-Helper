@@ -273,6 +273,26 @@
         box-shadow: inset 0 0 0 2px #d6e4ff;
     }
 
+    #buildRequestBtn{
+        transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .12s ease;
+    }
+    #buildRequestBtn:hover{
+        background:#0b5ed7;            /* 살짝 진하게 */
+        border-color:#0a58ca;
+        box-shadow:0 6px 16px rgba(13,110,253,.20);
+        transform:translateY(-1px);
+    }
+    #buildRequestBtn:active{
+        transform:translateY(0);
+        box-shadow:0 3px 10px rgba(13,110,253,.18);
+    }
+    #buildRequestBtn:focus-visible{
+        outline:0;
+        box-shadow:0 0 0 3px rgba(13,110,253,.25);
+    }
+    #buildRequestBtn[disabled]{
+        opacity:.6; cursor:not-allowed; box-shadow:none; transform:none;
+    }
 </style>
 </body>
 </html>
