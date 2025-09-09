@@ -79,13 +79,16 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
     const countSpan = $('#r-count');
     const comboListEl = $('#combo-list');
 
-    function renderTicks(ticks) {
-        return ticks.map(t => `
-            <div class="tick">
-              <span class="action">${actionLabel(t.action)}</span>
-              <span class="stamina">${t.stamina}</span>
-            </div>
-        `).join('');
+    function renderTicks(ticks){
+        return ticks.map(t => {
+            const cls = t.action === 'SLEEP' ? 'tick tick--sleep' : 'tick tick--other';
+            return `
+              <div class="${cls}">
+                <span class="action">${actionLabel(t.action)}</span>
+                <span class="stamina">${t.stamina}</span>
+              </div>
+            `;
+        }).join('');
     }
 
     function renderCombo(combo, idx) {

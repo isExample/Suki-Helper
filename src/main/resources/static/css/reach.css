@@ -171,3 +171,12 @@
 .tick .action code{
     font-size: 0.92rem;
 }
+
+.tick--other{
+    background: #fff0f0;        /* 연한 붉은 계열 */
+    border-color: #f5c2c2;
+}
+.tick--sleep{
+    background: #eaf6ff;        /* 연한 푸른 계열 */
+    border-color: #b6e0fe;
+}
