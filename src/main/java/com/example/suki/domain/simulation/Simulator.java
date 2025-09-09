@@ -95,7 +95,7 @@ public class Simulator {
             }
 
             // 소비성 아이템 미사용
-            path.add(new Tick(place, action, null));
+            path.add(new Tick(place, action, Math.abs(delta), null));
             findPath(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag, solutions);
             path.remove(path.size() - 1);
 
@@ -107,7 +107,7 @@ public class Simulator {
 
                 int itemNextStamina = item.apply(nextStamina);
                 consumableBag.use(item);
-                path.add(new Tick(place, action, item));
+                path.add(new Tick(place, action, Math.abs(delta), item));
                 findPath(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag, solutions);
                 path.remove(path.size() - 1);
                 consumableBag.undo(item);
