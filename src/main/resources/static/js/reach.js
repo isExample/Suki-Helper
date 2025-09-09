@@ -1,3 +1,34 @@
+// ===== 한글 라벨 맵 =====
+const PLACE_LABELS = {
+    SCHOOL: '학교',
+    HOME: '집',
+    PARK: '공원',
+    CAFE: '카페',
+    LIBRARY: '도서관',
+    GOLD_MINE: '금광',
+    ART_GALLERY: '미술관',
+    GYM: '헬스장',
+    PC_ROOM: '피시방',
+    FOOTBALL_PITCH: '축구연습장',
+    WORKSHOP: '작업실',
+    PRACTICE_ROOM: '연습실'
+};
+
+const ACTION_LABELS = {
+    STUDY: '공부',
+    PART_TIME: '알바',
+    EXERCISE: '운동',
+    SLEEP: '잠자기',
+    ATTEND_CLASS: '수업듣기',
+    PLAY_GAME: '게임연습',
+    FOOTBALL: '축구연습',
+    DRAWING: '그림연습',
+    TRAINING: '아이돌연습'
+};
+
+const placeLabel  = v => PLACE_LABELS[v]  ?? v;
+const actionLabel = v => ACTION_LABELS[v] ?? v;
+
 (() => {
     const $ = (sel, root = document) => root.querySelector(sel);
     const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -49,14 +80,12 @@
     const comboListEl = $('#combo-list');
 
     function renderTicks(ticks) {
-        return ticks.map(t => {
-            return `
-      <div class="tick">
-        <span class="action"><code>${t.action}</code></span>
-        <span class="stamina">${t.stamina}</span>
-      </div>
-    `;
-        }).join('');
+        return ticks.map(t => `
+            <div class="tick">
+              <span class="action">${actionLabel(t.action)}</span>
+              <span class="stamina">${t.stamina}</span>
+            </div>
+        `).join('');
     }
 
     function renderCombo(combo, idx) {
@@ -64,8 +93,8 @@
         const p1 = combo.slice(0, 6);
         const p2 = combo.slice(6, 14);
 
-        const p1Name = p1[0]?.place ?? '장소1';
-        const p2Name = p2[0]?.place ?? '장소2';
+        const p1Name = p1[0]?.place ? placeLabel(p1[0].place) : '장소1';
+        const p2Name = p2[0]?.place ? placeLabel(p2[0].place) : '장소2';
 
         // 장소2가 없으면 블록 자체를 생략
         const place2Html = p2.length ? `
