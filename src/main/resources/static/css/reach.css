@@ -1,0 +1,120 @@
+/* reach.html 전용 스타일 */
+/* 폼 카드: hover/포커스 효과 제거 */
+#reachForm.card { box-shadow: none; transition: none; }
+#reachForm.card:hover,
+#reachForm.card:focus,
+#reachForm.card:focus-within {
+    box-shadow: none;
+    transform: none;
+}
+
+/* 입력 공통 */
+#reachForm input[type="number"],
+#reachForm input[type="text"],
+#reachForm select,
+#reachForm textarea {
+    padding: 10px 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+/* 섹션 */
+.section { border:0; padding:0; margin:0 0 16px; }
+.section-title { font-weight:700; margin-bottom:10px; }
+
+/* 라벨/인풋 정렬 */
+.field-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+.field-label { width: 180px; font-weight: 600; }
+.field-input { width: 120px; max-width: 200px; }
+
+/* 특성 하위 그룹 표시 */
+.trait-group {
+    padding-left: 14px;
+    border-left: 3px solid #e6e9ef;
+    margin-top: 12px;
+}
+.subhead {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #555;
+    margin: 6px 0 6px;
+}
+
+/* 체크박스 그룹 */
+.choices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+    justify-items: start;
+}
+.choices label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 10px 12px;
+    max-width: 280px;
+    width: 100%;
+    white-space: normal;
+    word-break: keep-all;
+    line-height: 1.4;
+}
+
+/* 체크 상태 강조 (:has 지원 + 클래스 폴백 둘 다 가능) */
+.choices label:has(> input[type="checkbox"]:checked),
+.choices-inline label:has(> input[type="checkbox"]:checked) {
+    background: #eaf3ff;
+    border-color: #9ec5fe;
+    box-shadow: inset 0 0 0 2px #d6e4ff;
+}
+.choices label.is-checked,
+.choices-inline label.is-checked {
+    background: #eaf3ff;
+    border-color: #9ec5fe;
+    box-shadow: inset 0 0 0 2px #d6e4ff;
+}
+
+/* 소비성 아이템 그리드 */
+.qty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    padding-left: 16px;
+    padding-right: 16px;
+}
+.qty {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    width: 100%;
+}
+.qty span { min-width: 110px; }
+.qty .spin { display: flex; align-items: center; gap: 8px; }
+.qty input {
+    width: 90px;
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+/* '조합 조회' 버튼 호버/포커스 */
+#buildRequestBtn{
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .12s ease;
+}
+#buildRequestBtn:hover{
+    background:#0b5ed7;
+    border-color:#0a58ca;
+    box-shadow:0 6px 16px rgba(13,110,253,.20);
+    transform:translateY(-1px);
+}
+#buildRequestBtn:active{
+    transform:translateY(0);
+    box-shadow:0 3px 10px rgba(13,110,253,.18);
+}
+#buildRequestBtn:focus-visible{
+    outline:0;
+    box-shadow:0 0 0 3px rgba(13,110,253,.25);
+}
+#buildRequestBtn[disabled]{ opacity:.6; cursor:not-allowed; box-shadow:none; transform:none; }
