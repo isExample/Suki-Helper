@@ -85,6 +85,7 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         const c1 = payload.consumableItemMap['COFFEE'] || 0;
         const c2 = payload.consumableItemMap['COFFEE_X2'] || 0;
         if (c1 > 1) throw new Error('커피는 1개를 초과할 수 없습니다.');
+        if (c2 > 1) throw new Error('커피x2는 1개를 초과할 수 없습니다.');
         if (c1 > 0 && c2 > 0) throw new Error('커피와 커피x2는 동시에 사용할 수 없습니다.');
 
         // 범위형 target 검증
@@ -95,6 +96,11 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         } else if (typeof payload.targetStamina === 'number') {
             const n = payload.targetStamina;
             if (n < 1 || n > 99) throw new Error('목표 체력은 1~99입니다.');
+        }
+
+        // 특성 최대 6개 검증
+        if (Array.isArray(payload.traitList) && payload.traitList.length > 6) {
+            throw new Error('특성은 최대 6개까지 선택 가능합니다.');
         }
     }
 
