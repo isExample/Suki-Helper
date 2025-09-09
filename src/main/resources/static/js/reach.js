@@ -67,6 +67,14 @@
         const p1Name = p1[0]?.place ?? '장소1';
         const p2Name = p2[0]?.place ?? '장소2';
 
+        // 장소2가 없으면 블록 자체를 생략
+        const place2Html = p2.length ? `
+            <div class="place">
+              <div class="place-title">${p2Name} (8틱)</div>
+              <div class="ticks">${renderTicks(p2)}</div>
+            </div>
+          ` : '';
+
         return `
         <li>
           <div class="combo">
@@ -79,10 +87,7 @@
                 <div class="place-title">${p1Name} (6틱)</div>
                 <div class="ticks">${renderTicks(p1)}</div>
               </div>
-              <div class="place">
-                <div class="place-title">${p2Name} (8틱)</div>
-                <div class="ticks">${renderTicks(p2)}</div>
-              </div>
+              ${place2Html}
             </div>
           </div>
         </li>
