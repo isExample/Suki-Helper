@@ -121,7 +121,7 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
 
             const itemHtml = (t.item && ITEM_LABELS[t.item])
                 ? `
-                    <div class="tick - tick--item">
+                    <div class="tick tick--item">
                       <span class="item-name">${ITEM_LABELS[t.item].name}</span>
                       <span class="item-effect">${ITEM_LABELS[t.item].effect}</span>
                     </div>
