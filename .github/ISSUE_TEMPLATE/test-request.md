@@ -2,7 +2,7 @@
 name: Test request
 about: 테스트 작업
 title: "[Test]"
-labels: ''
+labels: "\U0001F9EA test"
 assignees: isExample
 
 ---
