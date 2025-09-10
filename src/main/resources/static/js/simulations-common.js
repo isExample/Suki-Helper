@@ -25,7 +25,17 @@ const ACTION_LABELS = {
     TRAINING: '아이돌연습'
 };
 
-const placeLabel  = v => PLACE_LABELS[v]  ?? v;
+const ITEM_LABELS = {
+    DECAF_COFFEE: { name: '디카페인 커피', effect: '+15'},
+    PUFFED_RICE: { name: '뻥튀기', effect: 'x2'},
+    ROYAL_FEAST: { name: '수라상', effect: '+100'},
+    CHOCOLATE_MILK: { name: '초코우유', effect: '+50'},
+    WHITE_MILK: { name: '흰 우유', effect: '+30'},
+    COFFEE: { name: '커피', effect: '+25'},
+    COFFEE_X2: { name: '커피 x2', effect: '+50'}
+};
+
+const placeLabel = v => PLACE_LABELS[v] ?? v;
 const actionLabel = v => ACTION_LABELS[v] ?? v;
 
 (() => {
@@ -49,12 +59,12 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         return map;
     }
 
-    function buildRequest(root=document){
+    function buildRequest(root = document) {
         const min = root.querySelector('#targetMin');
         const max = root.querySelector('#targetMax');
 
         const base = {
-            fitnessLevel:  Number($('#fitnessLevel', root)?.value || 0),
+            fitnessLevel: Number($('#fitnessLevel', root)?.value || 0),
             day: $('input[name="day"]:checked', root)?.value || 'WEEKDAY_OTHER',
             inactiveList: pickList('inactiveList', root),
             activeList: pickList('activeList', root),
@@ -64,7 +74,7 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
             consumableItemMap: buildConsumables(root)
         };
 
-        if(min && max){
+        if (min && max) {
             // range 모드
             return {
                 ...base,
@@ -80,7 +90,7 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         }
     }
 
-    function validateClient(payload){
+    function validateClient(payload) {
         // 커피 제약 검증
         const c1 = payload.consumableItemMap['COFFEE'] || 0;
         const c2 = payload.consumableItemMap['COFFEE_X2'] || 0;
@@ -105,19 +115,32 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
     }
 
     // ===== 결과 렌더링 =====
-    function renderTicks(ticks){
+    function renderTicks(ticks) {
         return ticks.map(t => {
             const cls = t.action === 'SLEEP' ? 'tick tick--sleep' : 'tick tick--other';
+
+            const itemHtml = (t.item && ITEM_LABELS[t.item])
+                ? `
+                    <div class="tick - tick--item">
+                      <span class="item-name">${ITEM_LABELS[t.item].name}</span>
+                      <span class="item-effect">${ITEM_LABELS[t.item].effect}</span>
+                    </div>
+              `
+                : '';
+
             return `
-        <div class="${cls}">
-          <span class="action">${actionLabel(t.action)}</span>
-          <span class="stamina">${t.stamina}</span>
-        </div>
-      `;
+              <div class="tick-wrap">
+                <div class="${cls}">
+                  <span class="action">${actionLabel(t.action)}</span>
+                  <span class="stamina">${t.stamina}</span>
+                </div>
+                ${itemHtml}
+              </div>
+            `;
         }).join('');
     }
 
-    function renderCombo(combo, idx){
+    function renderCombo(combo, idx) {
         const p1 = combo.slice(0, 6);
         const p2 = combo.slice(6, 14);
         const p1Name = p1[0]?.place ? placeLabel(p1[0].place) : '장소1';
@@ -131,7 +154,7 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
       <li>
         <div class="combo">
           <div class="combo-head">
-            <span class="title">조합 #${idx+1}</span>
+            <span class="title">조합 #${idx + 1}</span>
             <span class="info">총 ${combo.length}틱</span>
           </div>
           <div class="place-grid">
@@ -145,16 +168,16 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
       </li>`;
     }
 
-    function renderResult(resp, root=document){
-        const resultSec   = $('#result', root);
-        const emptyP      = $('#result-empty', root);
-        const resultWrap  = $('#result-wrap', root);
-        const countSpan   = $('#r-count', root);
+    function renderResult(resp, root = document) {
+        const resultSec = $('#result', root);
+        const emptyP = $('#result-empty', root);
+        const resultWrap = $('#result-wrap', root);
+        const countSpan = $('#r-count', root);
         const comboListEl = $('#combo-list', root);
 
         resultSec.hidden = false;
         const combos = Array.isArray(resp?.combinations) ? resp.combinations : [];
-        const count  = Number.isInteger(resp?.count) ? resp.count : combos.length;
+        const count = Number.isInteger(resp?.count) ? resp.count : combos.length;
 
         if (combos.length === 0) {
             emptyP.hidden = false;
@@ -168,38 +191,44 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
     }
 
     // ===== 초기화 엔트리 =====
-    function init({ endpoint, formId, buttonId }){
+    function init({endpoint, formId, buttonId}) {
         const form = document.getElementById(formId);
-        const btn  = document.getElementById(buttonId);
+        const btn = document.getElementById(buttonId);
         if (!form || !btn) return;
 
         btn.addEventListener('click', async () => {
-            try{
+            try {
                 const payload = buildRequest(form);
                 validateClient(payload);
 
-                const headers = { 'Content-Type': 'application/json' };
+                const headers = {'Content-Type': 'application/json'};
 
                 btn.disabled = true;
                 const oldText = btn.textContent;
                 btn.textContent = '요청 중...';
 
                 const res = await fetch(`${ctx}${endpoint}`, {
-                    method:'POST', headers, body: JSON.stringify(payload)
+                    method: 'POST', headers, body: JSON.stringify(payload)
                 });
 
                 const text = await res.text();
-                const parsed = (() => { try { return JSON.parse(text); } catch { return null; } })();
+                const parsed = (() => {
+                    try {
+                        return JSON.parse(text);
+                    } catch {
+                        return null;
+                    }
+                })();
                 const data = parsed && typeof parsed === 'object' ? (parsed.data ?? parsed) : parsed ?? text;
 
-                document.dispatchEvent(new CustomEvent('sim:response', { detail: { ok: res.ok, data, endpoint } }));
+                document.dispatchEvent(new CustomEvent('sim:response', {detail: {ok: res.ok, data, endpoint}}));
                 if (!res.ok || typeof data !== 'object') throw new Error(typeof data === 'string' ? data : '요청 실패');
 
                 renderResult(data, document);
-            } catch(err){
+            } catch (err) {
                 console.error('[Simulation ERROR]', err);
                 alert(err?.message || '요청 중 오류가 발생했습니다.');
-                document.dispatchEvent(new CustomEvent('sim:error', { detail: err }));
+                document.dispatchEvent(new CustomEvent('sim:error', {detail: err}));
             } finally {
                 btn.disabled = false;
                 btn.textContent = '조합 조회';
@@ -207,5 +236,5 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         });
     }
 
-    window.SimulationUI = { init };
+    window.SimulationUI = {init};
 })();
