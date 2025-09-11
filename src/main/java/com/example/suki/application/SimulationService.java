@@ -35,7 +35,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.BFS);
+        AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.SHORTEST_REACH);
         SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.consumableItemMap(), strategy);
         return SimulationResponse.from(request.targetStamina(), result);
     }

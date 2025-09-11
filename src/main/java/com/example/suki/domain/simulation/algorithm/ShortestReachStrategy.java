@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class BfsAlgorithm implements AlgorithmStrategy {
+public class ShortestReachStrategy implements AlgorithmStrategy {
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;
     private static final int MAX_TICKS = 14;
@@ -22,7 +22,7 @@ public class BfsAlgorithm implements AlgorithmStrategy {
 
     @Override
     public boolean supports(AlgorithmType algorithmType) {
-        return algorithmType == AlgorithmType.BFS;
+        return algorithmType == AlgorithmType.SHORTEST_REACH;
     }
 
     @Override
