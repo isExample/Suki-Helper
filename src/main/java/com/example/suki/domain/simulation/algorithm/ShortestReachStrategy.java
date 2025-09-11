@@ -2,6 +2,7 @@ package com.example.suki.domain.simulation.algorithm;
 
 import com.example.suki.domain.User.UserState;
 import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.DaySchedule;
 import com.example.suki.domain.simulation.goal.Goal;
@@ -20,6 +21,7 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
     private static final int MAX_SOLUTIONS = 10;
 
     private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag) {}
+    private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState) {}
 
     private record ActionCountKey(Map<ActionCategory, Long> counts) {
         public static ActionCountKey from(List<Tick> path) {
@@ -38,10 +40,13 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
     public void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
                       PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions) {
         Queue<SearchState> queue = new LinkedList<>();
+        Set<VisitedKey> visitedStates = new HashSet<>();
         Set<ActionCountKey> uniqueCombinations = new HashSet<>(); // 결과 중복 방지용 Set
 
         SearchState initialState = new SearchState(currentTick, currentStamina, path, consumableBag);
+        VisitedKey initialKey = new VisitedKey(currentTick, currentStamina, consumableBag.snapshotRemains());
         queue.add(initialState);
+        visitedStates.add(initialKey);
 
         while (!queue.isEmpty()) {
             SearchState currentState = queue.poll();
@@ -88,7 +93,10 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
                 newPathNoItem.add(new Tick(currentPlace, action, Math.abs(delta), null));
 
                 SearchState nextStateNoItem = new SearchState(tick + 1, nextStamina, newPathNoItem, bag);
-                queue.add(nextStateNoItem);
+                VisitedKey nextKeyNoItem = new VisitedKey(nextStateNoItem.tick(), nextStateNoItem.stamina(), nextStateNoItem.bag().snapshotRemains());
+                if(visitedStates.add(nextKeyNoItem)){
+                    queue.add(nextStateNoItem);
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ package com.example.suki.domain.simulation.model;
 
 import com.example.suki.domain.item.ConsumableItemCategory;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -30,5 +31,9 @@ public class ConsumableBag {
 
     public Iterable<ConsumableItemCategory> usableItems() {
         return this.remains.keySet();
+    }
+
+    public Map<ConsumableItemCategory, Integer> snapshotRemains() {
+        return Collections.unmodifiableMap(new EnumMap<>(remains));
     }
 }
