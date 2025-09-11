@@ -1,10 +1,10 @@
 package com.example.suki.domain.simulation;
 
 import com.example.suki.domain.User.UserState;
-import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
+import com.example.suki.domain.simulation.algorithm.AlgorithmStrategy;
 import com.example.suki.domain.simulation.goal.FinishAtGoal;
 import com.example.suki.domain.simulation.goal.FinishWithinGoal;
 import com.example.suki.domain.simulation.goal.Goal;
@@ -15,7 +15,6 @@ import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 

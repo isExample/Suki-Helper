@@ -12,11 +12,12 @@ import com.example.suki.domain.modifier.BadgeModifier;
 import com.example.suki.domain.modifier.FitnessLevelModifier;
 import com.example.suki.domain.modifier.ItemModifier;
 import com.example.suki.domain.modifier.TraitModifier;
+import com.example.suki.domain.simulation.algorithm.AlgorithmStrategy;
+import com.example.suki.domain.simulation.algorithm.AlgorithmStrategyResolver;
+import com.example.suki.domain.simulation.algorithm.AlgorithmType;
 import com.example.suki.domain.simulation.model.SimulationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.example.suki.domain.simulation;
+package com.example.suki.domain.simulation.algorithm;
 
 import com.example.suki.api.exception.BusinessException;
 import com.example.suki.api.exception.ErrorCode;
