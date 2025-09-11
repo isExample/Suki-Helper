@@ -18,7 +18,6 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;
     private static final int MAX_TICKS = 14;
-    private static final int MAX_SOLUTIONS = 10;
 
     private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag) {}
     private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState) {}

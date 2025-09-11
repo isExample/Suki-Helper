@@ -10,6 +10,7 @@ import com.example.suki.domain.simulation.model.Tick;
 import java.util.List;
 
 public interface AlgorithmStrategy {
+    int MAX_SOLUTIONS = 30;
     boolean supports(AlgorithmType algorithmType);
     void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
                PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions);

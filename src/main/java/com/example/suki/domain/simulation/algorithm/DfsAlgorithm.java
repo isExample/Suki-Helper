@@ -19,7 +19,6 @@ public class DfsAlgorithm implements AlgorithmStrategy{
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;
     private static final int MAX_TICKS = 14;
-    private static final int MAX_SOLUTIONS = 10;
 
     @Override
     public boolean supports(AlgorithmType algorithmType) {

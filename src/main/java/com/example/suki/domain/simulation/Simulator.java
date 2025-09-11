@@ -22,7 +22,6 @@ import java.util.Map;
 public class Simulator {
     private static final int INITIAL_STAMINA = 100;
     private static final int WEEKDAY_SCHOOL_TICKS = 6;
-    private static final int MAX_SOLUTIONS = 10;
 
     private static final DaySchedule WEEKEND_SCHEDULE = (tick, second) -> second;
     private static final DaySchedule WEEKDAY_SCHEDULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
@@ -59,7 +58,7 @@ public class Simulator {
             List<Tick> path = new ArrayList<>();
             strategy.solve(userState, 0, INITIAL_STAMINA, goal, second, schedule, path, consumableBag, solutions);
 
-            if(solutions.size() >= MAX_SOLUTIONS) {
+            if(solutions.size() >= AlgorithmStrategy.MAX_SOLUTIONS) {
                 break;
             }
         }
