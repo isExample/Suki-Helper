@@ -17,8 +17,10 @@ public enum ErrorCode {
     // Place
     PLACE_REQUIRED("P001", HttpStatus.INTERNAL_SERVER_ERROR, "장소는 null일 수 없습니다."),
     ACTION_REQUIRED("P002", HttpStatus.INTERNAL_SERVER_ERROR, "행동은 null일 수 없습니다."),
-    ACTION_ALREADY_DISABLED("P003", HttpStatus.INTERNAL_SERVER_ERROR, "이미 비활성화된 행동입니다.");
+    ACTION_ALREADY_DISABLED("P003", HttpStatus.INTERNAL_SERVER_ERROR, "이미 비활성화된 행동입니다."),
 
+    // Algorithm
+    ALGORITHM_NOT_FOUND("A001", HttpStatus.INTERNAL_SERVER_ERROR, "존재하지 않는 탐색 알고리즘입니다.");
 
     private final String code;
     private final HttpStatus status;
