@@ -2,6 +2,7 @@ package com.example.suki.application;
 
 import com.example.suki.api.dto.SimulationRangeRequest;
 import com.example.suki.api.dto.SimulationRangeResponse;
+import com.example.suki.domain.simulation.DfsAlgorithm;
 import com.example.suki.domain.simulation.Simulator;
 import com.example.suki.api.dto.SimulationRequest;
 import com.example.suki.api.dto.SimulationResponse;
@@ -33,7 +34,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.consumableItemMap());
+        SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.consumableItemMap(), new DfsAlgorithm());
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -42,7 +43,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), request.consumableItemMap());
+        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), request.consumableItemMap(), new DfsAlgorithm());
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -51,7 +52,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
-        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), request.consumableItemMap());
+        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), request.consumableItemMap(), new DfsAlgorithm());
         return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), result);
     }
 
