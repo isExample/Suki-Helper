@@ -16,10 +16,6 @@ import java.util.Map;
 
 @Component
 public class DfsAlgorithm implements AlgorithmStrategy{
-    private static final int MAX_STAMINA = 100;
-    private static final int MIN_STAMINA = 0;
-    private static final int MAX_TICKS = 14;
-
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.DFS;
