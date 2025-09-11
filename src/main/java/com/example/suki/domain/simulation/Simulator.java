@@ -20,9 +20,7 @@ import java.util.Map;
 
 @Component
 public class Simulator {
-    private static final int MAX_STAMINA = 100;
-    private static final int MIN_STAMINA = 0;
-    private static final int MAX_TICKS = 14;
+    private static final int INITIAL_STAMINA = 100;
     private static final int WEEKDAY_SCHOOL_TICKS = 6;
     private static final int MAX_SOLUTIONS = 10;
 
@@ -59,7 +57,7 @@ public class Simulator {
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
             List<Tick> path = new ArrayList<>();
-            strategy.solve(userState, 0, MAX_STAMINA, goal, second, schedule, path, consumableBag, solutions);
+            strategy.solve(userState, 0, INITIAL_STAMINA, goal, second, schedule, path, consumableBag, solutions);
 
             if(solutions.size() >= MAX_SOLUTIONS) {
                 break;
