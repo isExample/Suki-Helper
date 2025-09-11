@@ -10,6 +10,7 @@ import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class ShortestReachStrategy implements AlgorithmStrategy {
@@ -20,6 +21,14 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
 
     private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag) {}
 
+    private record ActionCountKey(Map<ActionCategory, Long> counts) {
+        public static ActionCountKey from(List<Tick> path) {
+            Map<ActionCategory, Long> counts = path.stream()
+                    .collect(Collectors.groupingBy(Tick::action, Collectors.counting()));
+            return new ActionCountKey(counts);
+        }
+    }
+
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.SHORTEST_REACH;
@@ -29,6 +38,8 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
     public void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
                       PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions) {
         Queue<SearchState> queue = new LinkedList<>();
+        Set<ActionCountKey> uniqueCombinations = new HashSet<>(); // 결과 중복 방지용 Set
+
         SearchState initialState = new SearchState(currentTick, currentStamina, path, consumableBag);
         queue.add(initialState);
 
@@ -40,9 +51,12 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
 
             // 성공 조건 확인
             if (goal.isSuccess(tick, stamina)) {
-                solutions.add(List.copyOf(currentState.path()));
-                if (solutions.size() >= MAX_SOLUTIONS) {
-                    return; // 최대 조합 개수: 즉시 종료
+                ActionCountKey combinationKey = ActionCountKey.from(currentState.path());
+                if(uniqueCombinations.add(combinationKey)) { // 원소가 새로 추가되었을 때 true 반환
+                    solutions.add(List.copyOf(currentState.path()));
+                    if (solutions.size() >= MAX_SOLUTIONS) {
+                        return; // 최대 조합 개수: 즉시 종료
+                    }
                 }
             }
 
