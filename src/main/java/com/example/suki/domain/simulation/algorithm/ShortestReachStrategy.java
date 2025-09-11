@@ -97,6 +97,29 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
                 if(visitedStates.add(nextKeyNoItem)){
                     queue.add(nextStateNoItem);
                 }
+
+                // 소비성 아이템을 사용하는 경우
+                for (ConsumableItemCategory item : bag.usableItems()) {
+                    // 아이템을 사용할 수 없거나, 체력이 최대라 회복 아이템이 무의미한 경우
+                    if (!bag.canUse(item) || nextStamina == MAX_STAMINA) {
+                        continue;
+                    }
+
+                    int itemNextStamina = item.apply(nextStamina);
+
+                    ConsumableBag nextBagWithItem = new ConsumableBag(bag.snapshotRemains());
+                    nextBagWithItem.use(item);
+
+                    List<Tick> newPathWithItem = new ArrayList<>(currentState.path());
+                    newPathWithItem.add(new Tick(currentPlace, action, Math.abs(delta), item));
+
+                    SearchState nextStateWithItem = new SearchState(tick + 1, itemNextStamina, newPathWithItem, nextBagWithItem);
+
+                    VisitedKey nextKeyWithItem = new VisitedKey(nextStateWithItem.tick(), nextStateWithItem.stamina(), nextStateWithItem.bag().snapshotRemains());
+                    if (visitedStates.add(nextKeyWithItem)) {
+                        queue.add(nextStateWithItem);
+                    }
+                }
             }
         }
     }
