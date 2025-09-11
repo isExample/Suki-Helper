@@ -21,6 +21,11 @@ public class DfsAlgorithm implements AlgorithmStrategy{
     private static final int MAX_SOLUTIONS = 10;
 
     @Override
+    public boolean supports(AlgorithmType algorithmType) {
+        return algorithmType == AlgorithmType.DFS;
+    }
+
+    @Override
     public void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
                           PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions) {
         if(solutions.size() >= MAX_SOLUTIONS) {

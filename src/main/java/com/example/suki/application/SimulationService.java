@@ -2,9 +2,7 @@ package com.example.suki.application;
 
 import com.example.suki.api.dto.SimulationRangeRequest;
 import com.example.suki.api.dto.SimulationRangeResponse;
-import com.example.suki.domain.simulation.AlgorithmStrategy;
-import com.example.suki.domain.simulation.DfsAlgorithm;
-import com.example.suki.domain.simulation.Simulator;
+import com.example.suki.domain.simulation.*;
 import com.example.suki.api.dto.SimulationRequest;
 import com.example.suki.api.dto.SimulationResponse;
 import com.example.suki.domain.User.UserContext;
@@ -29,13 +27,14 @@ public class SimulationService {
     private final TraitModifier traitModifier;
     private final ItemModifier itemModifier;
     private final Simulator simulator;
-    private final AlgorithmStrategy strategy;
+    private final AlgorithmStrategyResolver algorithmResolver;
 
     public SimulationResponse simulateReach(SimulationRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
         applyModifiers(userState, SimulationContext.from(request));
 
+        AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.BFS);
         SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.consumableItemMap(), strategy);
         return SimulationResponse.from(request.targetStamina(), result);
     }
@@ -45,6 +44,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
+        AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.DFS);
         SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), request.consumableItemMap(), strategy);
         return SimulationResponse.from(request.targetStamina(), result);
     }
@@ -54,6 +54,7 @@ public class SimulationService {
 
         applyModifiers(userState, SimulationContext.from(request));
 
+        AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.DFS);
         SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), request.consumableItemMap(), strategy);
         return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), result);
     }

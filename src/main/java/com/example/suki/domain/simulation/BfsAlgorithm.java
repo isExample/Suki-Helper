@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-@Primary
 public class BfsAlgorithm implements AlgorithmStrategy {
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;
@@ -20,6 +19,11 @@ public class BfsAlgorithm implements AlgorithmStrategy {
     private static final int MAX_SOLUTIONS = 10;
 
     private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag) {}
+
+    @Override
+    public boolean supports(AlgorithmType algorithmType) {
+        return algorithmType == AlgorithmType.BFS;
+    }
 
     @Override
     public void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
