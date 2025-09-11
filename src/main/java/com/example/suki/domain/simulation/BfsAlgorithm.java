@@ -53,6 +53,11 @@ public class BfsAlgorithm implements AlgorithmStrategy {
                 ActionCategory action = entry.getKey();
                 int delta = entry.getValue();
 
+                // 체력이 100이면서 회복 행동이면 해당 경로 종료
+                if(stamina == MAX_STAMINA && delta >= 0){
+                    continue;
+                }
+
                 int nextStamina = Math.min(MAX_STAMINA, stamina + delta);
 
                 // 체력이 0 이하가 되면 해당 경로 종료
