@@ -7,11 +7,13 @@ import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.goal.Goal;
 import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.Tick;
+import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class DfsAlgorithm implements AlgorithmStrategy{
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;

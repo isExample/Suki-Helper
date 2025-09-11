@@ -21,7 +21,6 @@ import java.util.Map;
 
 @Component
 public class Simulator {
-    private AlgorithmStrategy strategy;
     private static final int MAX_STAMINA = 100;
     private static final int MIN_STAMINA = 0;
     private static final int MAX_TICKS = 14;
@@ -31,44 +30,37 @@ public class Simulator {
     private static final DaySchedule WEEKEND_SCHEDULE = (tick, second) -> second;
     private static final DaySchedule WEEKDAY_SCHEDULE = (tick, second) -> (tick < WEEKDAY_SCHOOL_TICKS ? PlaceCategory.SCHOOL : second);
 
-    private void setStrategy(AlgorithmStrategy strategy) {
-        this.strategy = strategy;
-    }
-
     public SimulationResult simulateReach(UserState userState, int targetStamina, Map<ConsumableItemCategory, Integer> consumableItemMap, AlgorithmStrategy strategy){
-        setStrategy(strategy);
-        return simulate(userState, new ReachGoal(targetStamina), new ConsumableBag(consumableItemMap));
+        return simulate(userState, new ReachGoal(targetStamina), new ConsumableBag(consumableItemMap), strategy);
     }
 
     public SimulationResult simulateFinishAt(UserState userState, int targetStamina, Map<ConsumableItemCategory, Integer> consumableItemMap, AlgorithmStrategy strategy){
-        setStrategy(strategy);
-        return simulate(userState, new FinishAtGoal(targetStamina), new ConsumableBag(consumableItemMap));
+        return simulate(userState, new FinishAtGoal(targetStamina), new ConsumableBag(consumableItemMap), strategy);
     }
 
     public SimulationResult simulateFinishWithin(UserState userState, int min, int max, Map<ConsumableItemCategory, Integer> consumableItemMap, AlgorithmStrategy strategy){
-        setStrategy(strategy);
-        return simulate(userState, new FinishWithinGoal(min, max), new ConsumableBag(consumableItemMap));
+        return simulate(userState, new FinishWithinGoal(min, max), new ConsumableBag(consumableItemMap), strategy);
     }
 
-    private SimulationResult simulate(UserState userState, Goal goal, ConsumableBag consumableBag){
+    private SimulationResult simulate(UserState userState, Goal goal, ConsumableBag consumableBag, AlgorithmStrategy strategy){
         switch (userState.getDay()) {
             case WEEKEND:
-                return simulateBySchedule(userState, goal, WEEKEND_SCHEDULE, consumableBag);
+                return simulateBySchedule(userState, goal, WEEKEND_SCHEDULE, consumableBag, strategy);
             case WEEKDAY_MON:
             case WEEKDAY_OTHER:
-                return simulateBySchedule(userState, goal, WEEKDAY_SCHEDULE, consumableBag);
+                return simulateBySchedule(userState, goal, WEEKDAY_SCHEDULE, consumableBag, strategy);
             default:
                 return SimulationResult.failure();
         }
     }
 
-    private SimulationResult simulateBySchedule(UserState userState, Goal goal, DaySchedule schedule, ConsumableBag consumableBag) {
+    private SimulationResult simulateBySchedule(UserState userState, Goal goal, DaySchedule schedule, ConsumableBag consumableBag, AlgorithmStrategy strategy) {
         List<List<Tick>> solutions = new ArrayList<>();
 
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
             List<Tick> path = new ArrayList<>();
-            this.strategy.solve(userState, 0, MAX_STAMINA, goal, second, schedule, path, consumableBag, solutions);
+            strategy.solve(userState, 0, MAX_STAMINA, goal, second, schedule, path, consumableBag, solutions);
 
             if(solutions.size() >= MAX_SOLUTIONS) {
                 break;
