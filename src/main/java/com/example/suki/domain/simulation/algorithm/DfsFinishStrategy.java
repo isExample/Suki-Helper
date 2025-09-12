@@ -11,15 +11,14 @@ import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
-public class DfsAlgorithm implements AlgorithmStrategy{
+public class DfsFinishStrategy implements AlgorithmStrategy{
     private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState) {}
 
     @Override
     public boolean supports(AlgorithmType algorithmType) {
-        return algorithmType == AlgorithmType.DFS;
+        return algorithmType == AlgorithmType.DFS_FINISH;
     }
 
     @Override

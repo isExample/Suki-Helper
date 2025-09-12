@@ -11,16 +11,15 @@ import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
-public class ShortestReachStrategy implements AlgorithmStrategy {
+public class BfsReachStrategy implements AlgorithmStrategy {
     private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag) {}
     private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState) {}
 
     @Override
     public boolean supports(AlgorithmType algorithmType) {
-        return algorithmType == AlgorithmType.SHORTEST_REACH;
+        return algorithmType == AlgorithmType.BFS_REACH;
     }
 
     @Override
