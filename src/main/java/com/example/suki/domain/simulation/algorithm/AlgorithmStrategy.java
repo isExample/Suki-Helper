@@ -6,6 +6,7 @@ import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.DaySchedule;
 import com.example.suki.domain.simulation.goal.Goal;
 import com.example.suki.domain.simulation.model.ConsumableBag;
+import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.Tick;
 
 import java.util.List;
@@ -19,15 +20,6 @@ public interface AlgorithmStrategy {
     int MIN_STAMINA = 0;
     int INITIAL_STAMINA = 100;
     int INITIAL_TICK = 0;
-
-    record SimulationContext(
-            UserState userState,
-            Goal goal,
-            PlaceCategory secondPlace,
-            DaySchedule schedule,
-            ConsumableBag consumableBag,
-            List<List<Tick>> solutions
-    ) {}
 
      record ActionCountKey(Map<ActionCategory, Long> counts) {
         public static ActionCountKey from(List<Tick> path) {

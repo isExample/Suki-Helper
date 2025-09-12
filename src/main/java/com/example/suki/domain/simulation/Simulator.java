@@ -10,6 +10,7 @@ import com.example.suki.domain.simulation.goal.FinishWithinGoal;
 import com.example.suki.domain.simulation.goal.Goal;
 import com.example.suki.domain.simulation.goal.ReachGoal;
 import com.example.suki.domain.simulation.model.ConsumableBag;
+import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.SimulationResult;
 import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
@@ -54,7 +55,7 @@ public class Simulator {
 
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
-            AlgorithmStrategy.SimulationContext context = new AlgorithmStrategy.SimulationContext(
+            SimulationContext context = new SimulationContext(
                     userState,
                     goal,
                     second,

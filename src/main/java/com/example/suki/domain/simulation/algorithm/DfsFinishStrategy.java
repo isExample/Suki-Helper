@@ -4,6 +4,7 @@ import com.example.suki.domain.action.ActionCategory;
 import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.model.ConsumableBag;
+import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
 
