@@ -10,12 +10,20 @@ import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.Tick;
 import org.springframework.stereotype.Component;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class DfsAlgorithm implements AlgorithmStrategy{
+
+    private record ActionCountKey(Map<ActionCategory, Long> counts) {
+        public static ActionCountKey from(List<Tick> path) {
+            Map<ActionCategory, Long> counts = path.stream()
+                    .collect(Collectors.groupingBy(Tick::action, Collectors.counting()));
+            return new ActionCountKey(counts);
+        }
+    }
+
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.DFS;
@@ -24,13 +32,22 @@ public class DfsAlgorithm implements AlgorithmStrategy{
     @Override
     public void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
                       PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions) {
+        Set<ActionCountKey> uniqueCombinations = new HashSet<>();
+        solveRecursive(userState, currentTick, currentStamina, goal, secondPlace, schedule, path, consumableBag, solutions, uniqueCombinations);
+    }
+
+    private void solveRecursive(UserState userState, int currentTick, int currentStamina, Goal goal,
+                      PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions, Set<ActionCountKey> uniqueCombinations) {
         if(solutions.size() >= MAX_SOLUTIONS) {
             return;
         }
 
         if(goal.isTerminal(currentTick, currentStamina, MAX_TICKS)){
             if(goal.isSuccess(currentTick, currentStamina)){
-                solutions.add(List.copyOf(path));
+                ActionCountKey combinationKey = ActionCountKey.from(path);
+                if (uniqueCombinations.add(combinationKey)) {
+                    solutions.add(List.copyOf(path));
+                }
             }
             return;
         }
@@ -49,7 +66,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
 
             // 소비성 아이템 미사용
             path.add(new Tick(place, action, Math.abs(delta), null));
-            solve(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag, solutions);
+            solveRecursive(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations);
             path.remove(path.size() - 1);
 
             // 소비성 아이템 사용
@@ -61,7 +78,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
                 int itemNextStamina = item.apply(nextStamina);
                 consumableBag.use(item);
                 path.add(new Tick(place, action, Math.abs(delta), item));
-                solve(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag, solutions);
+                solveRecursive(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations);
                 path.remove(path.size() - 1);
                 consumableBag.undo(item);
             }
