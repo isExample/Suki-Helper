@@ -33,7 +33,7 @@ public class SimulationService {
     public SimulationResponse simulateReach(SimulationRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
-        applyModifiers(userState, SimulationContext.from(request));
+        applyModifiers(userState, ModifierContext.from(request));
 
         AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.BFS_REACH);
         SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.consumableItemMap(), strategy);
@@ -43,7 +43,7 @@ public class SimulationService {
     public SimulationResponse simulateFinishAt(SimulationRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
-        applyModifiers(userState, SimulationContext.from(request));
+        applyModifiers(userState, ModifierContext.from(request));
 
         AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.DFS_FINISH);
         SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), request.consumableItemMap(), strategy);
@@ -53,14 +53,14 @@ public class SimulationService {
     public SimulationRangeResponse simulateFinishWithin(SimulationRangeRequest request) {
         UserState userState = userStateFactory.create(UserContext.from(request));
 
-        applyModifiers(userState, SimulationContext.from(request));
+        applyModifiers(userState, ModifierContext.from(request));
 
         AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.DFS_FINISH);
         SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), request.consumableItemMap(), strategy);
         return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), result);
     }
 
-    private void applyModifiers(UserState userState, SimulationContext context) {
+    private void applyModifiers(UserState userState, ModifierContext context) {
         fitnessLevelModifier.modify(userState, context.fitnessLevel());
         badgeModifier.modify(userState, context.badgeList());
         traitModifier.modify(userState, context.traitList());

@@ -3,21 +3,19 @@ package com.example.suki.application;
 import com.example.suki.api.dto.SimulationRangeRequest;
 import com.example.suki.api.dto.SimulationRequest;
 import com.example.suki.domain.badge.BadgeCategory;
-import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.item.PermanentItemCategory;
 import com.example.suki.domain.trait.TraitCategory;
 
 import java.util.List;
-import java.util.Map;
 
-public record SimulationContext(
+public record ModifierContext(
         int fitnessLevel,
         List<BadgeCategory> badgeList,
         List<TraitCategory> traitList,
         List<PermanentItemCategory> permanentItemList
 ) {
-    public static SimulationContext from(SimulationRequest request) {
-        return new SimulationContext(
+    public static ModifierContext from(SimulationRequest request) {
+        return new ModifierContext(
                 request.fitnessLevel(),
                 request.badgeList(),
                 request.traitList(),
@@ -25,8 +23,8 @@ public record SimulationContext(
         );
     }
 
-    public static SimulationContext from(SimulationRangeRequest request) {
-        return new SimulationContext(
+    public static ModifierContext from(SimulationRangeRequest request) {
+        return new ModifierContext(
                 request.fitnessLevel(),
                 request.badgeList(),
                 request.traitList(),
