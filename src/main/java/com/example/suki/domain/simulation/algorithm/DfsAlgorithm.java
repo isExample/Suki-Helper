@@ -43,7 +43,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
             int delta = entry.getValue();
 
             int nextStamina = Math.min(MAX_STAMINA, currentStamina + delta);
-            if (nextStamina <= MIN_STAMINA) {
+            if (nextStamina <= MIN_STAMINA || nextStamina == MAX_STAMINA) {
                 continue;
             }
 
@@ -54,7 +54,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
 
             // 소비성 아이템 사용
             for(ConsumableItemCategory item : consumableBag.usableItems()){
-                if(!consumableBag.canUse(item) || nextStamina == MAX_STAMINA) {
+                if(!consumableBag.canUse(item)) {
                     continue;
                 }
 
