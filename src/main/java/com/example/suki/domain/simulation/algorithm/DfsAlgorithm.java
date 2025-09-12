@@ -65,7 +65,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
 
             // 소비성 아이템 미사용
             path.add(new Tick(place, action, Math.abs(delta), null));
-            solveRecursive(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations, visitedStates);
+            solveRecursive(userState, currentTick + 1, nextStamina, goal, secondPlace, schedule, path, consumableBag, solutions, uniqueCombinations, visitedStates);
             path.remove(path.size() - 1);
 
             // 소비성 아이템 사용
@@ -77,7 +77,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
                 int itemNextStamina = item.apply(nextStamina);
                 consumableBag.use(item);
                 path.add(new Tick(place, action, Math.abs(delta), item));
-                solveRecursive(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations, visitedStates);
+                solveRecursive(userState, currentTick + 1, itemNextStamina, goal, secondPlace, schedule, path, consumableBag, solutions, uniqueCombinations, visitedStates);
                 path.remove(path.size() - 1);
                 consumableBag.undo(item);
             }
