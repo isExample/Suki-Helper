@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class DfsAlgorithm implements AlgorithmStrategy{
+    private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState) {}
+
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.DFS;
@@ -23,12 +25,18 @@ public class DfsAlgorithm implements AlgorithmStrategy{
     @Override
     public void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
                       PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions) {
+        Set<VisitedKey> visitedStates = new HashSet<>();
         Set<ActionCountKey> uniqueCombinations = new HashSet<>();
-        solveRecursive(userState, currentTick, currentStamina, goal, secondPlace, schedule, path, consumableBag, solutions, uniqueCombinations);
+        solveRecursive(userState, currentTick, currentStamina, goal, secondPlace, schedule, path, consumableBag, solutions, uniqueCombinations, visitedStates);
     }
 
     private void solveRecursive(UserState userState, int currentTick, int currentStamina, Goal goal,
-                      PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions, Set<ActionCountKey> uniqueCombinations) {
+                      PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions, Set<ActionCountKey> uniqueCombinations, Set<VisitedKey> visitedStates) {
+        VisitedKey currentKey = new VisitedKey(currentTick, currentStamina, consumableBag.snapshotRemains());
+        if (!visitedStates.add(currentKey)) {
+            return;
+        }
+
         if(solutions.size() >= MAX_SOLUTIONS) {
             return;
         }
@@ -57,7 +65,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
 
             // 소비성 아이템 미사용
             path.add(new Tick(place, action, Math.abs(delta), null));
-            solveRecursive(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations);
+            solveRecursive(userState, currentTick + 1, nextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations, visitedStates);
             path.remove(path.size() - 1);
 
             // 소비성 아이템 사용
@@ -69,7 +77,7 @@ public class DfsAlgorithm implements AlgorithmStrategy{
                 int itemNextStamina = item.apply(nextStamina);
                 consumableBag.use(item);
                 path.add(new Tick(place, action, Math.abs(delta), item));
-                solveRecursive(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations);
+                solveRecursive(userState, currentTick + 1, itemNextStamina, goal, place, schedule, path, consumableBag, solutions, uniqueCombinations, visitedStates);
                 path.remove(path.size() - 1);
                 consumableBag.undo(item);
             }
