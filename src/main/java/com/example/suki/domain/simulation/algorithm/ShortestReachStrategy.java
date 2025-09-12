@@ -73,13 +73,8 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
 
                 int nextStamina = Math.min(MAX_STAMINA, stamina + delta);
 
-                // 체력이 0 이하가 되면 해당 경로 종료
-                if (nextStamina <= MIN_STAMINA) {
-                    continue;
-                }
-
-                // 체력이 100이 되면 해당 경로 종료: 중복 조합 방지
-                if(nextStamina == MAX_STAMINA){
+                // 체력이 0 이하가 되면 해당 경로 종료 & 체력 100이 되면 경로 종료
+                if (nextStamina <= MIN_STAMINA || nextStamina == MAX_STAMINA) {
                     continue;
                 }
 
@@ -96,7 +91,7 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
                 // 소비성 아이템을 사용하는 경우
                 for (ConsumableItemCategory item : bag.usableItems()) {
                     // 아이템을 사용할 수 없거나, 체력이 최대라 회복 아이템이 무의미한 경우
-                    if (!bag.canUse(item) || nextStamina == MAX_STAMINA) {
+                    if (!bag.canUse(item)) {
                         continue;
                     }
 
