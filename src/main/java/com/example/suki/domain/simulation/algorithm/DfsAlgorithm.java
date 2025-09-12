@@ -15,15 +15,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class DfsAlgorithm implements AlgorithmStrategy{
-
-    private record ActionCountKey(Map<ActionCategory, Long> counts) {
-        public static ActionCountKey from(List<Tick> path) {
-            Map<ActionCategory, Long> counts = path.stream()
-                    .collect(Collectors.groupingBy(Tick::action, Collectors.counting()));
-            return new ActionCountKey(counts);
-        }
-    }
-
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.DFS;

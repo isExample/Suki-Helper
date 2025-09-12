@@ -18,14 +18,6 @@ public class ShortestReachStrategy implements AlgorithmStrategy {
     private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag) {}
     private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState) {}
 
-    private record ActionCountKey(Map<ActionCategory, Long> counts) {
-        public static ActionCountKey from(List<Tick> path) {
-            Map<ActionCategory, Long> counts = path.stream()
-                    .collect(Collectors.groupingBy(Tick::action, Collectors.counting()));
-            return new ActionCountKey(counts);
-        }
-    }
-
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.SHORTEST_REACH;
