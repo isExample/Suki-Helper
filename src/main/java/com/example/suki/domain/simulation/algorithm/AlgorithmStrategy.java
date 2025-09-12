@@ -17,6 +17,17 @@ public interface AlgorithmStrategy {
     int MAX_TICKS = 14;
     int MAX_STAMINA = 100;
     int MIN_STAMINA = 0;
+    int INITIAL_STAMINA = 100;
+    int INITIAL_TICK = 0;
+
+    record SimulationContext(
+            UserState userState,
+            Goal goal,
+            PlaceCategory secondPlace,
+            DaySchedule schedule,
+            ConsumableBag consumableBag,
+            List<List<Tick>> solutions
+    ) {}
 
      record ActionCountKey(Map<ActionCategory, Long> counts) {
         public static ActionCountKey from(List<Tick> path) {
@@ -27,6 +38,6 @@ public interface AlgorithmStrategy {
     }
 
     boolean supports(AlgorithmType algorithmType);
-    void solve(UserState userState, int currentTick, int currentStamina, Goal goal,
-               PlaceCategory secondPlace, DaySchedule schedule, List<Tick> path, ConsumableBag consumableBag, List<List<Tick>> solutions);
+
+    void solve(SimulationContext context);
 }

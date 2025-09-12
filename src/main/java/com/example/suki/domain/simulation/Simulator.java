@@ -20,7 +20,6 @@ import java.util.Map;
 
 @Component
 public class Simulator {
-    private static final int INITIAL_STAMINA = 100;
     private static final int WEEKDAY_SCHOOL_TICKS = 6;
 
     private static final DaySchedule WEEKEND_SCHEDULE = (tick, second) -> second;
@@ -55,8 +54,15 @@ public class Simulator {
 
         for (Map.Entry<PlaceCategory, Place> entry : userState.getPlaces().entrySet()) {
             PlaceCategory second = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
-            List<Tick> path = new ArrayList<>();
-            strategy.solve(userState, 0, INITIAL_STAMINA, goal, second, schedule, path, consumableBag, solutions);
+            AlgorithmStrategy.SimulationContext context = new AlgorithmStrategy.SimulationContext(
+                    userState,
+                    goal,
+                    second,
+                    schedule,
+                    consumableBag,
+                    solutions
+            );
+            strategy.solve(context);
 
             if(solutions.size() >= AlgorithmStrategy.MAX_SOLUTIONS) {
                 break;
