@@ -9,6 +9,7 @@ import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.Tick;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,11 +22,17 @@ public interface AlgorithmStrategy {
     int INITIAL_STAMINA = 100;
     int INITIAL_TICK = 0;
 
-     record ActionCountKey(Map<ActionCategory, Long> counts) {
+    record ActionCountKey(Map<ActionCategory, Long> counts) {
         public static ActionCountKey from(List<Tick> path) {
             Map<ActionCategory, Long> counts = path.stream()
                     .collect(Collectors.groupingBy(Tick::action, Collectors.counting()));
             return new ActionCountKey(counts);
+        }
+
+        public ActionCountKey add(ActionCategory action) {
+            Map<ActionCategory, Long> newCounts = new EnumMap<>(this.counts);
+            newCounts.merge(action, 1L, Long::sum);
+            return new ActionCountKey(newCounts);
         }
     }
 
