@@ -48,19 +48,19 @@ class BfsReachStrategyTest {
         Goal goal = new ReachGoal(targetStamina);
         ConsumableBag bag = new ConsumableBag(Map.of());
 
-        // size()가 항상 0을 반환하는 가짜 List 생성 - 모든 조합 수 반환 목적
-        final List<List<Tick>> actualSolutions = new ArrayList<>();
-        List<List<Tick>> lyingList = new ArrayList<>() {
-            @Override
-            public int size() {
-                return 0;   // MAX_SOLUTIONS 체크를 우회하기 위해 항상 0을 반환
-            }
+        List<List<Tick>> allSolutions = findAllSolutions(userState, goal, schedule, bag);
 
-            @Override
-            public boolean add(List<Tick> ticks) {
-                return actualSolutions.add(ticks);  // 데이터는 실제 리스트에 저장
-            }
-        };
+        assertThat(allSolutions).isNotEmpty();
+        for (List<Tick> combination : allSolutions) {
+            verifyCombination(combination, targetStamina);
+        }
+
+        System.out.printf("[%s] 테스트 성공: 총 %d개의 유효한 조합을 검증했습니다.%n", testName, allSolutions.size());
+    }
+
+    private List<List<Tick>> findAllSolutions(UserState userState, Goal goal, DaySchedule schedule, ConsumableBag bag) {
+        final List<List<Tick>> actualSolutions = new ArrayList<>();
+        List<List<Tick>> lyingList = createLyingList(actualSolutions);
 
         for (PlaceCategory secondPlace : userState.getPlaces().keySet()) {
             SimulationContext context = new SimulationContext(
@@ -73,13 +73,21 @@ class BfsReachStrategyTest {
             );
             strategy.solve(context);
         }
+        return actualSolutions;
+    }
 
-        assertThat(actualSolutions).isNotEmpty();
-        for (List<Tick> combination : actualSolutions) {
-            verifyCombination(combination, targetStamina);
-        }
+    private List<List<Tick>> createLyingList(List<List<Tick>> actualList) {
+        return new ArrayList<>() {
+            @Override
+            public int size() {
+                return 0; // MAX_SOLUTIONS 체크를 우회하기 위해 항상 0을 반환
+            }
 
-        System.out.printf("[%s] 테스트 성공: 총 %d개의 유효한 조합을 검증했습니다.%n", testName, actualSolutions.size());
+            @Override
+            public boolean add(List<Tick> ticks) {
+                return actualList.add(ticks); // 데이터 저장하는 실제 리스트
+            }
+        };
     }
 
     // 결과 조합의 유효성을 검증하는 헬퍼 메서드
