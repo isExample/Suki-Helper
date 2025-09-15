@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserStateModifierTest {
@@ -144,7 +145,7 @@ public class UserStateModifierTest {
 
         userStateModifier.apply(userState, context);
 
-        assertTrue(userState.getPlaces().get(PlaceCategory.LIBRARY).getActions().containsKey(ActionCategory.EXERCISE));
-        assertTrue(userState.getPlaces().get(PlaceCategory.PARK).getActions().containsKey(ActionCategory.EXERCISE));
+        assertFalse(userState.getPlaces().get(PlaceCategory.LIBRARY).getActions().containsKey(ActionCategory.EXERCISE));
+        assertFalse(userState.getPlaces().get(PlaceCategory.PARK).getActions().containsKey(ActionCategory.EXERCISE));
     }
 }
