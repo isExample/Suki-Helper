@@ -35,6 +35,8 @@ public class Place {
     }
 
     public void applyDeltaToAction(int delta, ActionCategory action){
-        this.actions.replace(action, this.actions.get(action) + delta);
+        if(this.actions.containsKey(action)) {
+            this.actions.replace(action, this.actions.get(action) + delta);
+        }
     }
 }
