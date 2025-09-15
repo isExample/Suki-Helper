@@ -47,7 +47,7 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
             return;
         }
 
-        if(context.goal().isTerminal(currentTick, currentStamina, MAX_TICKS)){
+        if(context.goal().isTerminal(currentTick, currentStamina)){
             if(context.goal().isSuccess(currentTick, currentStamina)){
                 if (uniqueCombinations.add(currentActionCount)) {
                     context.solutions().add(List.copyOf(path));

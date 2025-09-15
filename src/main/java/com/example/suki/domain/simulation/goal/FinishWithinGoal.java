@@ -7,7 +7,7 @@ public record FinishWithinGoal(int min, int max) implements Goal{
     }
 
     @Override
-    public boolean isTerminal(int tick, int stamina, int maxTicks) {
-        return tick == maxTicks || stamina == 0;
+    public boolean isTerminal(int tick, int stamina) {
+        return tick == MAX_TICKS || stamina == 0;
     }
 }
