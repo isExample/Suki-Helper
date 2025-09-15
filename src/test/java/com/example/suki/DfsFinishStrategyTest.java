@@ -6,6 +6,7 @@ import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.DaySchedule;
 import com.example.suki.domain.simulation.algorithm.DfsFinishStrategy;
 import com.example.suki.domain.simulation.goal.FinishAtGoal;
+import com.example.suki.domain.simulation.goal.FinishWithinGoal;
 import com.example.suki.domain.simulation.goal.Goal;
 import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DfsFinishStrategyTest {
     private final DfsFinishStrategy strategy = new DfsFinishStrategy();
@@ -51,7 +53,26 @@ public class DfsFinishStrategyTest {
 
         assertThat(allSolutions).isNotEmpty();
         for (List<Tick> combination : allSolutions) {
-            verifyCombination(combination, targetStamina);
+            verifyCombination(combination, goal);
+        }
+
+        System.out.printf("[%s] 테스트 성공: 총 %d개의 유효한 조합을 검증했습니다.%n", testName, allSolutions.size());
+    }
+
+    @ParameterizedTest(name = "[{0}] 테스트")
+    @MethodSource("dayAndScheduleProvider")
+    void 기본_UserState는_목표체력범위로_마무리하는_유효한_조합을_반환한다(String testName, DayCategory day, DaySchedule schedule) {
+        UserState userState = new UserState(day);
+        int targetStaminaMin = 84;
+        int targetStaminaMax = 89;
+        Goal goal = new FinishWithinGoal(targetStaminaMin, targetStaminaMax);
+        ConsumableBag bag = new ConsumableBag(Map.of());
+
+        List<List<Tick>> allSolutions = findAllSolutions(userState, goal, schedule, bag);
+
+        assertThat(allSolutions).isNotEmpty();
+        for (List<Tick> combination : allSolutions) {
+            verifyCombination(combination, goal);
         }
 
         System.out.printf("[%s] 테스트 성공: 총 %d개의 유효한 조합을 검증했습니다.%n", testName, allSolutions.size());
@@ -90,7 +111,7 @@ public class DfsFinishStrategyTest {
     }
 
     // 결과 조합의 유효성을 검증하는 헬퍼 메서드
-    private void verifyCombination(List<Tick> combination, int targetStamina) {
+    private void verifyCombination(List<Tick> combination, Goal goal) {
         int currentStamina = 100; // 초기 체력
 
         for (Tick tick : combination) {
@@ -102,7 +123,7 @@ public class DfsFinishStrategyTest {
             }
             currentStamina = Math.min(100, currentStamina);
         }
-        assertThat(currentStamina).isEqualTo(targetStamina);
+        assertTrue(goal.isSuccess(combination.size(), currentStamina));
         assertThat(combination.size()).isEqualTo(14);
     }
 }
