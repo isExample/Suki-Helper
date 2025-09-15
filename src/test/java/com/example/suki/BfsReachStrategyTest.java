@@ -63,6 +63,49 @@ class BfsReachStrategyTest {
         System.out.printf("테스트 성공: 총 %d개의 유효한 조합을 검증했습니다.%n", actualSolutions.size());
     }
 
+    @Test
+    void 주말에_기본_UserState는_목표체력_84에_도달하는_유효한_조합을_반환한다() {
+        DayCategory day = DayCategory.WEEKEND;
+        UserState userState = new UserState(day);
+
+        int targetStamina = 84;
+        Goal goal = new ReachGoal(targetStamina);
+        ConsumableBag bag = new ConsumableBag(Map.of());
+
+        // size()가 항상 0을 반환하는 가짜 List 생성 - 모든 조합 수 반환 목적
+        final List<List<Tick>> actualSolutions = new ArrayList<>();
+        List<List<Tick>> lyingList = new ArrayList<>() {
+            @Override
+            public int size() {
+                return 0;   // MAX_SOLUTIONS 체크를 우회하기 위해 항상 0을 반환
+            }
+
+            @Override
+            public boolean add(List<Tick> ticks) {
+                return actualSolutions.add(ticks);  // 데이터는 실제 리스트에 저장
+            }
+        };
+
+        for (PlaceCategory secondPlace : userState.getPlaces().keySet()) {
+            SimulationContext context = new SimulationContext(
+                    userState,
+                    goal,
+                    secondPlace,
+                    (tick, second) -> second,
+                    bag,
+                    lyingList
+            );
+            strategy.solve(context);
+        }
+
+        assertThat(actualSolutions).isNotEmpty();
+        for (List<Tick> combination : actualSolutions) {
+            verifyCombination(combination, targetStamina);
+        }
+
+        System.out.printf("테스트 성공: 총 %d개의 유효한 조합을 검증했습니다.%n", actualSolutions.size());
+    }
+
     // 결과 조합의 유효성을 검증하는 헬퍼 메서드
     private void verifyCombination(List<Tick> combination, int targetStamina) {
         int currentStamina = 100; // 초기 체력
