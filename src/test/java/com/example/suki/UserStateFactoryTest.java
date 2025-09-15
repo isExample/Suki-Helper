@@ -9,6 +9,7 @@ import com.example.suki.domain.place.PlaceCategory;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,16 +29,15 @@ public class UserStateFactoryTest {
 
         UserState actualUserState = userStateFactory.create(context);
 
-        // 비활성화된 장소가 실제로 없는지 확인
-        assertThat(actualUserState.getPlaces())
-                .doesNotContainKey(PlaceCategory.HOME);
-        // 활성화된 장소가 실제로 존재하는지 확인
-        assertThat(actualUserState.getPlaces())
-                .containsKey(PlaceCategory.GOLD_MINE);
+        // 기대되는 최종 장소를 담는 Set 생성
+        Set<PlaceCategory> expectedPlaces = Arrays.stream(PlaceCategory.values())
+                .filter(PlaceCategory::isDefault)
+                .collect(Collectors.toCollection(HashSet::new));
 
-        // 비활성화 목록에 없던 다른 기본 장소는 그대로 존재하는지 확인
-        assertThat(actualUserState.getPlaces())
-                .containsKey(PlaceCategory.LIBRARY);
+        context.inactiveList().forEach(expectedPlaces::remove);
+        context.activeList().forEach(expectedPlaces::add);
+
+        assertThat(actualUserState.getPlaces().keySet()).isEqualTo(expectedPlaces);
     }
 
     @Test
@@ -50,10 +50,11 @@ public class UserStateFactoryTest {
 
         UserState actualUserState = userStateFactory.create(context);
 
+        // 기본 장소만 존재하는지 확인
         Set<PlaceCategory> expectedDefaultPlaces = Arrays.stream(PlaceCategory.values())
                 .filter(PlaceCategory::isDefault)
                 .collect(Collectors.toSet());
-        // 기본 장소만 존재하는지 확인
+
         assertThat(actualUserState.getPlaces().keySet()).isEqualTo(expectedDefaultPlaces);
     }
 }
