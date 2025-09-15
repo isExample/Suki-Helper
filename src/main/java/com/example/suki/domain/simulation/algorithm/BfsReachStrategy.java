@@ -51,7 +51,7 @@ public class BfsReachStrategy implements AlgorithmStrategy {
             }
 
             // 종료 조건을 확인: 최대 틱 수 도달
-            if (context.goal().isTerminal(tick, stamina, MAX_TICKS)) {
+            if (context.goal().isTerminal(tick, stamina)) {
                 continue;
             }
 
