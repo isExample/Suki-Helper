@@ -9,27 +9,20 @@ import com.example.suki.domain.item.PermanentItemCategory;
 import com.example.suki.domain.modifier.*;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.trait.TraitCategory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserStateModifierTest {
-    private UserStateModifier userStateModifier;
-
-    @BeforeEach
-    void setUp() {
-        this.userStateModifier = new UserStateModifier(
-                new FitnessLevelModifier(),
-                new BadgeModifier(),
-                new TraitModifier(),
-                new ItemModifier()
-        );
-    }
+    private final UserStateModifier userStateModifier = new UserStateModifier(
+            new FitnessLevelModifier(),
+            new BadgeModifier(),
+            new TraitModifier(),
+            new ItemModifier()
+    );
 
     @Test
     void 운동레벨과_뱃지가_적용되어_UserState의_행동별_체력_소모량이_올바르게_보정된다() {
