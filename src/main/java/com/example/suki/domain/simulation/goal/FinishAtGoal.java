@@ -3,7 +3,7 @@ package com.example.suki.domain.simulation.goal;
 public record FinishAtGoal(int target) implements Goal{
     @Override
     public boolean isSuccess(int tick, int stamina) {
-        return stamina == target;
+        return tick == MAX_TICKS && stamina == target;
     }
 
     @Override
