@@ -33,5 +33,5 @@ public interface AlgorithmStrategy {
 
     boolean supports(AlgorithmType algorithmType);
 
-    void solve(SimulationContext context);
+    int solve(SimulationContext context);
 }
