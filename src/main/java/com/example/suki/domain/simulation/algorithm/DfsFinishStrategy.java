@@ -21,7 +21,7 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
     }
 
     @Override
-    public void solve(SimulationContext context) {
+    public int solve(SimulationContext context) {
         Set<VisitedKey> visitedStates = new HashSet<>();
         Set<ActionCountKey> uniqueCombinations = new HashSet<>();
 
@@ -29,6 +29,7 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
         RecursiveState initialState = new RecursiveState(INITIAL_TICK, INITIAL_STAMINA, context.consumableBag(), initialActionCount);
 
         solveRecursive(initialState, new ArrayList<>(), context, uniqueCombinations, visitedStates);
+        return visitedStates.size();
     }
 
     private void solveRecursive(RecursiveState currentState, List<Tick> path, SimulationContext context,

@@ -21,7 +21,7 @@ public class BfsReachStrategy implements AlgorithmStrategy {
     }
 
     @Override
-    public void solve(SimulationContext context) {
+    public int solve(SimulationContext context) {
         Queue<SearchState> queue = new LinkedList<>();
         Set<VisitedKey> visitedStates = new HashSet<>();
         Set<ActionCountKey> uniqueCombinations = new HashSet<>(); // 결과 중복 방지용 Set
@@ -45,7 +45,7 @@ public class BfsReachStrategy implements AlgorithmStrategy {
                 if(uniqueCombinations.add(currentActionCount)) { // 원소가 새로 추가되었을 때 true 반환
                     context.solutions().add(List.copyOf(currentState.path()));
                     if (context.solutions().size() >= MAX_SOLUTIONS) {
-                        return; // 최대 조합 개수: 즉시 종료
+                        return visitedStates.size(); // 최대 조합 개수: 즉시 종료
                     }
                 }
             }
@@ -102,5 +102,6 @@ public class BfsReachStrategy implements AlgorithmStrategy {
                 }
             }
         }
+        return visitedStates.size();
     }
 }
