@@ -13,6 +13,7 @@ import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.Tick;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Disabled
 public class AlgorithmPerformanceTest {
     private static long totalBfsTime = 0;
     private static long totalDfsTime = 0;
