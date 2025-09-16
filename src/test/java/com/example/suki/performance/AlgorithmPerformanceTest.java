@@ -13,71 +13,78 @@ import com.example.suki.domain.simulation.goal.ReachGoal;
 import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.Tick;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
+@Disabled
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AlgorithmPerformanceTest {
-    private static long totalBfsTime = 0;
-    private static long totalDfsTime = 0;
-    private static long totalBfsVisitedNodes = 0;
-    private static long totalDfsVisitedNodes = 0;
+    private final int REPETITIONS = 100;
+    private Map<String, Long> totalExecutionTimes;
+    private Map<String, Long> totalVisitedNodes;
 
-    private record PerformanceResult(int visitedNodeCount) {}
+    @BeforeAll
+    void setup() {
+        totalExecutionTimes = new HashMap<>();
+        totalVisitedNodes = new HashMap<>();
+    }
 
     @AfterAll
-    static void reportAverageTimes() {
-        int repetitions = 100;
+    void reportAverageTimes() {
         System.out.println("\n==================== 성능 테스트 결과 ====================");
-        if (totalBfsTime > 0) {
-            System.out.printf("[ReachGoal] BFS 평균 실행 시간: %.3f ms | 평균 탐색 노드: %,d 개%n", (double) totalBfsTime / repetitions / 1_000_000, totalBfsVisitedNodes / repetitions);
-        }
-        if (totalDfsTime > 0) {
-            System.out.printf("[ReachGoal] DFS 평균 실행 시간: %.3f ms | 평균 탐색 노드: %,d 개%n", (double) totalDfsTime / repetitions / 1_000_000, totalDfsVisitedNodes / repetitions);
-        }
-        System.out.println("======================================================");
+
+        totalExecutionTimes.forEach((strategyName, totalTime) -> {
+            long totalNodes = totalVisitedNodes.getOrDefault(strategyName, 0L);
+            System.out.printf("[%s] 평균 실행 시간: %.3f ms | 평균 탐색 노드: %,d 개%n",
+                    strategyName,
+                    (double) totalTime / REPETITIONS / 1_000_000,
+                    totalNodes / REPETITIONS);
+        });
+
+        System.out.println("========================================================");
     }
 
-    @RepeatedTest(value = 100, name = "[BFS] {currentRepetition}/{totalRepetitions} 회차 실행 중...")
-    @DisplayName("[ReachGoal] BFS 전략 성능 측정")
-    void measureBfsPerformance() {
+    private static Stream<Arguments> strategyProvider() {
+        return Stream.of(
+                Arguments.of("BFS", new BfsReachStrategy()),
+                Arguments.of("DFS", new DfsFinishStrategy())
+                // 여기에 다른 전략 알고리즘 추가
+        );
+    }
+
+    @ParameterizedTest(name = "[{0}] 전략 성능 측정")
+    @MethodSource("strategyProvider")
+    void measurePerformance(String strategyName, AlgorithmStrategy strategy) {
         UserState userState = new UserState(DayCategory.WEEKDAY_OTHER);
-        Goal goal = new FinishAtGoal(84); // 테스트할 기능 선택
+        Goal goal = new ReachGoal(84); // 목표 Goal을 여기서 수정
         DaySchedule schedule = (tick, second) -> (tick < 6 ? PlaceCategory.SCHOOL : second);
         ConsumableBag bag = new ConsumableBag(Map.of());
-        BfsReachStrategy bfs = new BfsReachStrategy();
 
-        long startTime = System.nanoTime();
-        PerformanceResult result = findAllSolutions(bfs, userState, goal, schedule, bag);
-        long endTime = System.nanoTime();
+        long cumulativeTime = 0;
+        long cumulativeNodes = 0;
 
-        totalBfsTime += (endTime - startTime);
-        totalBfsVisitedNodes += result.visitedNodeCount();
+        for (int i = 0; i < REPETITIONS; i++) {
+            long startTime = System.nanoTime();
+            int visitedNodeCount = findAllSolutions(strategy, userState, goal, schedule, bag);
+            long endTime = System.nanoTime();
+
+            cumulativeTime += (endTime - startTime);
+            cumulativeNodes += visitedNodeCount;
+        }
+
+        totalExecutionTimes.put(strategyName, cumulativeTime);
+        totalVisitedNodes.put(strategyName, cumulativeNodes);
     }
 
-    @RepeatedTest(value = 100, name = "[DFS] {currentRepetition}/{totalRepetitions} 회차 실행 중...")
-    @DisplayName("[ReachGoal] DFS 전략 성능 측정")
-    void measureDfsPerformance() {
-        UserState userState = new UserState(DayCategory.WEEKDAY_OTHER);
-        Goal goal = new FinishAtGoal(84); // 테스트할 기능 선택
-        DaySchedule schedule = (tick, second) -> (tick < 6 ? PlaceCategory.SCHOOL : second);
-        ConsumableBag bag = new ConsumableBag(Map.of());
-        DfsFinishStrategy dfs = new DfsFinishStrategy();
-
-        long startTime = System.nanoTime();
-        PerformanceResult result = findAllSolutions(dfs, userState, goal, schedule, bag);
-        long endTime = System.nanoTime();
-
-        totalDfsTime += (endTime - startTime);
-        totalDfsVisitedNodes += result.visitedNodeCount();
-    }
-
-    private PerformanceResult findAllSolutions(AlgorithmStrategy strategy, UserState userState, Goal goal, DaySchedule schedule, ConsumableBag bag) {
+    private int findAllSolutions(AlgorithmStrategy strategy, UserState userState, Goal goal, DaySchedule schedule, ConsumableBag bag) {
         List<List<Tick>> solutions = new ArrayList<>();
         int totalVisitedCount = 0;
         for (PlaceCategory secondPlace : userState.getPlaces().keySet()) {
@@ -91,6 +98,6 @@ public class AlgorithmPerformanceTest {
             );
             totalVisitedCount += strategy.solve(context);
         }
-        return new PerformanceResult(totalVisitedCount);
+        return totalVisitedCount;
     }
 }
