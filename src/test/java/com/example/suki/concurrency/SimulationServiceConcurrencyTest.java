@@ -10,11 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,6 +31,9 @@ public class SimulationServiceConcurrencyTest {
         int threadCount = 50; // 동시에 실행할 스레드 수
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(threadCount);
+
+        AtomicInteger successCount = new AtomicInteger(0);
+        AtomicInteger failureCount = new AtomicInteger(0);
 
         // 모든 스레드가 사용할 동일 요청 객체
         SimulationRequest request = new SimulationRequest(
@@ -55,7 +60,14 @@ public class SimulationServiceConcurrencyTest {
                     List<List<Tick>> actualCombinations = response.combinations();
 
                     // 반환된 결과 조합이 기대값과 일치하는지 검증
-                    assertThat(actualCombinations).containsExactlyElementsOf(expectedCombinations);
+                    boolean isIdentical = expectedCombinations.size() == actualCombinations.size() &&
+                            new HashSet<>(expectedCombinations).equals(new HashSet<>(actualCombinations));
+
+                    if (isIdentical) {
+                        successCount.incrementAndGet();
+                    } else {
+                        failureCount.incrementAndGet();
+                    }
                 } finally {
                     latch.countDown();
                 }
@@ -66,6 +78,14 @@ public class SimulationServiceConcurrencyTest {
         latch.await();
         executorService.shutdown();
 
-        System.out.printf("%d개의 스레드가 동시에 요청을 전송. %d개의 동일한 결과 조합을 반환.%n", threadCount, expectedCombinations.size());
+        System.out.println("\n--- 동시성 테스트 결과 ---");
+        System.out.printf("총 요청 수: %d\n", threadCount);
+        System.out.printf("성공: %d\n", successCount.get());
+        System.out.printf("실패: %d\n", failureCount.get());
+        System.out.println("----------------------\n");
+
+        assertThat(failureCount.get())
+                .as("동시성 이슈 발생.")
+                .isZero();
     }
 }
