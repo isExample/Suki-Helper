@@ -80,11 +80,11 @@ public class SimulationServiceConcurrencyTest {
         latch.await();
         executorService.shutdown();
 
-        System.out.println("\n--- 동시성 테스트 결과 ---");
+        System.out.println("\n-- 체력 n 달성 API 동시성 테스트 결과 --");
         System.out.printf("총 요청 수: %d\n", threadCount);
         System.out.printf("성공: %d\n", successCount.get());
         System.out.printf("실패: %d\n", failureCount.get());
-        System.out.println("----------------------\n");
+        System.out.println("-----------------------------------\n");
 
         assertThat(failureCount.get())
                 .as("동시성 이슈 발생.")
@@ -144,11 +144,11 @@ public class SimulationServiceConcurrencyTest {
         latch.await();
         executorService.shutdown();
 
-        System.out.println("\n--- 동시성 테스트 결과 ---");
+        System.out.println("\n-- 체력 n 마무리 API 동시성 테스트 결과 --");
         System.out.printf("총 요청 수: %d\n", threadCount);
         System.out.printf("성공: %d\n", successCount.get());
         System.out.printf("실패: %d\n", failureCount.get());
-        System.out.println("----------------------\n");
+        System.out.println("-----------------------------------\n");
 
         assertThat(failureCount.get())
                 .as("동시성 이슈 발생.")
@@ -209,11 +209,11 @@ public class SimulationServiceConcurrencyTest {
         latch.await();
         executorService.shutdown();
 
-        System.out.println("\n--- 동시성 테스트 결과 ---");
+        System.out.println("\n-- 체력 n1~n2 마무리 API 동시성 테스트 결과 --");
         System.out.printf("총 요청 수: %d\n", threadCount);
         System.out.printf("성공: %d\n", successCount.get());
         System.out.printf("실패: %d\n", failureCount.get());
-        System.out.println("----------------------\n");
+        System.out.println("---------------------------------------\n");
 
         assertThat(failureCount.get())
                 .as("동시성 이슈 발생.")
