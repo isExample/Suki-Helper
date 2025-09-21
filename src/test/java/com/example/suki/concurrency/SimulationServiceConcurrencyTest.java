@@ -64,8 +64,7 @@ public class SimulationServiceConcurrencyTest {
                     // System.out.printf("[%s] [실제 결과]: %s\n", Thread.currentThread().getName(), actualCombinations);
 
                     // 반환된 결과 조합이 기대값과 일치하는지 검증
-                    boolean isIdentical = expectedCombinations.size() == actualCombinations.size() &&
-                            new HashSet<>(expectedCombinations).equals(new HashSet<>(actualCombinations));
+                    boolean isIdentical = expectedCombinations.size() == actualCombinations.size() && expectedCombinations.equals(actualCombinations);
 
                     if (isIdentical) {
                         successCount.incrementAndGet();
@@ -130,8 +129,7 @@ public class SimulationServiceConcurrencyTest {
                     // System.out.printf("[%s] [실제 결과]: %s\n", Thread.currentThread().getName(), actualCombinations);
 
                     // 반환된 결과 조합이 기대값과 일치하는지 검증
-                    boolean isIdentical = expectedCombinations.size() == actualCombinations.size() &&
-                            new HashSet<>(expectedCombinations).equals(new HashSet<>(actualCombinations));
+                    boolean isIdentical = expectedCombinations.size() == actualCombinations.size() && expectedCombinations.equals(actualCombinations);
 
                     if (isIdentical) {
                         successCount.incrementAndGet();
@@ -197,8 +195,7 @@ public class SimulationServiceConcurrencyTest {
                     // System.out.printf("[%s] [실제 결과]: %s\n", Thread.currentThread().getName(), actualCombinations);
 
                     // 반환된 결과 조합이 기대값과 일치하는지 검증
-                    boolean isIdentical = expectedCombinations.size() == actualCombinations.size() &&
-                            new HashSet<>(expectedCombinations).equals(new HashSet<>(actualCombinations));
+                    boolean isIdentical = expectedCombinations.size() == actualCombinations.size() && expectedCombinations.equals(actualCombinations);
 
                     if (isIdentical) {
                         successCount.incrementAndGet();
