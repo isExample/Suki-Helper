@@ -61,6 +61,8 @@ public class SimulationServiceConcurrencyTest {
                     SimulationResponse response = simulationService.simulateReach(request);
                     List<List<Tick>> actualCombinations = response.combinations();
 
+                    // System.out.printf("[%s] [실제 결과]: %s\n", Thread.currentThread().getName(), actualCombinations);
+
                     // 반환된 결과 조합이 기대값과 일치하는지 검증
                     boolean isIdentical = expectedCombinations.size() == actualCombinations.size() &&
                             new HashSet<>(expectedCombinations).equals(new HashSet<>(actualCombinations));
@@ -124,6 +126,8 @@ public class SimulationServiceConcurrencyTest {
                 try {
                     SimulationResponse response = simulationService.simulateFinishAt(request);
                     List<List<Tick>> actualCombinations = response.combinations();
+
+                    // System.out.printf("[%s] [실제 결과]: %s\n", Thread.currentThread().getName(), actualCombinations);
 
                     // 반환된 결과 조합이 기대값과 일치하는지 검증
                     boolean isIdentical = expectedCombinations.size() == actualCombinations.size() &&
@@ -189,6 +193,8 @@ public class SimulationServiceConcurrencyTest {
                 try {
                     SimulationRangeResponse response = simulationService.simulateFinishWithin(request);
                     List<List<Tick>> actualCombinations = response.combinations();
+
+                    // System.out.printf("[%s] [실제 결과]: %s\n", Thread.currentThread().getName(), actualCombinations);
 
                     // 반환된 결과 조합이 기대값과 일치하는지 검증
                     boolean isIdentical = expectedCombinations.size() == actualCombinations.size() &&
