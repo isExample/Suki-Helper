@@ -12,9 +12,6 @@ import java.util.*;
 
 @Component
 public class DfsFinishStrategy implements AlgorithmStrategy{
-    private record RecursiveState(int tick, int stamina, ConsumableBag bag, ActionCountKey actionCountKey) {}
-    private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState, ActionCountKey actionCountKey) {}
-
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.DFS_FINISH;
@@ -25,14 +22,14 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
         Set<VisitedKey> visitedStates = new HashSet<>();
         Set<ActionCountKey> uniqueCombinations = new HashSet<>();
 
-        ActionCountKey initialActionCount = new ActionCountKey(new EnumMap<>(ActionCategory.class));
-        RecursiveState initialState = new RecursiveState(INITIAL_TICK, INITIAL_STAMINA, context.consumableBag(), initialActionCount);
+        ActionCountKey initialActionCount = ActionCountKey.create();
+        SearchState initialState = new SearchState(null, null, INITIAL_TICK, INITIAL_STAMINA, context.consumableBag(), initialActionCount);
 
-        solveRecursive(initialState, new ArrayList<>(), context, uniqueCombinations, visitedStates);
+        solveRecursive(initialState, context, uniqueCombinations, visitedStates);
         return visitedStates.size();
     }
 
-    private void solveRecursive(RecursiveState currentState, List<Tick> path, SimulationContext context,
+    private void solveRecursive(SearchState currentState, SimulationContext context,
                                 Set<ActionCountKey> uniqueCombinations, Set<VisitedKey> visitedStates) {
         int currentTick = currentState.tick();
         int currentStamina = currentState.stamina();
@@ -51,14 +48,14 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
         if(context.goal().isTerminal(currentTick, currentStamina)){
             if(context.goal().isSuccess(currentTick, currentStamina)){
                 if (uniqueCombinations.add(currentActionCount)) {
-                    context.solutions().add(List.copyOf(path));
+                    context.solutions().add(currentState.reconstructPath());
                 }
             }
             return;
         }
 
         PlaceCategory place = context.schedule().placeAt(currentTick, context.secondPlace());
-        Map<ActionCategory, Integer> actions = new EnumMap<>(context.userState().getPlaces().get(place).getActions());
+        Map<ActionCategory, Integer> actions = context.userState().getPlaces().get(place).getActions();
 
         for (Map.Entry<ActionCategory, Integer> entry : actions.entrySet()) {
             ActionCategory action = entry.getKey();
@@ -72,10 +69,9 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
             ActionCountKey nextActionCount = currentActionCount.add(action);
 
             // 소비성 아이템 미사용
-            path.add(new Tick(place, action, Math.abs(delta), null));
-            RecursiveState nextStateNoItem = new RecursiveState(currentTick + 1, nextStamina, consumableBag, nextActionCount);
-            solveRecursive(nextStateNoItem, path, context, uniqueCombinations, visitedStates);
-            path.remove(path.size() - 1);
+            Tick tickNoItem = new Tick(place, action, Math.abs(delta), null);
+            SearchState nextStateNoItem = new SearchState(currentState, tickNoItem, currentTick + 1, nextStamina, consumableBag, nextActionCount);
+            solveRecursive(nextStateNoItem, context, uniqueCombinations, visitedStates);
 
             // 소비성 아이템 사용
             for(ConsumableItemCategory item : consumableBag.usableItems()){
@@ -83,13 +79,15 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
                     continue;
                 }
 
-                int itemNextStamina = item.apply(nextStamina);
                 consumableBag.use(item);
-                path.add(new Tick(place, action, Math.abs(delta), item));
-                RecursiveState nextStateWithItem = new RecursiveState(currentTick + 1, itemNextStamina, consumableBag, nextActionCount);
-                solveRecursive(nextStateWithItem, path, context, uniqueCombinations, visitedStates);
-                path.remove(path.size() - 1);
-                consumableBag.undo(item);
+                try{
+                    int itemNextStamina = item.apply(nextStamina);
+                    Tick tickWithItem = new Tick(place, action, Math.abs(delta), item);
+                    SearchState nextStateWithItem = new SearchState(currentState, tickWithItem, currentState.tick() + 1, itemNextStamina, consumableBag, nextActionCount);
+                    solveRecursive(nextStateWithItem, context, uniqueCombinations, visitedStates);
+                } finally {
+                    consumableBag.undo(item);
+                }
             }
         }
     }
