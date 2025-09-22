@@ -92,13 +92,15 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
                     continue;
                 }
 
-                ConsumableBag nextBagWithItem = new ConsumableBag(currentState.bag().snapshotRemains());
-                nextBagWithItem.use(item);
-                int itemNextStamina = item.apply(nextStamina);
-
-                Tick tickWithItem = new Tick(place, action, Math.abs(delta), item);
-                SearchState nextStateWithItem = new SearchState(currentState, tickWithItem, currentState.tick() + 1, itemNextStamina, nextBagWithItem, nextActionCount);
-                solveRecursive(nextStateWithItem, context, uniqueCombinations, visitedStates);
+                consumableBag.use(item);
+                try{
+                    int itemNextStamina = item.apply(nextStamina);
+                    Tick tickWithItem = new Tick(place, action, Math.abs(delta), item);
+                    SearchState nextStateWithItem = new SearchState(currentState, tickWithItem, currentState.tick() + 1, itemNextStamina, consumableBag, nextActionCount);
+                    solveRecursive(nextStateWithItem, context, uniqueCombinations, visitedStates);
+                } finally {
+                    consumableBag.undo(item);
+                }
             }
         }
     }
