@@ -12,7 +12,17 @@ import java.util.*;
 
 @Component
 public class BfsReachStrategy implements AlgorithmStrategy {
-    private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag, ActionCountKey actionCountKey) {}
+    private record SearchState(SearchState parent, Tick currentTick, int tick, int stamina, ConsumableBag bag, ActionCountKey actionCountKey) {
+        public List<Tick> reconstructPath() {
+            LinkedList<Tick> path = new LinkedList<>();
+            SearchState current = this;
+            while (current != null && current.currentTick() != null) {
+                path.addFirst(current.currentTick());
+                current = current.parent();
+            }
+            return path;
+        }
+    }
     private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState, ActionCountKey actionCountKey) {}
 
     @Override
@@ -27,7 +37,7 @@ public class BfsReachStrategy implements AlgorithmStrategy {
         Set<ActionCountKey> uniqueCombinations = new HashSet<>(); // 결과 중복 방지용 Set
 
         ActionCountKey initialActionCount = ActionCountKey.create();
-        SearchState initialState = new SearchState(INITIAL_TICK, INITIAL_STAMINA, new ArrayList<>(), context.consumableBag(), initialActionCount);
+        SearchState initialState = new SearchState(null, null, INITIAL_TICK, INITIAL_STAMINA, context.consumableBag(), initialActionCount);
         VisitedKey initialKey = new VisitedKey(INITIAL_TICK, INITIAL_STAMINA, context.consumableBag().snapshotRemains(), initialActionCount);
 
         queue.add(initialState);
@@ -43,7 +53,7 @@ public class BfsReachStrategy implements AlgorithmStrategy {
             // 성공 조건 확인
             if (context.goal().isSuccess(tick, stamina)) {
                 if(uniqueCombinations.add(currentActionCount)) { // 원소가 새로 추가되었을 때 true 반환
-                    context.solutions().add(List.copyOf(currentState.path()));
+                    context.solutions().add(currentState.reconstructPath());
                     if (context.solutions().size() >= MAX_SOLUTIONS) {
                         return visitedStates.size(); // 최대 조합 개수: 즉시 종료
                     }
@@ -71,10 +81,8 @@ public class BfsReachStrategy implements AlgorithmStrategy {
                 ActionCountKey nextActionCount = currentActionCount.add(action);
 
                 // 소비성 아이템을 사용하지 않는 경우
-                List<Tick> newPathNoItem = new ArrayList<>(currentState.path());
-                newPathNoItem.add(new Tick(currentPlace, action, Math.abs(delta), null));
-
-                SearchState nextStateNoItem = new SearchState(tick + 1, nextStamina, newPathNoItem, bag, nextActionCount);
+                Tick tickNoItem = new Tick(currentPlace, action, Math.abs(delta), null);
+                SearchState nextStateNoItem = new SearchState(currentState, tickNoItem, tick + 1, nextStamina, bag, nextActionCount);
                 VisitedKey nextKeyNoItem = new VisitedKey(nextStateNoItem.tick(), nextStateNoItem.stamina(), nextStateNoItem.bag().snapshotRemains(), nextActionCount);
                 if(visitedStates.add(nextKeyNoItem)){
                     queue.add(nextStateNoItem);
@@ -91,10 +99,8 @@ public class BfsReachStrategy implements AlgorithmStrategy {
                     ConsumableBag nextBagWithItem = new ConsumableBag(bag.snapshotRemains());
                     nextBagWithItem.use(item);
 
-                    List<Tick> newPathWithItem = new ArrayList<>(currentState.path());
-                    newPathWithItem.add(new Tick(currentPlace, action, Math.abs(delta), item));
-
-                    SearchState nextStateWithItem = new SearchState(tick + 1, itemNextStamina, newPathWithItem, nextBagWithItem, nextActionCount);
+                    Tick tickWithItem = new Tick(currentPlace, action, Math.abs(delta), item);
+                    SearchState nextStateWithItem = new SearchState(currentState, tickWithItem, tick + 1, itemNextStamina, nextBagWithItem, nextActionCount);
                     VisitedKey nextKeyWithItem = new VisitedKey(nextStateWithItem.tick(), nextStateWithItem.stamina(), nextStateWithItem.bag().snapshotRemains(), nextActionCount);
                     if (visitedStates.add(nextKeyWithItem)) {
                         queue.add(nextStateWithItem);
