@@ -68,7 +68,7 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
         }
 
         PlaceCategory place = context.schedule().placeAt(currentTick, context.secondPlace());
-        Map<ActionCategory, Integer> actions = new EnumMap<>(context.userState().getPlaces().get(place).getActions());
+        Map<ActionCategory, Integer> actions = context.userState().getPlaces().get(place).getActions();
 
         for (Map.Entry<ActionCategory, Integer> entry : actions.entrySet()) {
             ActionCategory action = entry.getKey();
