@@ -12,19 +12,6 @@ import java.util.*;
 
 @Component
 public class BfsReachStrategy implements AlgorithmStrategy {
-    private record SearchState(SearchState parent, Tick currentTick, int tick, int stamina, ConsumableBag bag, ActionCountKey actionCountKey) {
-        public List<Tick> reconstructPath() {
-            LinkedList<Tick> path = new LinkedList<>();
-            SearchState current = this;
-            while (current != null && current.currentTick() != null) {
-                path.addFirst(current.currentTick());
-                current = current.parent();
-            }
-            return path;
-        }
-    }
-    private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState, ActionCountKey actionCountKey) {}
-
     @Override
     public boolean supports(AlgorithmType algorithmType) {
         return algorithmType == AlgorithmType.BFS_REACH;

@@ -1,9 +1,15 @@
 package com.example.suki.domain.simulation.algorithm;
 
 import com.example.suki.domain.action.ActionCategory;
+import com.example.suki.domain.item.ConsumableItemCategory;
+import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
+import com.example.suki.domain.simulation.model.Tick;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public interface AlgorithmStrategy {
     int MAX_SOLUTIONS = 10;
@@ -12,6 +18,21 @@ public interface AlgorithmStrategy {
     int MIN_STAMINA = 0;
     int INITIAL_STAMINA = 100;
     int INITIAL_TICK = 0;
+
+    record SearchState(SearchState parent, Tick currentTick, int tick, int stamina, ConsumableBag bag, ActionCountKey actionCountKey) {
+        public List<Tick> reconstructPath() {
+            LinkedList<Tick> path = new LinkedList<>();
+            SearchState current = this;
+            while (current != null && current.currentTick() != null) {
+                path.addFirst(current.currentTick());
+                current = current.parent();
+            }
+            return path;
+        }
+    }
+
+    record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState, ActionCountKey actionCountKey) {}
+
 
     record ActionCountKey(int[] counts) {
         public static ActionCountKey create() {
