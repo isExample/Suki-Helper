@@ -12,7 +12,17 @@ import java.util.*;
 
 @Component
 public class DfsFinishStrategy implements AlgorithmStrategy{
-    private record SearchState(int tick, int stamina, List<Tick> path, ConsumableBag bag, ActionCountKey actionCountKey) {}
+    private record SearchState(SearchState parent, Tick currentTick, int tick, int stamina, ConsumableBag bag, ActionCountKey actionCountKey) {
+        public List<Tick> reconstructPath() {
+            LinkedList<Tick> path = new LinkedList<>();
+            SearchState current = this;
+            while (current != null && current.currentTick() != null) {
+                path.addFirst(current.currentTick());
+                current = current.parent();
+            }
+            return path;
+        }
+    }
     private record VisitedKey(int tick, int stamina, Map<ConsumableItemCategory, Integer> bagState, ActionCountKey actionCountKey) {}
 
     @Override
@@ -26,7 +36,7 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
         Set<ActionCountKey> uniqueCombinations = new HashSet<>();
 
         ActionCountKey initialActionCount = ActionCountKey.create();
-        SearchState initialState = new SearchState(INITIAL_TICK, INITIAL_STAMINA, new ArrayList<>(), context.consumableBag(), initialActionCount);
+        SearchState initialState = new SearchState(null, null, INITIAL_TICK, INITIAL_STAMINA, context.consumableBag(), initialActionCount);
 
         solveRecursive(initialState, context, uniqueCombinations, visitedStates);
         return visitedStates.size();
@@ -51,7 +61,7 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
         if(context.goal().isTerminal(currentTick, currentStamina)){
             if(context.goal().isSuccess(currentTick, currentStamina)){
                 if (uniqueCombinations.add(currentActionCount)) {
-                    context.solutions().add(List.copyOf(currentState.path()));
+                    context.solutions().add(currentState.reconstructPath());
                 }
             }
             return;
@@ -72,9 +82,8 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
             ActionCountKey nextActionCount = currentActionCount.add(action);
 
             // 소비성 아이템 미사용
-            List<Tick> newPathNoItem = new ArrayList<>(currentState.path());
-            newPathNoItem.add(new Tick(place, action, Math.abs(delta), null));
-            SearchState nextStateNoItem = new SearchState(currentTick + 1, nextStamina, newPathNoItem, consumableBag, nextActionCount);
+            Tick tickNoItem = new Tick(place, action, Math.abs(delta), null);
+            SearchState nextStateNoItem = new SearchState(currentState, tickNoItem, currentTick + 1, nextStamina, consumableBag, nextActionCount);
             solveRecursive(nextStateNoItem, context, uniqueCombinations, visitedStates);
 
             // 소비성 아이템 사용
@@ -87,10 +96,8 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
                 nextBagWithItem.use(item);
                 int itemNextStamina = item.apply(nextStamina);
 
-                List<Tick> newPathWithItem = new ArrayList<>(currentState.path());
-                newPathWithItem.add(new Tick(place, action, Math.abs(delta), item));
-
-                SearchState nextStateWithItem = new SearchState(currentState.tick() + 1, itemNextStamina, newPathWithItem, nextBagWithItem, nextActionCount);
+                Tick tickWithItem = new Tick(place, action, Math.abs(delta), item);
+                SearchState nextStateWithItem = new SearchState(currentState, tickWithItem, currentState.tick() + 1, itemNextStamina, nextBagWithItem, nextActionCount);
                 solveRecursive(nextStateWithItem, context, uniqueCombinations, visitedStates);
             }
         }
