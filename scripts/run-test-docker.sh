@@ -6,5 +6,5 @@ docker run \
     --cpus="1.0" \
     --memory="1g" \
     -e "JAVA_OPTS=-Xms256m -Xmx512m" \
-    --name suki-local-test \
+    --name suki-local-async \
     suki-helper
