@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // Common
     VALIDATION_FAILED("C001", HttpStatus.BAD_REQUEST, "요청 값이 올바르지 않습니다."),
+    DUPLICATE_REQUEST("C002", HttpStatus.TOO_MANY_REQUESTS, "짧은 시간 내에 동일한 요청을 보낼 수 없습니다."),
 
     // User
     PLACE_ALREADY_ACTIVATED("U001", HttpStatus.CONFLICT, "이미 활성화된 장소입니다."),
