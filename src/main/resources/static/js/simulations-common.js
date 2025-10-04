@@ -222,6 +222,11 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
                 const data = parsed && typeof parsed === 'object' ? (parsed.data ?? parsed) : parsed ?? text;
 
                 document.dispatchEvent(new CustomEvent('sim:response', {detail: {ok: res.ok, data, endpoint}}));
+                if (res.status === 429) {
+                    const msg = (typeof data === 'object' && (data.message || data.detail)) || '짧은 시간 내에 동일한 요청을 보낼 수 없습니다.';
+                    alert(msg);
+                    return;
+                }
                 if (!res.ok || typeof data !== 'object') throw new Error(typeof data === 'string' ? data : '요청 실패');
 
                 renderResult(data, document);
