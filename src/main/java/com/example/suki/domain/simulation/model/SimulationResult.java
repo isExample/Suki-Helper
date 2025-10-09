@@ -2,6 +2,7 @@ package com.example.suki.domain.simulation.model;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +21,6 @@ public class SimulationResult {
     }
 
     public static SimulationResult failure() {
-        return new SimulationResult(false, null);
+        return new SimulationResult(false, new ArrayList<>());
     }
 }
