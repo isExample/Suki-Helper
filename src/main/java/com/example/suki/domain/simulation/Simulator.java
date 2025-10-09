@@ -1,15 +1,8 @@
 package com.example.suki.domain.simulation;
 
-import com.example.suki.domain.User.UserState;
-import com.example.suki.domain.item.ConsumableItemCategory;
 import com.example.suki.domain.place.Place;
 import com.example.suki.domain.place.PlaceCategory;
 import com.example.suki.domain.simulation.algorithm.AlgorithmStrategy;
-import com.example.suki.domain.simulation.goal.FinishAtGoal;
-import com.example.suki.domain.simulation.goal.FinishWithinGoal;
-import com.example.suki.domain.simulation.goal.Goal;
-import com.example.suki.domain.simulation.goal.ReachGoal;
-import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.SimulationResult;
 import com.example.suki.domain.simulation.model.Tick;
