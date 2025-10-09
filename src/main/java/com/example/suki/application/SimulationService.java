@@ -30,7 +30,7 @@ public class SimulationService {
         userStateModifier.apply(userState, ModifierContext.from(request));
 
         AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.BFS_REACH);
-        SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.consumableItemMap(), strategy);
+        SimulationResult result = simulator.simulateReach(userState, request.targetStamina(), request.currentTick(), request.currentStamina(), request.consumableItemMap(), strategy);
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -40,7 +40,7 @@ public class SimulationService {
         userStateModifier.apply(userState, ModifierContext.from(request));
 
         AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.DFS_FINISH);
-        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), request.consumableItemMap(), strategy);
+        SimulationResult result = simulator.simulateFinishAt(userState, request.targetStamina(), request.currentTick(), request.currentStamina(), request.consumableItemMap(), strategy);
         return SimulationResponse.from(request.targetStamina(), result);
     }
 
@@ -50,7 +50,7 @@ public class SimulationService {
         userStateModifier.apply(userState, ModifierContext.from(request));
 
         AlgorithmStrategy strategy = algorithmResolver.find(AlgorithmType.DFS_FINISH);
-        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), request.consumableItemMap(), strategy);
+        SimulationResult result = simulator.simulateFinishWithin(userState, request.targetMin(), request.targetMax(), request.currentTick(), request.currentStamina(), request.consumableItemMap(), strategy);
         return SimulationRangeResponse.from(request.targetMin(), request.targetMax(), result);
     }
 }
