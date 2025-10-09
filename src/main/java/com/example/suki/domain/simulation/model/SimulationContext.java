@@ -12,8 +12,21 @@ public record SimulationContext(
         Goal goal,
         int startTick,
         int startStamina,
+        ConsumableBag consumableBag,
         PlaceCategory secondPlace,
         DaySchedule schedule,
-        ConsumableBag consumableBag,
         List<List<Tick>> solutions
-) {}
+) {
+    public SimulationContext updateExecutionContext(DaySchedule schedule, PlaceCategory secondPlace, List<List<Tick>> solutions) {
+        return new SimulationContext(
+                this.userState,
+                this.goal,
+                this.startTick,
+                this.startStamina,
+                this.consumableBag,
+                secondPlace,
+                schedule,
+                solutions
+        );
+    }
+}
