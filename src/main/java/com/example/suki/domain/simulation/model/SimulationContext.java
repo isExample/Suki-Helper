@@ -10,6 +10,8 @@ import java.util.List;
 public record SimulationContext(
         UserState userState,
         Goal goal,
+        int startTick,
+        int startStamina,
         PlaceCategory secondPlace,
         DaySchedule schedule,
         ConsumableBag consumableBag,

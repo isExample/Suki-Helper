@@ -24,8 +24,8 @@ public class BfsReachStrategy implements AlgorithmStrategy {
         Set<ActionCountKey> uniqueCombinations = new HashSet<>(); // 결과 중복 방지용 Set
 
         ActionCountKey initialActionCount = ActionCountKey.create();
-        SearchState initialState = new SearchState(null, null, INITIAL_TICK, INITIAL_STAMINA, context.consumableBag(), initialActionCount);
-        VisitedKey initialKey = new VisitedKey(INITIAL_TICK, INITIAL_STAMINA, context.consumableBag().snapshotRemains(), initialActionCount);
+        SearchState initialState = new SearchState(null, null, context.startTick(), context.startStamina(), context.consumableBag(), initialActionCount);
+        VisitedKey initialKey = new VisitedKey(context.startTick(), context.startStamina(), context.consumableBag().snapshotRemains(), initialActionCount);
 
         queue.add(initialState);
         visitedStates.add(initialKey);
