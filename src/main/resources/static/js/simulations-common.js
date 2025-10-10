@@ -64,6 +64,8 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         const max = root.querySelector('#targetMax');
 
         const base = {
+            currentTick: Number($('#currentTick', root)?.value || 0),
+            currentStamina: Number($('#currentStamina', root)?.value || 100),
             fitnessLevel: Number($('#fitnessLevel', root)?.value || 0),
             day: $('input[name="day"]:checked', root)?.value || 'WEEKDAY_OTHER',
             inactiveList: pickList('inactiveList', root),
@@ -106,6 +108,14 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         } else if (typeof payload.targetStamina === 'number') {
             const n = payload.targetStamina;
             if (n < 1 || n > 99) throw new Error('목표 체력은 1~99입니다.');
+        }
+
+        // 틱과 현재 체력 검증
+        if (!(Number.isInteger(payload.currentTick) && payload.currentTick >= 0 && payload.currentTick <= 13)) {
+            throw new Error('진행된 틱은 0~13 사이여야 합니다.');
+        }
+        if (!(Number.isInteger(payload.currentStamina) && payload.currentStamina >= 1 && payload.currentStamina <= 100)) {
+            throw new Error('현재 체력은 1~100 사이여야 합니다.');
         }
 
         // 특성 최대 6개 검증
