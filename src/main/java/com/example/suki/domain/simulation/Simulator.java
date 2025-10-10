@@ -35,8 +35,8 @@ public class Simulator {
         List<List<Tick>> solutions = new ArrayList<>();
 
         for (Map.Entry<PlaceCategory, Place> entry : context.userState().getPlaces().entrySet()) {
-            PlaceCategory place = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
-            SimulationContext executionContext = context.updateExecutionContext(schedule, place, solutions);
+            PlaceCategory secondPlace = entry.getKey(); // 평일: 두번째 장소 / 주말: 단일 장소
+            SimulationContext executionContext = context.updateExecutionContext(schedule, secondPlace, solutions);
             strategy.solve(executionContext);
 
             if(solutions.size() >= AlgorithmStrategy.MAX_SOLUTIONS) {
