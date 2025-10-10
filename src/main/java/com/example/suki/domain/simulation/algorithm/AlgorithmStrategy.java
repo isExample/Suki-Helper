@@ -17,8 +17,6 @@ public interface AlgorithmStrategy {
     int MAX_STAMINA = 100;
     int MIN_STAMINA = 0;
     int WEEKDAY_SCHOOL_TICKS = 6;
-    int INITIAL_STAMINA = 100;
-    int INITIAL_TICK = 0;
 
     record SearchState(SearchState parent, Tick currentTick, int tick, int stamina, ConsumableBag bag, ActionCountKey actionCountKey) {
         public List<Tick> reconstructPath() {
