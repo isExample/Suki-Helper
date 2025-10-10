@@ -25,6 +25,17 @@
                     <input type="number" id="targetStamina" name="targetStamina" min="1" max="99" step="1" inputmode="numeric" required class="field-input">
                 </div>
             </div>
+
+            <div class="field-row">
+                <label class="field-label" for="currentTick">진행된 틱 & 현재 체력</label>
+                <div class="field-input-pair">
+                    <input type="number" id="currentTick" name="currentTick" min="0" max="13" value="0" inputmode="numeric" class="field-input">
+                    <span class="sep">틱(0 ~ 13)</span>
+                    <input type="number" id="currentStamina" name="currentStamina" min="1" max="100" value="100" inputmode="numeric" class="field-input">
+                    <span class="sep">체력(1 ~ 100)</span>
+                </div>
+            </div>
+
             <div class="field-row">
                 <label class="field-label" for="fitnessLevel">운동 레벨 <span class="label-hint">(0~10)</span></label>
                 <input type="number" id="fitnessLevel" name="fitnessLevel" min="0" max="10" value="0" inputmode="numeric" class="field-input">

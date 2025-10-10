@@ -24,6 +24,14 @@ public record SimulationRangeRequest(
         @Max(99)
         int targetMax,
 
+        @Schema(description="진행된 틱 수")
+        @Min(0) @Max(13)
+        int currentTick,
+
+        @Schema(description="현재 체력")
+        @Min(1) @Max(100)
+        int currentStamina,
+
         @Schema(description="운동 레벨", defaultValue = "0")
         @Min(0) @Max(10)
         int fitnessLevel,

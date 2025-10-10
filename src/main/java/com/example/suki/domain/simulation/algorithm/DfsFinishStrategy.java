@@ -23,7 +23,7 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
         Set<ActionCountKey> uniqueCombinations = new HashSet<>();
 
         ActionCountKey initialActionCount = ActionCountKey.create();
-        SearchState initialState = new SearchState(null, null, INITIAL_TICK, INITIAL_STAMINA, context.consumableBag(), initialActionCount);
+        SearchState initialState = new SearchState(null, null, context.startTick(), context.startStamina(), context.consumableBag(), initialActionCount);
 
         solveRecursive(initialState, context, uniqueCombinations, visitedStates);
         return visitedStates.size();
