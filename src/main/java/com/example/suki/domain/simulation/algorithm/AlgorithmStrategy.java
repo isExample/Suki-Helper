@@ -16,6 +16,7 @@ public interface AlgorithmStrategy {
     int MAX_TICKS = 14;
     int MAX_STAMINA = 100;
     int MIN_STAMINA = 0;
+    int WEEKDAY_SCHOOL_TICKS = 6;
     int INITIAL_STAMINA = 100;
     int INITIAL_TICK = 0;
 
