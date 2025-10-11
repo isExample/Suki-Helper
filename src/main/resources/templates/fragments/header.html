@@ -5,7 +5,7 @@
     <div class="container">
         <h1 class="site-title">
             <a th:href="@{/}" th:text="${appName}">Suki Helper</a>
-            <span class="version-badge" th:text="'v' + ${#strings.defaultString(@buildProperties?.version, 'dev')}">v0.0.0</span>
+            <span class="version-badge" th:text="'v' + ${appVersion}">v0.0.0</span>
         </h1>
     </div>
 </header>
