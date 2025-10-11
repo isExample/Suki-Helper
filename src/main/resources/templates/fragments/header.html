@@ -3,7 +3,9 @@
 <body>
 <header th:fragment="header(appName)">
     <div class="container">
-        <h1 style="margin:0;" th:text="${appName}">Suki Helper</h1>
+        <h1 class="site-title" style="margin:0;">
+            <a th:href="@{/}" th:text="${appName}">Suki Helper</a>
+        </h1>
     </div>
 </header>
 </body>
