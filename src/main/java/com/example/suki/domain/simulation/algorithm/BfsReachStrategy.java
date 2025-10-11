@@ -58,6 +58,10 @@ public class BfsReachStrategy implements AlgorithmStrategy {
                 ActionCategory action = entry.getKey();
                 int delta = entry.getValue();
 
+                if (currentPlace == PlaceCategory.SCHOOL && action == ActionCategory.ATTEND_CLASS && tick >= WEEKDAY_SCHOOL_TICKS) {
+                    continue;
+                }
+
                 int nextStamina = Math.min(MAX_STAMINA, stamina + delta);
 
                 // 체력이 0 이하가 되면 해당 경로 종료 & 체력 100이 되면 경로 종료

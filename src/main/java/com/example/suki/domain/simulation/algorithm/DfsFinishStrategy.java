@@ -61,6 +61,10 @@ public class DfsFinishStrategy implements AlgorithmStrategy{
             ActionCategory action = entry.getKey();
             int delta = entry.getValue();
 
+            if (place == PlaceCategory.SCHOOL && action == ActionCategory.ATTEND_CLASS && currentTick >= WEEKDAY_SCHOOL_TICKS) {
+                continue;
+            }
+
             int nextStamina = Math.min(MAX_STAMINA, currentStamina + delta);
             if (nextStamina <= MIN_STAMINA || nextStamina == MAX_STAMINA) {
                 continue;
