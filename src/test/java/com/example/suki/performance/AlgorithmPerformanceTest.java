@@ -7,13 +7,15 @@ import com.example.suki.domain.simulation.DaySchedule;
 import com.example.suki.domain.simulation.algorithm.AlgorithmStrategy;
 import com.example.suki.domain.simulation.algorithm.BfsReachStrategy;
 import com.example.suki.domain.simulation.algorithm.DfsFinishStrategy;
-import com.example.suki.domain.simulation.goal.FinishAtGoal;
 import com.example.suki.domain.simulation.goal.Goal;
 import com.example.suki.domain.simulation.goal.ReachGoal;
 import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.model.Tick;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -65,6 +67,8 @@ public class AlgorithmPerformanceTest {
     void measurePerformance(String strategyName, AlgorithmStrategy strategy) {
         UserState userState = new UserState(DayCategory.WEEKDAY_OTHER);
         Goal goal = new ReachGoal(84); // 목표 Goal을 여기서 수정
+        int currentTick = 0;
+        int currentStamina = 100;
         DaySchedule schedule = (tick, second) -> (tick < 6 ? PlaceCategory.SCHOOL : second);
         ConsumableBag bag = new ConsumableBag(Map.of());
 
@@ -73,7 +77,7 @@ public class AlgorithmPerformanceTest {
 
         for (int i = 0; i < REPETITIONS; i++) {
             long startTime = System.nanoTime();
-            int visitedNodeCount = findAllSolutions(strategy, userState, goal, schedule, bag);
+            int visitedNodeCount = findAllSolutions(strategy, userState, goal, currentTick, currentStamina, schedule, bag);
             long endTime = System.nanoTime();
 
             cumulativeTime += (endTime - startTime);
@@ -84,16 +88,18 @@ public class AlgorithmPerformanceTest {
         totalVisitedNodes.put(strategyName, cumulativeNodes);
     }
 
-    private int findAllSolutions(AlgorithmStrategy strategy, UserState userState, Goal goal, DaySchedule schedule, ConsumableBag bag) {
+    private int findAllSolutions(AlgorithmStrategy strategy, UserState userState, Goal goal, int currentTick, int currentStamina, DaySchedule schedule, ConsumableBag bag) {
         List<List<Tick>> solutions = new ArrayList<>();
         int totalVisitedCount = 0;
         for (PlaceCategory secondPlace : userState.getPlaces().keySet()) {
             SimulationContext context = new SimulationContext(
                     userState,
                     goal,
+                    currentTick,
+                    currentStamina,
+                    bag,
                     secondPlace,
                     schedule,
-                    bag,
                     solutions
             );
             totalVisitedCount += strategy.solve(context);
