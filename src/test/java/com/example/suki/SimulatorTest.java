@@ -3,6 +3,7 @@ package com.example.suki;
 import com.example.suki.domain.day.DayCategory;
 import com.example.suki.domain.simulation.algorithm.AlgorithmStrategy;
 import com.example.suki.domain.simulation.goal.ReachGoal;
+import com.example.suki.domain.simulation.model.ConsumableBag;
 import com.example.suki.domain.simulation.model.SimulationContext;
 import com.example.suki.domain.simulation.Simulator;
 import com.example.suki.domain.User.UserState;
@@ -42,7 +43,17 @@ class SimulatorTest {
         ReachGoal goal = new ReachGoal(targetStamina);
         ArgumentCaptor<SimulationContext> contextCaptor = ArgumentCaptor.forClass(SimulationContext.class);
 
-        simulator.simulateReach(userState, targetStamina, Map.of(), strategy);
+        SimulationContext simulationContext = new SimulationContext(
+                userState,
+                goal,
+                0,
+                100,
+                new ConsumableBag(Map.of()),
+                null,
+                null,
+                null
+        );
+        simulator.simulate(simulationContext, strategy);
 
         // userState에 활성화된 장소(SCHOOL, HOME, PARK)의 수만큼 strategy.solve()가 호출되었는지 검증
         verify(strategy, times(3)).solve(contextCaptor.capture());
@@ -77,7 +88,17 @@ class SimulatorTest {
         ReachGoal goal = new ReachGoal(targetStamina);
         ArgumentCaptor<SimulationContext> contextCaptor = ArgumentCaptor.forClass(SimulationContext.class);
 
-        simulator.simulateReach(userState, targetStamina, Map.of(), strategy);
+        SimulationContext simulationContext = new SimulationContext(
+                userState,
+                goal,
+                0,
+                100,
+                new ConsumableBag(Map.of()),
+                null,
+                null,
+                null
+        );
+        simulator.simulate(simulationContext, strategy);
 
         // userState에 활성화된 장소(HOME, PARK)의 수만큼 strategy.solve()가 호출되었는지 검증
         verify(strategy, times(2)).solve(contextCaptor.capture());
