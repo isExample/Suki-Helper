@@ -27,6 +27,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AlgorithmStrategyTest {
+    private static int START_TICK = 0;
+    private static int START_STAMINA = 100;
+
     private static Stream<Arguments> strategyAndGoalProvider() {
         DaySchedule weekdaySchedule = (tick, second) -> (tick < 6 ? PlaceCategory.SCHOOL : second);
         DaySchedule weekendSchedule = (tick, second) -> second;
@@ -78,9 +81,11 @@ public class AlgorithmStrategyTest {
             SimulationContext context = new SimulationContext(
                     userState,
                     goal,
+                    START_TICK,
+                    START_STAMINA,
+                    bag,
                     secondPlace,
                     schedule,
-                    bag,
                     lyingList
             );
             strategy.solve(context);

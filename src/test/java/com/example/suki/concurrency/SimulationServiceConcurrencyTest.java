@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -40,6 +39,8 @@ public class SimulationServiceConcurrencyTest {
         // 모든 스레드가 사용할 동일 요청 객체
         SimulationRequest request = new SimulationRequest(
                 84,
+                0,
+                100,
                 0,
                 DayCategory.WEEKDAY_OTHER,
                 List.of(),
@@ -106,6 +107,8 @@ public class SimulationServiceConcurrencyTest {
         SimulationRequest request = new SimulationRequest(
                 84,
                 0,
+                100,
+                0,
                 DayCategory.WEEKDAY_OTHER,
                 List.of(),
                 List.of(),
@@ -171,6 +174,8 @@ public class SimulationServiceConcurrencyTest {
         SimulationRangeRequest request = new SimulationRangeRequest(
                 84,
                 89,
+                0,
+                100,
                 0,
                 DayCategory.WEEKEND,
                 List.of(),
