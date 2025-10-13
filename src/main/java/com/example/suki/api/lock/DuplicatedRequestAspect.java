@@ -8,11 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Aspect
@@ -22,6 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DuplicatedRequestAspect {
     private static final ConcurrentHashMap<String, Object> requestLocks = new ConcurrentHashMap<>();
     private static final Object DUMMY_VALUE = new Object();
+
+    @Value("${spring.profiles.active:dev}")
+    private String activeProfile;
 
     @Around("@annotation(com.example.suki.api.lock.PreventDuplicateRequest)")
     public Object preventDuplicateRequest(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -43,12 +49,17 @@ public class DuplicatedRequestAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
         String userIdentifier;
-        if (request.getSession(false) != null && !request.getSession().isNew()) {
-            userIdentifier = request.getSession().getId();
-        } else {
-            userIdentifier = getClientIp(request);
+        if ("perf".equalsIgnoreCase(activeProfile)) {
+            userIdentifier = UUID.randomUUID().toString();
+            log.debug("Test profile active. Using random UUID for user identifier: {}", userIdentifier);
+        } else{
+            if (request.getSession(false) != null && !request.getSession().isNew()) {
+                userIdentifier = request.getSession().getId();
+            } else {
+                userIdentifier = getClientIp(request);
+            }
+            log.debug("User: {}", userIdentifier);
         }
-        log.debug("User: {}", userIdentifier);
 
         StringBuilder payloadBuilder = new StringBuilder();
         for (Object arg : joinPoint.getArgs()) {
