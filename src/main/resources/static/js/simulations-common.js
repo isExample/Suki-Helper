@@ -53,7 +53,7 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         const map = {};
         ids.forEach(k => {
             const el = $(`#qty-${k}`);
-            const n = Number(el?.value || 0);
+            const n  = validateItemQuantity(Number(el?.value ?? 0));
             if (n >= 1) map[k] = n;
         });
         return map;
@@ -122,6 +122,14 @@ const actionLabel = v => ACTION_LABELS[v] ?? v;
         if (Array.isArray(payload.traitList) && payload.traitList.length > 6) {
             throw new Error('특성은 최대 6개까지 선택 가능합니다.');
         }
+    }
+
+    function validateItemQuantity(n) {
+        const v = Number.isFinite(n) ? Math.trunc(n) : 0;
+        if (v < 0 || v > 10) {
+            throw new Error('소비성 아이템 수량은 0~10 사이여야 합니다.');
+        }
+        return v;
     }
 
     // ===== 결과 렌더링 =====
