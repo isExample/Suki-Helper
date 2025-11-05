@@ -12,7 +12,7 @@ public record SupportRequest(
 
         @Schema(description = "문의 내용", example = "특정 조건에서 시뮬레이션 결과가 나오지 않습니다.")
         @NotBlank(message = "내용은 필수입니다.")
-        @Size(min = 10, max = 2000, message = "내용은 10자 이상 2000자 이하로 입력해주세요.")
+        @Size(min = 10, max = 200, message = "내용은 10자 이상 200자 이하로 입력해주세요.")
         String message
 ) {
 }
