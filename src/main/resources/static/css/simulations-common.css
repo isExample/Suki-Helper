@@ -141,6 +141,41 @@
     opacity:.6; cursor:not-allowed; box-shadow:none; transform:none;
 }
 
+/* 피드백 및 문의 버튼 */
+.feedback-button{
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #111827;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 48px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform .08s ease, box-shadow .12s ease, background-color .12s ease;
+}
+.feedback-button:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0,0,0,.10);
+    background: #f8fafc;
+}
+.feedback-button:active{
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+.feedback-button:focus-visible{
+    outline: 3px solid #bfdbfe;
+    outline-offset: 2px;
+    border-color: #93c5fd;
+}
+
 /* 결과 UI */
 .result-card { padding:16px; margin-top:20px; }
 .result-card .muted { color:#666; }
