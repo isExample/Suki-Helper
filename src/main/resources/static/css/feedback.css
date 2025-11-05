@@ -1,0 +1,88 @@
+/* 피드백 및 문의 버튼 */
+.feedback-button{
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #111827;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 48px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform .08s ease, box-shadow .12s ease, background-color .12s ease;
+}
+.feedback-button:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0,0,0,.10);
+    background: #f8fafc;
+}
+.feedback-button:active{
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+.feedback-button:focus-visible{
+    outline: 3px solid #bfdbfe;
+    outline-offset: 2px;
+    border-color: #93c5fd;
+}
+
+.feedback-panel{
+    position: fixed;
+    right: 16px;
+    bottom: 76px;
+    width: min(92vw, 360px);
+    max-height: 70vh;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.18);
+    overflow: hidden;
+    z-index: 1001;
+    transform: translateY(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .18s ease, opacity .18s ease;
+}
+.feedback-panel.is-open{
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.fb-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 14px; border-bottom: 1px solid #f1f3f5;
+}
+.fb-head strong{ font-size: 16px; }
+.fb-close{
+    appearance:none; border:0; background:transparent; cursor:pointer;
+    font-size: 20px; line-height: 1; padding:4px; border-radius: 6px;
+}
+.fb-close:hover{ background:#f3f4f6; }
+
+.fb-body{ padding: 12px 14px; display:flex; flex-direction:column; gap:12px; }
+.fb-row{ display:flex; flex-direction:column; gap:6px; }
+.fb-label{ font-weight:600; font-size:.92rem; color:#374151; }
+
+#fbType, #fbMessage{
+    width:100%; border:1px solid #ddd; border-radius:10px;
+    font-size: 14px; padding: 10px 12px;
+}
+#fbMessage{ resize: vertical; }
+
+.fb-actions{
+    display:flex; justify-content:flex-end; gap:8px; margin-top: 4px;
+}
+.fb-actions .btn{
+    appearance:none; border:1px solid #ddd; border-radius:10px;
+    padding: 8px 12px; font-weight:600; cursor:pointer; background:#0d6efd; color:#fff;
+}
+.fb-actions .fb-cancel{ background:#fff; color:#0d6efd; border-color:#cfe2ff; }
+.fb-actions .btn:disabled{ opacity:.6; cursor: not-allowed; }
