@@ -1,11 +1,15 @@
 package com.example.suki.application;
 
+import com.example.suki.api.dto.DiscordEmbed;
+import com.example.suki.api.dto.DiscordEmbedField;
 import com.example.suki.api.dto.DiscordWebhookPayload;
 import com.example.suki.api.dto.SupportRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,11 +26,20 @@ public class NotificationService {
         }
 
         try{
+            DiscordEmbedField typeField = new DiscordEmbedField("유형", request.type(), true);
+            DiscordEmbedField messageField = new DiscordEmbedField("내용", request.message(), false);
+
+            DiscordEmbed embed = new DiscordEmbed(
+                    "🔔 새로운 피드백 도착!",
+                    "사용자로부터 새로운 피드백이 제출되었습니다.",
+                    List.of(typeField, messageField)
+            );
+
             DiscordWebhookPayload payload = new DiscordWebhookPayload(
-                    "🔔 새로운 피드백 도착!\n\n유형: `%s`\n내용: `%s`\n".formatted(
-                    request.type(),
-                    request.message()
-                    ));
+                    "Suki Helper 피드백 봇",
+                    List.of(embed)
+            );
+
             restTemplate.postForObject(discordWebhookUrl, payload, String.class);
             log.info("Discord로 피드백이 성공적으로 전송되었습니다.");
 
