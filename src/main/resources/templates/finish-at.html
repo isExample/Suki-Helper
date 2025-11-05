@@ -2,6 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('체력 N 마무리 · Suki Helper', ~{::link}, ~{::script})}">
     <link rel="stylesheet" th:href="@{/css/simulations-common.css}">
+    <link rel="stylesheet" th:href="@{/css/feedback.css}">
+    <script defer th:src="@{/js/feedback.js}"></script>
     <script defer th:src="@{/js/simulations-common.js}"></script>
     <script defer th:src="@{/js/finish-at.js}"></script>
 </head>
@@ -12,6 +14,8 @@
 <main class="container"
       th:insert="~{fragments/simulations :: formAndResult('체력 N 마무리', '/api/v1/simulations/finish-at', 'finishAtForm', 'finishAtBtn', 'single')}">
 </main>
+
+<div th:insert="~{fragments/feedback :: feedback}"></div>
 
 <footer th:replace="~{fragments/footer :: footer('Suki Helper')}"></footer>
 </body>

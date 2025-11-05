@@ -41,3 +41,5 @@ out/
 
 ### Suki-Helper ###
 logs/
+application-prod.**
+application-secrets.**
