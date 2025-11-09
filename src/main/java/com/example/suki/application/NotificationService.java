@@ -35,19 +35,7 @@ public class NotificationService {
         }
 
         try {
-            DiscordEmbedField typeField = new DiscordEmbedField("유형", request.type(), true);
-            DiscordEmbedField messageField = new DiscordEmbedField("내용", request.message(), false);
-
-            DiscordEmbed embed = new DiscordEmbed(
-                    "🔔 새로운 피드백 도착!",
-                    "사용자로부터 새로운 피드백이 제출되었습니다.",
-                    List.of(typeField, messageField)
-            );
-
-            DiscordWebhookPayload payload = new DiscordWebhookPayload(
-                    "Suki Helper 피드백 봇",
-                    List.of(embed)
-            );
+            DiscordWebhookPayload payload = createDiscordPayload(request);
 
             webClient.post()
                     .uri(discordWebhookUrl)
@@ -61,6 +49,22 @@ public class NotificationService {
         } catch (Exception e) {
             log.error("Discord 웹훅 피드백 전송에 실패했습니다.", e);
         }
+    }
+
+    private DiscordWebhookPayload createDiscordPayload(SupportRequest request) {
+        DiscordEmbedField typeField = new DiscordEmbedField("유형", request.type(), true);
+        DiscordEmbedField messageField = new DiscordEmbedField("내용", request.message(), false);
+
+        DiscordEmbed embed = new DiscordEmbed(
+                "🔔 새로운 피드백 도착!",
+                "사용자로부터 새로운 피드백이 제출되었습니다.",
+                List.of(typeField, messageField)
+        );
+
+        return new DiscordWebhookPayload(
+                "Suki Helper 피드백 봇",
+                List.of(embed)
+        );
     }
 
     /**
