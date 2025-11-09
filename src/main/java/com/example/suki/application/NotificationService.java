@@ -110,8 +110,8 @@ public class NotificationService {
      */
     private Duration parseRetryAfterHeader(String headerValue) {
         try {
-            long seconds = Long.parseLong(headerValue);
-            return Duration.ofSeconds(seconds);
+            double seconds = Double.parseDouble(headerValue);
+            return Duration.ofMillis((long) (seconds * 1000));
         } catch (NumberFormatException e) {
             log.warn("Retry-After 헤더 파싱에 실패했습니다. 기본값 3초를 사용합니다. Header: {}", headerValue);
             return Duration.ofSeconds(RETRY_DURATION);
