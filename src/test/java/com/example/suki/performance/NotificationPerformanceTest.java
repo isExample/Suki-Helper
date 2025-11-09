@@ -6,6 +6,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.jupiter.api.*;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @DisplayName("NotificationService 성능 테스트")
@@ -21,6 +23,8 @@ class NotificationPerformanceTest {
     private static MockWebServer mockWebServer;
     private NotificationService notificationService;
     private final Random random = new Random();
+
+    private static final CountDownLatch latch = new CountDownLatch(100);
 
     // 1. 각 시나리오별 실행 시간을 저장할 두 개의 독립된 리스트 생성
     private static final List<Long> successTimes = Collections.synchronizedList(new ArrayList<>());
@@ -33,7 +37,13 @@ class NotificationPerformanceTest {
     }
 
     @AfterAll
-    static void tearDown() throws IOException {
+    static void tearDown() throws IOException, InterruptedException {
+        System.out.println("\n[INFO] 모든 비동기 작업이 완료될 때까지 대기합니다...");
+        boolean completed = latch.await(10, TimeUnit.SECONDS);
+        if (!completed) {
+            System.err.println("[ERROR] 일부 비동기 작업이 시간 내에 완료되지 않았습니다.");
+        }
+
         mockWebServer.shutdown();
         printAllStatistics(); // 두 시나리오의 통계를 함께 출력
     }
@@ -41,8 +51,15 @@ class NotificationPerformanceTest {
     @BeforeEach
     void initialize() {
         String baseUrl = mockWebServer.url("/").toString();
-        WebClient webClient = WebClient.builder().build();
-        notificationService = new NotificationService(webClient, baseUrl);
+        // 작업이 완료되면 Latch를 감소시키는 필터(인터셉터) 생성
+        ExchangeFilterFunction latchFilter = (request, next) ->
+                next.exchange(request)
+                        .doFinally(signalType -> latch.countDown());
+
+        WebClient testWebClient = WebClient.builder()
+                .filter(latchFilter)
+                .build();
+        notificationService = new NotificationService(testWebClient, baseUrl);
     }
 
     // --- 테스트 시나리오 1: 즉시 성공 ---
@@ -50,7 +67,7 @@ class NotificationPerformanceTest {
     @RepeatedTest(value = 100, name = "[성공 시나리오] {currentRepetition}/{totalRepetitions}")
     void testPerformance_onApiSuccess() {
         // given: 외부 API가 항상 즉시 성공(204)하도록 설정
-        mockWebServer.enqueue(new MockResponse().setResponseCode(200));
+        mockWebServer.enqueue(new MockResponse().setResponseCode(204));
 
         SupportRequest request = new SupportRequest("성능 테스트", "즉시 성공 시나리오");
         StopWatch stopWatch = new StopWatch();
