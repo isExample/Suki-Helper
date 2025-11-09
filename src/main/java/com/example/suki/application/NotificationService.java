@@ -4,20 +4,22 @@ import com.example.suki.api.dto.DiscordEmbed;
 import com.example.suki.api.dto.DiscordEmbedField;
 import com.example.suki.api.dto.DiscordWebhookPayload;
 import com.example.suki.api.dto.SupportRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
     @Value("${discord.webhook.url}")
     private String discordWebhookUrl;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final WebClient webClient;
 
     public void sendDiscordNotification(SupportRequest request) {
         if (discordWebhookUrl == null || discordWebhookUrl.isBlank()) {
@@ -40,7 +42,12 @@ public class NotificationService {
                     List.of(embed)
             );
 
-            restTemplate.postForObject(discordWebhookUrl, payload, String.class);
+            webClient.post()
+                    .uri(discordWebhookUrl)
+                    .bodyValue(payload)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .subscribe();
             log.info("Discord로 피드백이 성공적으로 전송되었습니다.");
 
         } catch (Exception e){
