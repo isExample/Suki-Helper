@@ -7,9 +7,15 @@ import com.example.suki.api.dto.SupportRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +33,7 @@ public class NotificationService {
             return;
         }
 
-        try{
+        try {
             DiscordEmbedField typeField = new DiscordEmbedField("유형", request.type(), true);
             DiscordEmbedField messageField = new DiscordEmbedField("내용", request.message(), false);
 
@@ -47,12 +53,63 @@ public class NotificationService {
                     .bodyValue(payload)
                     .retrieve()
                     .bodyToMono(Void.class)
+                    .retryWhen(buildRetrySpec())
                     .subscribe();
             log.info("Discord로 피드백이 성공적으로 전송되었습니다.");
 
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Discord 웹훅 피드백 전송에 실패했습니다.", e);
         }
     }
 
+    /**
+     * Retry-After 헤더를 고려하는 동적 재시도 전략 생성
+     */
+    private Retry buildRetrySpec() {
+        return Retry.from(companion -> companion.flatMap(retrySignal -> {
+            Throwable failure = retrySignal.failure();
+            long attempt = retrySignal.totalRetries() + 1;
+
+            if (!(failure instanceof WebClientResponseException ex)) {
+                log.warn("네트워크 에러가 아닌 다른 예외 발생, 재시도하지 않음: {}", failure.getMessage());
+                return Mono.error(failure); // 재시도 중단
+            }
+
+            // 429 (Too Many Requests) 또는 503 (Service Unavailable) 상태 코드인 경우
+            if (ex.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS || ex.getStatusCode() == HttpStatus.SERVICE_UNAVAILABLE) {
+                HttpHeaders headers = ex.getHeaders();
+                String retryAfter = headers.getFirst(HttpHeaders.RETRY_AFTER);
+
+                if (retryAfter != null) {
+                    Duration delay = parseRetryAfterHeader(retryAfter);
+                    log.warn("서버가 Retry-After 헤더로 응답했습니다. ({}초 후 재시도). 시도 횟수: {}", delay.toSeconds(), attempt);
+                    return Mono.delay(delay);
+                }
+            }
+
+            // 일반적인 backoff 전략
+            if (attempt <= 3) {
+                Duration delay = Duration.ofSeconds(2);
+                log.warn("일반적인 HTTP 에러 발생, {}초 후 재시도. 상태코드: {}, 시도 횟수: {}", delay.toSeconds(), ex.getStatusCode(), attempt);
+                return Mono.delay(delay);
+            } else {
+                log.error("최대 재시도 횟수(3회)를 초과했습니다.");
+                return Mono.error(failure); // 재시도 중단
+            }
+        }));
+    }
+
+    /**
+     * Retry-After 헤더 값을 파싱하여 Duration 객체로 변환
+     * 헤더 값은 초 단위: https://discord.com/developers/docs/topics/rate-limits 참조
+     */
+    private Duration parseRetryAfterHeader(String headerValue) {
+        try {
+            long seconds = Long.parseLong(headerValue);
+            return Duration.ofSeconds(seconds);
+        } catch (NumberFormatException e) {
+            log.warn("Retry-After 헤더 파싱에 실패했습니다. 기본값 3초를 사용합니다. Header: {}", headerValue);
+            return Duration.ofSeconds(3);
+        }
+    }
 }
