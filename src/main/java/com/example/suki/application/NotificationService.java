@@ -26,6 +26,7 @@ public class NotificationService {
     private String discordWebhookUrl;
 
     private final WebClient webClient;
+    private final long RETRY_DURATION = 2;
 
     public void sendDiscordNotification(SupportRequest request) {
         if (discordWebhookUrl == null || discordWebhookUrl.isBlank()) {
@@ -89,7 +90,7 @@ public class NotificationService {
 
             // 일반적인 backoff 전략
             if (attempt <= 3) {
-                Duration delay = Duration.ofSeconds(2);
+                Duration delay = Duration.ofSeconds(RETRY_DURATION);
                 log.warn("일반적인 HTTP 에러 발생, {}초 후 재시도. 상태코드: {}, 시도 횟수: {}", delay.toSeconds(), ex.getStatusCode(), attempt);
                 return Mono.delay(delay);
             } else {
@@ -109,7 +110,7 @@ public class NotificationService {
             return Duration.ofSeconds(seconds);
         } catch (NumberFormatException e) {
             log.warn("Retry-After 헤더 파싱에 실패했습니다. 기본값 3초를 사용합니다. Header: {}", headerValue);
-            return Duration.ofSeconds(3);
+            return Duration.ofSeconds(RETRY_DURATION);
         }
     }
 }
