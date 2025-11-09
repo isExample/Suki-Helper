@@ -23,7 +23,7 @@ public class NotificationService {
     private final WebClient webClient;
     private final String discordWebhookUrl;
 
-    private final long RETRY_DURATION = 2;
+    private static final long RETRY_DURATION = 2;
 
     public NotificationService(WebClient webClient, @Value("${discord.webhook.url}") String discordWebhookUrl) {
         this.discordWebhookUrl = discordWebhookUrl;
