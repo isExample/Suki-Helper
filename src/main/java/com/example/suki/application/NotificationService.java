@@ -34,21 +34,19 @@ public class NotificationService {
             return;
         }
 
-        try {
-            DiscordWebhookPayload payload = createDiscordPayload(request);
+        DiscordWebhookPayload payload = createDiscordPayload(request);
 
-            webClient.post()
-                    .uri(discordWebhookUrl)
-                    .bodyValue(payload)
-                    .retrieve()
-                    .bodyToMono(Void.class)
-                    .retryWhen(buildRetrySpec())
-                    .subscribe();
-            log.info("Discord로 피드백이 성공적으로 전송되었습니다.");
-
-        } catch (Exception e) {
-            log.error("Discord 웹훅 피드백 전송에 실패했습니다.", e);
-        }
+        webClient.post()
+                .uri(discordWebhookUrl)
+                .bodyValue(payload)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .retryWhen(buildRetrySpec())
+                .doOnSuccess(v -> log.info("Discord로 피드백이 성공적으로 전송되었습니다."))
+                .subscribe(
+                        null,
+                        error -> log.error("최종 재시도 후에도 Discord 알림 전송에 실패했습니다. Error: {}", error.getMessage())
+                );
     }
 
     private DiscordWebhookPayload createDiscordPayload(SupportRequest request) {
