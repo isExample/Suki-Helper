@@ -4,7 +4,6 @@ import com.example.suki.api.dto.DiscordEmbed;
 import com.example.suki.api.dto.DiscordEmbedField;
 import com.example.suki.api.dto.DiscordWebhookPayload;
 import com.example.suki.api.dto.SupportRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -20,13 +19,16 @@ import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class NotificationService {
-    @Value("${discord.webhook.url}")
-    private String discordWebhookUrl;
-
     private final WebClient webClient;
+    private final String discordWebhookUrl;
+
     private final long RETRY_DURATION = 2;
+
+    public NotificationService(WebClient webClient, @Value("${discord.webhook.url}") String discordWebhookUrl) {
+        this.discordWebhookUrl = discordWebhookUrl;
+        this.webClient = webClient;
+    }
 
     public void sendDiscordNotification(SupportRequest request) {
         if (discordWebhookUrl == null || discordWebhookUrl.isBlank()) {
