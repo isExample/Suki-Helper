@@ -47,7 +47,11 @@ public class NotificationService {
                 .doOnSuccess(v -> log.info("Discord로 피드백이 성공적으로 전송되었습니다."))
                 .subscribe(
                         null,
-                        error -> log.error("최종 재시도 후에도 Discord 알림 전송에 실패했습니다. Error: {}", error.getMessage())
+                        error -> log.error(
+                                "최종 재시도 후에도 Discord 알림 전송에 실패했습니다. 데이터: {}, 에러: {}",
+                                request, // 실패한 데이터
+                                error.getMessage()
+                        )
                 );
     }
 
