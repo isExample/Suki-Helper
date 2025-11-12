@@ -51,7 +51,7 @@ public class NotificationService {
                         error -> log.error(
                                 "최종 재시도 후에도 Discord 알림 전송에 실패했습니다. 데이터: {}, 에러: {}",
                                 request, // 실패한 데이터
-                                error.getMessage()
+                                error
                         )
                 );
     }
