@@ -24,6 +24,7 @@ public class NotificationService {
     private final String discordWebhookUrl;
 
     private static final long RETRY_DURATION = 2;
+    private static final int MAX_RETRY_COUNT = 3;
 
     public NotificationService(WebClient webClient, @Value("${discord.webhook.url}") String discordWebhookUrl) {
         this.discordWebhookUrl = discordWebhookUrl;
@@ -97,12 +98,12 @@ public class NotificationService {
             }
 
             // 일반적인 backoff 전략
-            if (attempt <= 3) {
+            if (attempt <= MAX_RETRY_COUNT) {
                 Duration delay = Duration.ofSeconds(RETRY_DURATION);
                 log.warn("일반적인 HTTP 에러 발생, {}초 후 재시도. 상태코드: {}, 시도 횟수: {}", delay.toSeconds(), ex.getStatusCode(), attempt);
                 return Mono.delay(delay);
             } else {
-                log.error("최대 재시도 횟수(3회)를 초과했습니다.");
+                log.error("최대 재시도 횟수({}회)를 초과했습니다.", MAX_RETRY_COUNT);
                 return Mono.error(failure); // 재시도 중단
             }
         }));
