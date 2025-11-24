@@ -7,23 +7,15 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-
-import static net.logstash.logback.argument.StructuredArguments.kv;
 
 @Aspect
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class SimulationLoggingAspect {
-    private static final Marker API_REQUEST_MARKER = MarkerFactory.getMarker("API_REQUEST");
-    private static final Marker API_RESPONSE_MARKER = MarkerFactory.getMarker("API_RESPONSE");
-
     @Pointcut("within(com.example.suki.api.controller.SimulationController)")
     public void simulationControllerPointcut() {
     }
@@ -34,13 +26,8 @@ public class SimulationLoggingAspect {
         String method = request.getMethod();
         String requestURI = request.getRequestURI();
 
-        // Request Body 로깅
         Object requestBody = joinPoint.getArgs().length > 0 ? joinPoint.getArgs()[0] : null;
-        log.info(API_REQUEST_MARKER, "API Request received",
-                kv("http_method", method),
-                kv("uri", requestURI),
-                kv("payload", requestBody)
-        );
+        log.info("API Request. Method: {}, URI: {}, Payload: {}", method, requestURI, requestBody);
 
         long startTime = System.currentTimeMillis();
         Object result = null;
@@ -50,13 +37,7 @@ public class SimulationLoggingAspect {
             return result;
         } finally {
             long duration = System.currentTimeMillis() - startTime;
-            // Response Body 로깅
-            log.info(API_RESPONSE_MARKER, "API Response sent",
-                    kv("http_method", method),
-                    kv("uri", requestURI),
-                    kv("duration_ms", duration),
-                    kv("payload", result)
-            );
+            log.info("API Response. Duration: {}ms, Payload: {}", duration, result);
         }
     }
 }
