@@ -1,6 +1,7 @@
 package com.example.suki.api.log;
 
 import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
@@ -14,11 +15,13 @@ import java.util.UUID;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class MdcLoggingFilter implements Filter {
+    private static final String X_REQUEST_ID_HEADER = "X-Request-ID";
     private static final String TRACE_ID_KEY = "traceId";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        String requestId = ((HttpServletRequest) request).getHeader(X_REQUEST_ID_HEADER);
+        String traceId = (requestId != null && !requestId.isEmpty()) ? requestId : UUID.randomUUID().toString().substring(0, 8);
         MDC.put(TRACE_ID_KEY, traceId);
 
         try {
